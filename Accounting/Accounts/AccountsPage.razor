@@ -8,6 +8,8 @@
 
 <MudText Typo="Typo.h3" Class="mt-4 mb-2">Accounts</MudText>
 
+<MudCheckBox Checked="showEmptyAccounts" CheckedChanged="new Func<bool, Task>(OnShowEmptyAccountsChecked)" Label="Show empty accounts" Class="mb-4"></MudCheckBox>
+
 <MudTable Items="accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Account No</MudTh>
@@ -25,13 +27,26 @@
 @code
 {
     IEnumerable<AccountViewModel>? accounts = null;
+    bool showEmptyAccounts = false;
 
     protected override async Task OnInitializedAsync()
     {
-        var r = await Context.Accounts
+        await LoadData();
+    }
+
+    async Task LoadData()
+    {
+        var query = Context.Accounts
             .Include(a => a.Entries)
             .AsNoTracking()
-            .ToListAsync();
+            .AsQueryable();
+
+        if (!showEmptyAccounts)
+        {
+            query = query.Where(a => a.Entries.Any());
+        }
+
+        var r = await query.ToListAsync();
 
         var vms = new List<AccountViewModel>();
 
@@ -46,6 +61,15 @@
         }));
 
         accounts = vms;
+    }
+
+    async Task OnShowEmptyAccountsChecked(bool v)
+    {
+        showEmptyAccounts = v;
+
+        await LoadData();
+
+        StateHasChanged();
     }
 
     class AccountViewModel
