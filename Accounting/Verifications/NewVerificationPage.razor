@@ -1,0 +1,188 @@
+﻿@page "/verifications/new"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.EntityFrameworkCore
+@using Accounting.Data
+@inject NavigationManager NavigationManager
+@inject AccountingContext Context
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<PageTitle>New Verification</PageTitle>
+
+<MudText Typo="Typo.h3" Class="mt-4 mb-2">New Verification</MudText>
+
+<MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
+
+<MudTable @ref="table" Items="@entries" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By"
+          
+ CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Entries</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.AccountNo)">Account</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="account">
+        <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
+        <MudTd DataLabel="Debit">@account.Debit</MudTd> 
+        <MudTd DataLabel="Credit">@account.Credit</MudTd>  
+    </RowTemplate>
+    <RowEditingTemplate Context="account">
+        <MudTd DataLabel="Account">
+            <MudSelect @bind-Value="account.Account">
+                @foreach (var account in accounts)
+                {
+                    <MudSelectItem Value="@account">@account.AccountNo @account.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudTd>
+        <MudTd DataLabel="Debit">
+            <MudNumericField @bind-Value="account.Debit" Step="0.1m" Variant="Variant.Text"
+                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+        </MudTd>
+        <MudTd DataLabel="Credit">
+            <MudNumericField @bind-Value="account.Credit" Step="0.1m" Variant="Variant.Text"
+                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+        </MudTd>      
+    </RowEditingTemplate>
+</MudTable>
+
+<MudPaper Class="mt-4 py-4 px-4">
+    <MudText Typo="Typo.h6" Class="mt-4 mb-4">Document</MudText>
+
+    <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple accept=".jpg, .jpeg, .png, .pdf" />
+
+    <MudButton HtmlTag="label"
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                StartIcon="@Icons.Filled.CloudUpload"
+                for="fileInput112">
+        Upload your images
+    </MudButton>
+</MudPaper>
+
+
+@if (entries.Any())
+{
+    <MudButton OnClick="OnValidSubmit" Disabled="isEditingEntry" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Class="mt-2">Save</MudButton>
+}
+
+@code
+{
+    MudTable<EntryFormModel> table = null!;
+
+    List<Account> accounts = new List<Account>();
+
+    List<EntryFormModel> entries = new List<EntryFormModel>();
+
+    EntryFormModel? elementBeforeEdit;
+
+    bool isEditingEntry = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        accounts.AddRange(await Context.Accounts.Select(a => new Account
+        {
+            AccountNo = a.AccountNo,
+            Name = a.Name
+        }).ToArrayAsync());
+    }
+
+    void AddEntry()
+    {
+        var item = new EntryFormModel() { Account = accounts.First() };
+        entries.Add(item);
+
+        table.SetEditingItem(item);
+
+        isEditingEntry = true;
+
+        StateHasChanged();
+    }
+
+    private void BackupItem(object element)
+    {
+        elementBeforeEdit = new()
+        {
+            Account = ((EntryFormModel)element).Account,
+            Debit = ((EntryFormModel)element).Debit,
+            Credit = ((EntryFormModel)element).Credit
+        };
+
+        isEditingEntry = true;
+
+        StateHasChanged();
+    }
+
+    private void ItemHasBeenCommitted(object element)
+    {
+        isEditingEntry = false;
+
+        StateHasChanged();
+    }
+
+    private void ResetItemToOriginalValues(object element)
+    {
+        if (elementBeforeEdit is not null)
+        { 
+            ((EntryFormModel)element).Account = elementBeforeEdit.Account;
+            ((EntryFormModel)element).Debit = elementBeforeEdit.Debit;
+            ((EntryFormModel)element).Credit = elementBeforeEdit.Credit;         
+        }
+
+        isEditingEntry = false;
+
+        StateHasChanged();
+    }
+
+    private void UploadFiles(InputFileChangeEventArgs e)
+    {
+
+    }
+
+    private async Task OnValidSubmit()
+    {
+        var verificationCount = await Context.Verifications.CountAsync();
+
+        var verification = new Verification
+        {
+            VerificationNo = $"V{verificationCount + 1}",
+            Date = DateTime.Now,
+            Description = String.Empty,
+            Attachment = String.Empty
+        };
+
+        verification.Entries.AddRange(entries.Select(e => new Entry
+        {
+            AccountNo = e.Account!.AccountNo,
+            Description = String.Empty,
+            Debit = e.Debit,
+            Credit = e.Credit
+        }));
+
+        Context.Verifications.Add(verification);
+
+        await Context.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/verifications");
+    }
+
+    class EntryFormModel
+    {
+        [Required]
+        public Account? Account { get; set; }
+
+        public decimal? Debit { get; set; }
+
+        public decimal? Credit { get; set; }
+    }
+
+    class AccountViewModel
+    {
+        public int AccountNo { get; set; }
+
+        public string Name { get; set; } = null!;
+    }
+}

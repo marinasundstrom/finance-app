@@ -1,0 +1,65 @@
+﻿@page "/"
+@page "/accounts"
+@using Microsoft.EntityFrameworkCore
+@using Accounting.Data
+@inject AccountingContext Context
+
+<PageTitle>Accounts</PageTitle>
+
+<MudText Typo="Typo.h3" Class="mt-4 mb-2">Accounts</MudText>
+
+<MudTable Items="accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Account No</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Balance</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="account">
+        <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
+        <MudTd DataLabel="Name">@account.Name</MudTd>
+        <MudTd DataLabel="balance">@((account.Debit - account.Credit).ToString("c"))</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code
+{
+    IEnumerable<AccountViewModel>? accounts = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var r = await Context.Accounts
+            .Include(a => a.Entries)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var vms = new List<AccountViewModel>();
+
+        vms.AddRange(r.Select(a => new AccountViewModel
+        {
+            AccountNo = a.AccountNo,
+            Class = a.Class,
+            Name = a.Name,
+            Description = a.Description,
+            Debit = a.Entries.Sum(e => e.Debit.GetValueOrDefault()),
+            Credit = a.Entries.Sum(e => e.Credit.GetValueOrDefault())
+        }));
+
+        accounts = vms;
+    }
+
+    class AccountViewModel
+    {
+        public int AccountNo { get; set; }
+
+        public int Class { get; set; }
+
+        public string Name { get; set; } = null!;
+
+        public string Description { get; set; } = null!;
+
+        public decimal Debit { get; set; }
+
+        public decimal Credit { get; set; }
+    }
+}
