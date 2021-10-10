@@ -9,13 +9,32 @@ public class Account
     [Key]
     public int AccountNo { get; set; }
 
-    public int Class { get; set; }
+    public AccountClass Class { get; set; }
+
+    public AccountGroup Group { get; set; }
 
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
     public List<Entry> Entries { get; set; } = new List<Entry>();
+}
+
+public enum AccountClass
+{
+    Assets = 1,
+    EquityAndLiabilites = 2,
+    OperatingIncomeRevenue = 3,
+    Costs = 4,
+    OtherOperatingExpenses1 = 5,
+    OtherOperatingExpenses2 = 6,
+    PersonnelCosts = 7,
+    FinancialAndOtherIcomeAndExpenses = 8
+}
+
+public enum AccountGroup
+{
+    Unspecified = 0
 }
 
 public class Verification

@@ -53,7 +53,7 @@
         vms.AddRange(r.Select(a => new AccountViewModel
         {
             AccountNo = a.AccountNo,
-            Class = a.Class,
+            Class = (int)a.Class,
             Name = a.Name,
             Description = a.Description,
             Debit = a.Entries.Sum(e => e.Debit.GetValueOrDefault()),
