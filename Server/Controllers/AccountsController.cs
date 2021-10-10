@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Accounting.Server.Data;
@@ -19,7 +20,7 @@ namespace Accounting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Account>> GetAsync(int? accountClass = null, bool? showUnusedAccounts = false)
+        public async Task<IEnumerable<Account>> GetAccountsAsync(int? accountClass = null, bool? showUnusedAccounts = false)
         {
             var query = context.Accounts
             .Include(a => a.Entries)
@@ -33,7 +34,7 @@ namespace Accounting.Server.Controllers
 
             if (accountClass is not null)
             {
-                query = query.Where(a => a.Class == (AccountClass)accountClass);
+                query = query.Where(a => a.Class == (Data.AccountClass)accountClass);
             }
 
             var r = await query.ToListAsync();
@@ -43,7 +44,11 @@ namespace Accounting.Server.Controllers
             vms.AddRange(r.Select(a => new Account
             {
                 AccountNo = a.AccountNo,
-                Class = (int)a.Class,
+                Class = new AccountClass
+                {
+                    Id = (int)a.Class,
+                    Description = a.Class.GetAttribute<DisplayAttribute>()!.Name!
+                },
                 Name = a.Name,
                 Description = a.Description,
                 Balance =
@@ -53,6 +58,19 @@ namespace Accounting.Server.Controllers
 
             return vms;
         }
+
+        [HttpGet("Classes")]
+        public IEnumerable<AccountClass> GetAccountClassesAsync()
+        {
+            return Enum.GetValues<Data.AccountClass>().Select(ac =>
+            {
+                return new AccountClass
+                {
+                    Id = (int)ac,
+                    Description = ac.GetAttribute<DisplayAttribute>()!.Name!
+                };
+            });
+        }
     }
 }
 
@@ -60,7 +78,7 @@ public class Account
 {
     public int AccountNo { get; set; }
 
-    public int Class { get; set; }
+    public AccountClass Class { get; set; } = null!;
 
     public string Name { get; set; } = null!;
 
@@ -74,6 +92,13 @@ public class AccountShort
     public int AccountNo { get; set; }
 
     public string Name { get; set; } = null!;
+}
+
+public class AccountClass
+{
+    public int Id { get; set; }
+
+    public string Description { get; set; } = null!;
 }
 
 

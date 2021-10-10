@@ -20,7 +20,7 @@
         "tags": [
           "Accounts"
         ],
-        "operationId": "Accounts_Get",
+        "operationId": "Accounts_GetAccounts",
         "parameters": [
           {
             "type": "integer",
@@ -51,12 +51,32 @@
         }
       }
     },
+    "/api/Accounts/Classes": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountClasses",
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountClass"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Entries": {
       "get": {
         "tags": [
           "Entries"
         ],
-        "operationId": "Entries_Get",
+        "operationId": "Entries_GetEntries",
         "parameters": [
           {
             "type": "string",
@@ -84,7 +104,7 @@
         "tags": [
           "Verifications"
         ],
-        "operationId": "Verifications_Get",
+        "operationId": "Verifications_GetVerifications",
         "responses": {
           "200": {
             "x-nullable": false,
@@ -116,8 +136,7 @@
           "format": "int32"
         },
         "class": {
-          "type": "integer",
-          "format": "int32"
+          "$ref": "#/definitions/AccountClass"
         },
         "name": {
           "type": "string"
@@ -128,6 +147,22 @@
         "balance": {
           "type": "number",
           "format": "decimal"
+        }
+      }
+    },
+    "AccountClass": {
+      "type": "object",
+      "required": [
+        "id",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string"
         }
       }
     },

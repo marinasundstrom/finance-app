@@ -6,8 +6,6 @@ using Accounting.Server.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Accounting.Server.Controllers
 {
     [Route("api/[controller]")]
@@ -21,7 +19,7 @@ namespace Accounting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Entry>> GetAsync(string? verificationNo = null)
+        public async Task<IEnumerable<Entry>> GetEntriesAsync(string? verificationNo = null)
         {
             var query = context.Entries
                         .Include(e => e.Verification)

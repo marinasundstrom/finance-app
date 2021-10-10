@@ -10,17 +10,16 @@
 
 <MudCheckBox Checked="showEmptyAccounts" CheckedChanged="new Func<bool, Task>(OnShowEmptyAccountsChecked)" Label="Show empty accounts" Class="mb-4"></MudCheckBox>
 
-@*
-
-<MudSelect T="AccountClass?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mb-4">
-    <MudSelectItem Value="@((AccountClass?)null)">All</MudSelectItem>
-    @foreach (var accountClass in Enum.GetValues<AccountClass>())
-    {
-        <MudSelectItem Value="@((AccountClass?)accountClass)">@(accountClass.GetAttribute<DisplayAttribute>()?.Name)</MudSelectItem>
-    }
-</MudSelect>
-
-*@
+@if (accountClasses is not null)
+{
+    <MudSelect T="int?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mb-4">
+        <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
+        @foreach (AccountClass accountClass in accountClasses)
+        {
+            <MudSelectItem Value="@((int?)accountClass.Id)">@accountClass.Description</MudSelectItem>
+        }
+    </MudSelect>
+}
 
 <MudTable Items="accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info">
     <HeaderContent>
@@ -35,21 +34,23 @@
     </RowTemplate>
 </MudTable>
 
-
 @code
 {
+    IEnumerable<AccountClass>? accountClasses = null;
     IEnumerable<Account>? accounts = null;
     bool showEmptyAccounts = false;
     int? accountClass = null;
 
     protected override async Task OnInitializedAsync()
     {
+        accountClasses = await AccountsClient.GetAccountClassesAsync();
+
         await LoadData();
     }
 
     async Task LoadData()
     {
-        accounts = await AccountsClient.GetAsync(accountClass, showEmptyAccounts);
+        accounts = await AccountsClient.GetAccountsAsync(accountClass, showEmptyAccounts);
     }
 
     async Task OnShowEmptyAccountsChecked(bool v)

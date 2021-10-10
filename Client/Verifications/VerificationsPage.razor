@@ -63,7 +63,7 @@
 
     private async Task LoadData()
     {
-        verifications = await VerificationsClient.GetAsync();
+        verifications = await VerificationsClient.GetVerificationsAsync();
     }
 
     private async Task OpenNewVerificationDialog()

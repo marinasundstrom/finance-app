@@ -56,7 +56,7 @@
 
     private async Task LoadData()
     {
-        entries = await EntriesClient.GetAsync(VerificationNo);
+        entries = await EntriesClient.GetEntriesAsync(VerificationNo);
 
         title = $"Ledger";
 
