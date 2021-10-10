@@ -236,14 +236,14 @@ public static class Seed
             new Account
             {
                 AccountNo = 8310,
-                Class = AccountClass.FinancialAndOtherIcomeAndExpenses,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Ränteintäkter",
                 Description = String.Empty
             },
             new Account
             {
                 AccountNo = 8410,
-                Class = AccountClass.FinancialAndOtherIcomeAndExpenses,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Räntekostnader",
                 Description = String.Empty
             },
@@ -279,10 +279,11 @@ public static class Seed
         YouSendAnInvoiceToCustomer(context);
         TheCustomerPaysTheInvoice(context);
         YouReceiveAInvoice(context);
+        YouTransferFromPlusGiroToCorporateAccount(context);
         YouPayForTheInvoice(context);
         YouWithdrawMoneyAsSalary(context);
 
-        //YouTransferTaxAccountToCorporateAccount(context);
+        //YouTransferFromTaxAccountToCorporateAccount(context);
     }
 
     private static void InsertMoney(AccountingContext context)
@@ -480,8 +481,37 @@ public static class Seed
         verificationNo++;
     }
 
+    private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context)
+    {
+        context.Verifications.AddRange(
+            new Verification
+            {
+                VerificationNo = $"V{verificationNo}",
+                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+                Description = "Du överför pengar från PlusGiro till företagskonto",
+                Attachment = String.Empty
+            });
 
-    private static void YouTransferTaxAccountToCorporateAccount(AccountingContext context)
+        context.Entries.AddRange(
+            new Entry
+            {
+                AccountNo = 1920,
+                VerificationNo = $"V{verificationNo}",
+                Description = string.Empty,
+                Credit = 10000m
+            },
+            new Entry
+            {
+                AccountNo = 1930,
+                VerificationNo = $"V{verificationNo}",
+                Description = string.Empty,
+                Debit = 10000m
+            });
+
+        verificationNo++;
+    }
+
+    private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context)
     {
         context.Verifications.AddRange(
             new Verification

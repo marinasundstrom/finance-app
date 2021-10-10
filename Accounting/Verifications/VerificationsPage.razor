@@ -28,7 +28,7 @@
             <MudLink Href="@($"/ledger?verificationNo={verification.VerificationNo}")">@verification.VerificationNo</MudLink>
         </MudTd>
         <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
-        <MudTd DataLabel="Name">@verification.Description</MudTd>
+        <MudTd DataLabel="Description">@verification.Description</MudTd>
         <MudTd DataLabel="Debit">@verification.Debit.ToString("c")</MudTd>
         <MudTd DataLabel="Credit">@verification.Credit.ToString("c")</MudTd>
     </RowTemplate>

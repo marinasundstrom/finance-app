@@ -11,63 +11,79 @@
 
 <MudText Typo="Typo.h3" Class="mt-4 mb-2">New Verification</MudText>
 
-<MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
+<EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
 
-<MudTable @ref="table" Items="@entries" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By"
-          
- CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Entries</MudText>
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.AccountNo)">Account</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
-    </HeaderContent>
-    <RowTemplate Context="account">
-        <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
-        <MudTd DataLabel="Debit">@account.Debit</MudTd> 
-        <MudTd DataLabel="Credit">@account.Credit</MudTd>  
-    </RowTemplate>
-    <RowEditingTemplate Context="account">
-        <MudTd DataLabel="Account">
-            <MudSelect @bind-Value="account.Account">
-                @foreach (var account in accounts)
-                {
-                    <MudSelectItem Value="@account">@account.AccountNo @account.Name</MudSelectItem>
-                }
-            </MudSelect>
-        </MudTd>
-        <MudTd DataLabel="Debit">
-            <MudNumericField @bind-Value="account.Debit" Step="0.1m" Variant="Variant.Text"
-                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
-        </MudTd>
-        <MudTd DataLabel="Credit">
-            <MudNumericField @bind-Value="account.Credit" Step="0.1m" Variant="Variant.Text"
-                             Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
-        </MudTd>      
-    </RowEditingTemplate>
-</MudTable>
+    <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
 
-<MudPaper Class="mt-4 py-4 px-4">
-    <MudText Typo="Typo.h6" Class="mt-4 mb-4">Document</MudText>
+    <MudTable @ref="table" Items="@formModel.Entries" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By"
+              CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Entries</MudText>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.AccountNo)">Account</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="account">
+            <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
+            <MudTd DataLabel="Debit">@account.Debit</MudTd>
+            <MudTd DataLabel="Credit">@account.Credit</MudTd>
+        </RowTemplate>
+        <RowEditingTemplate Context="account">
+            <MudTd DataLabel="Account">
+                <MudSelect @bind-Value="account.Account">
+                    @foreach (var account in accounts)
+                    {
+                        <MudSelectItem Value="@account">@account.AccountNo @account.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudTd>
+            <MudTd DataLabel="Debit">
+                <MudNumericField @bind-Value="account.Debit" Step="0.1m" Variant="Variant.Text"
+                                 For="@(() => account.Debit)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+            </MudTd>
+            <MudTd DataLabel="Credit">
+                <MudNumericField @bind-Value="account.Credit" Step="0.1m" Variant="Variant.Text"
+                                 For="@(() => account.Credit)" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" HideSpinButtons="true" />
+            </MudTd>
+        </RowEditingTemplate>
+        <FooterContent>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"><MudText Typo="Typo.body1"><b>Total</b></MudText></MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"><MudText Typo="Typo.body1">@formModel.Debit</MudText></MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer"><MudText Typo="Typo.body1">@formModel.Credit</MudText></MudTh>
+        </FooterContent>
+    </MudTable>
 
-    <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple accept=".jpg, .jpeg, .png, .pdf" />
+    <MudTextField T="string" Label="Description" HelperText="@(formModel.Description is null ? "Optional" : $"{formModel.Description.Length}/240")" Variant="Variant.Outlined"
+                  @bind-Value="formModel.Description" Lines="3" Class="my-4" For="@(() => formModel.Description)" />
 
-    <MudButton HtmlTag="label"
-                Variant="Variant.Filled"
-                Color="Color.Primary"
-                StartIcon="@Icons.Filled.CloudUpload"
-                for="fileInput112">
-        Upload your images
-    </MudButton>
-</MudPaper>
+    <MudPaper Class="mt-4 py-4 px-4">
+        <MudText Typo="Typo.h6" Class="mt-4 mb-4">Document</MudText>
 
+        <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple accept=".jpg, .jpeg, .png, .pdf" />
 
-@if (entries.Any())
-{
-    <MudButton OnClick="OnValidSubmit" Disabled="isEditingEntry" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Class="mt-2">Save</MudButton>
-}
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Filled.CloudUpload"
+                   for="fileInput112">
+            Upload your images
+        </MudButton>
+    </MudPaper>
+
+    <MudPaper Class="mt-4 py-4 px-4">
+        <MudText Color="@Color.Error">
+            <ValidationSummary />
+        </MudText>
+    </MudPaper>
+
+    @if (formModel.Entries.Any())
+    {
+        <MudButton ButtonType="ButtonType.Submit" Disabled="isEditingEntry" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Outlined.Save" Class="mt-2">Save</MudButton>
+    }
+</EditForm>
 
 @code
 {
@@ -75,7 +91,7 @@
 
     List<Account> accounts = new List<Account>();
 
-    List<EntryFormModel> entries = new List<EntryFormModel>();
+    VerificationFormModel formModel = new VerificationFormModel();
 
     EntryFormModel? elementBeforeEdit;
 
@@ -93,7 +109,7 @@
     void AddEntry()
     {
         var item = new EntryFormModel() { Account = accounts.First() };
-        entries.Add(item);
+        formModel.Entries.Add(item);
 
         table.SetEditingItem(item);
 
@@ -126,10 +142,10 @@
     private void ResetItemToOriginalValues(object element)
     {
         if (elementBeforeEdit is not null)
-        { 
+        {
             ((EntryFormModel)element).Account = elementBeforeEdit.Account;
             ((EntryFormModel)element).Debit = elementBeforeEdit.Debit;
-            ((EntryFormModel)element).Credit = elementBeforeEdit.Credit;         
+            ((EntryFormModel)element).Credit = elementBeforeEdit.Credit;
         }
 
         isEditingEntry = false;
@@ -150,11 +166,11 @@
         {
             VerificationNo = $"V{verificationCount + 1}",
             Date = DateTime.Now,
-            Description = String.Empty,
+            Description = formModel.Description ?? String.Empty,
             Attachment = String.Empty
         };
 
-        verification.Entries.AddRange(entries.Select(e => new Entry
+        verification.Entries.AddRange(formModel.Entries.Select(e => new Entry
         {
             AccountNo = e.Account!.AccountNo,
             Description = String.Empty,
@@ -169,6 +185,20 @@
         NavigationManager.NavigateTo("/verifications");
     }
 
+    class VerificationFormModel
+    {
+        [MaxLength(240, ErrorMessage = "Max 240 characters")]
+        public string? Description { get; set; }
+
+        [ValidateComplexType]
+        public List<EntryFormModel> Entries { get; } = new List<EntryFormModel>();
+
+        public decimal Debit => Entries.Sum(e => e.Debit.GetValueOrDefault());
+
+        public decimal Credit => Entries.Sum(e => e.Credit.GetValueOrDefault());
+    }
+
+    [CustomValidator]
     class EntryFormModel
     {
         [Required]
@@ -184,5 +214,27 @@
         public int AccountNo { get; set; }
 
         public string Name { get; set; } = null!;
+    }
+
+    public class CustomValidator : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object? value,
+            ValidationContext validationContext)
+        {
+            var entryFormModel = (EntryFormModel)validationContext.ObjectInstance;
+
+            if(entryFormModel.Debit is null && entryFormModel.Credit is null)
+            {
+                return new ValidationResult("Both cannot be null.",
+                    new[] { nameof(EntryFormModel.Debit), nameof(EntryFormModel.Credit) });
+            }
+            else if (entryFormModel.Debit is not null && entryFormModel.Credit is not null)
+            {
+                return new ValidationResult("Both cannot be set.",
+                   new[] { nameof(EntryFormModel.Debit), nameof(EntryFormModel.Credit) });
+            }
+
+            return ValidationResult.Success!;
+        }
     }
 }
