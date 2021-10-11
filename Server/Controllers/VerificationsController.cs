@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Accounting.Server.Data;
@@ -44,6 +45,43 @@ namespace Accounting.Server.Controllers
 
             return vms;
         }
+
+        [HttpPost]
+        public async Task<string> CreateVerification([FromBody] CreateVerification dto)
+        {
+            var verificationCount = await context.Verifications.CountAsync();
+
+            var verification = new Data.Verification
+            {
+                VerificationNo = $"V{verificationCount + 1}",
+                Description = dto.Description,
+                Date = DateTime.Now,
+                Attachment = String.Empty
+            };
+
+            foreach(var entryDto in dto.Entries)
+            {
+                if(entryDto.Debit is null && entryDto.Credit is null
+                    && entryDto.Debit is not null && entryDto.Credit is not null)
+                {
+                    throw new Exception("Cannot set both Debit and Credit.");
+                }
+
+                verification.Entries.Add(new Data.Entry
+                {
+                    AccountNo = entryDto.AccountNo,
+                    Description = entryDto.Description ?? String.Empty,
+                    Debit = entryDto.Debit,
+                    Credit = entryDto.Credit
+                });
+            }
+
+            context.Verifications.Add(verification);
+
+            await context.SaveChangesAsync();
+
+            return verification.VerificationNo;
+        }
     }
 
     public class Verification
@@ -66,6 +104,26 @@ namespace Accounting.Server.Controllers
         public DateTime Date { get; set; }
 
         public string Description { get; set; } = null!;
+    }
+
+    public class CreateVerification
+    {
+        public string Description { get; set; } = null!;
+
+        [Required]
+        public List<CreateEntry> Entries { get; set; } = new List<CreateEntry>()!;
+    }
+
+    public class CreateEntry
+    {
+        [Required]
+        public int AccountNo { get; set; }
+
+        public string? Description { get; set; }
+
+        public decimal? Debit { get; set; }
+
+        public decimal? Credit { get; set; }
     }
 }
 

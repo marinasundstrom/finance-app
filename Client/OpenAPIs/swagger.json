@@ -117,6 +117,37 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_CreateVerification",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateVerification"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
       }
     }
   },
@@ -250,6 +281,47 @@
         "date": {
           "type": "string",
           "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "debit": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "credit": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
+    },
+    "CreateVerification": {
+      "type": "object",
+      "required": [
+        "description",
+        "entries"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateEntry"
+          }
+        }
+      }
+    },
+    "CreateEntry": {
+      "type": "object",
+      "required": [
+        "accountNo"
+      ],
+      "properties": {
+        "accountNo": {
+          "type": "integer",
+          "format": "int32"
         },
         "description": {
           "type": "string"

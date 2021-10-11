@@ -1,9 +1,8 @@
 ﻿@page "/verifications/new"
 @using System.ComponentModel.DataAnnotations
-@using Microsoft.EntityFrameworkCore
-@using Accounting.Data
 @inject NavigationManager NavigationManager
-@inject AccountingContext Context
+@inject IAccountsClient AccountsClient
+@inject IVerificationsClient VerificationsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -22,7 +21,7 @@
             <MudText Typo="Typo.h6">Entries</MudText>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.AccountNo)">Account</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.Account.AccountNo)">Account</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
         </HeaderContent>
@@ -99,11 +98,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        accounts.AddRange(await Context.Accounts.Select(a => new Account
-        {
-            AccountNo = a.AccountNo,
-            Name = a.Name
-        }).ToArrayAsync());
+        accounts.AddRange(
+            await AccountsClient.GetAccountsAsync(null, true));
     }
 
     void AddEntry()
@@ -160,17 +156,14 @@
 
     private async Task OnValidSubmit()
     {
-        var verificationCount = await Context.Verifications.CountAsync();
-
-        var verification = new Verification
+        var verification = new CreateVerification
         {
-            VerificationNo = $"V{verificationCount + 1}",
-            Date = DateTime.Now,
-            Description = formModel.Description ?? String.Empty,
-            Attachment = String.Empty
+            Description = formModel.Description ?? String.Empty
         };
 
-        verification.Entries.AddRange(formModel.Entries.Select(e => new Entry
+        var entries = new List<CreateEntry>();
+
+        entries.AddRange(formModel.Entries.Select(e => new CreateEntry
         {
             AccountNo = e.Account!.AccountNo,
             Description = String.Empty,
@@ -178,9 +171,9 @@
             Credit = e.Credit
         }));
 
-        Context.Verifications.Add(verification);
+        verification.Entries = entries;
 
-        await Context.SaveChangesAsync();
+        await VerificationsClient.CreateVerificationAsync(verification);
 
         NavigationManager.NavigateTo("/verifications");
     }
@@ -223,7 +216,7 @@
         {
             var entryFormModel = (EntryFormModel)validationContext.ObjectInstance;
 
-            if(entryFormModel.Debit is null && entryFormModel.Credit is null)
+            if (entryFormModel.Debit is null && entryFormModel.Credit is null)
             {
                 return new ValidationResult("Both cannot be null.",
                     new[] { nameof(EntryFormModel.Debit), nameof(EntryFormModel.Credit) });
