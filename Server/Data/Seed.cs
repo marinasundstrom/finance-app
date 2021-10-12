@@ -81,6 +81,20 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 2010,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Eget kapital",
+                Description = String.Empty,
+            },
+            new Account
+            {
+                AccountNo = 2011,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Egna varuttag",
+                Description = String.Empty,
+            },
+            new Account
+            {
                 AccountNo = 2013,
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Egna Uttag",
@@ -95,6 +109,20 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 2068,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Vinst eller förlust från föregående år",
+                Description = String.Empty,
+            },
+            new Account
+            {
+                AccountNo = 2330,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Checkkredit",
+                Description = String.Empty,
+            },
+            new Account
+            {
                 AccountNo = 2440,
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Leverantörsskulder",
@@ -102,9 +130,16 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 2510,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Skatteskulder",
+                Description = String.Empty,
+            },
+            new Account
+            {
                 AccountNo = 2610,
                 Class = AccountClass.EquityAndLiabilites,
-                Name = "Utgående moms 25%",
+                Name = "Utgående moms",
                 Description = String.Empty
             },
             new Account
@@ -113,7 +148,35 @@ public static class Seed
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Utgående moms Försäljning Sverige 25%",
                 Description = String.Empty
-            }, 
+            },
+            new Account
+            {
+                AccountNo = 2620,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms 12%",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 2621,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms Försäljning Sverige 12%",
+                Description = String.Empty
+            },
+            new Account
+             {
+                 AccountNo = 2630,
+                 Class = AccountClass.EquityAndLiabilites,
+                 Name = "Utgående moms 6%",
+                 Description = String.Empty
+             },
+            new Account
+            {
+                AccountNo = 2631,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms Försäljning Sverige 6%",
+                Description = String.Empty
+            },
             new Account
             {
                 AccountNo = 2640,
@@ -130,6 +193,13 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 3000,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 3001,
                 Class = AccountClass.OperatingIncomeRevenue,
                 Name = "Försäljning 25% moms Sverige",
@@ -137,9 +207,23 @@ public static class Seed
             },
             new Account
             {
-                AccountNo = 3051,
+                AccountNo = 3002,
                 Class = AccountClass.OperatingIncomeRevenue,
-                Name = "Försäljning varor 25% moms Sverige",
+                Name = "Försäljning 12% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3003,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning 6% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3040,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning tjänster",
                 Description = String.Empty
             },
             new Account
@@ -151,9 +235,72 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 3042,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning tjänster 12% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3043,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning tjänster 6% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3050,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Varuförsäljning",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3051,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning varor 25% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3052,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning varor 12% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3053,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning varor 6% moms Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3550,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Fakturerade resekostnader",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 3740,
                 Class = AccountClass.OperatingIncomeRevenue,
                 Name = "Öresavrundning",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3911,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Hyresintäkter",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 3921,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Provisionsintäkter",
                 Description = String.Empty
             },
             new Account
@@ -256,6 +403,62 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 7010,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Löner till kollektivanställda",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7210,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Löner till tjänstemän",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7220,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Löner till företagsledare",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7332,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Bilersättningar, skattepliktiga",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7610,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Utbildning",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7620,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Sjuk- och hälsovård",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7691,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Personalrekrytering",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8014,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Koncernbidrag",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 8310,
                 Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Ränteintäkter",
@@ -263,9 +466,44 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 8311,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Ränteintäkter från bank",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 8410,
                 Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Räntekostnader",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8420,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Räntekostnader för kortfristiga skulder",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8421,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Räntekostnader till kreditinstitut",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8990,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Resultat",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8999,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Årets resultat",
                 Description = String.Empty
             });
     }
