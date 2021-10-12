@@ -1,4 +1,4 @@
-﻿@page "/verifications/invoice"
+﻿@page "/verifications/sale"
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
@@ -6,9 +6,9 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<PageTitle>New Verification</PageTitle>
+<PageTitle>Register sale</PageTitle>
 
-<MudText Typo="Typo.h3" Class="mt-4 mb-2">Register invoice</MudText>
+<MudText Typo="Typo.h3" Class="mt-4 mb-2">Register sale</MudText>
 
 <EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
     <ObjectGraphDataAnnotationsValidator />
@@ -16,11 +16,20 @@
     <MudTextField T="string" Label="Description" HelperText="@(formModel.Description is null ? null : $"{formModel.Description.Length}/240")" Variant="Variant.Outlined"
                   @bind-Value="formModel.Description" Lines="3" Class="my-4" For="@(() => formModel.Description)" />
 
-    <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
+
+    <MudSelect Label="Account" Variant="Variant.Outlined" Class="my-4" @bind-Value="formModel.TargetAccount" For="@(() => formModel.TargetAccount)">
+        @foreach (TargetAccount targetAccount in Enum.GetValues<TargetAccount>())
+        {
+            <MudSelectItem Value="@targetAccount">@(targetAccount.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
+        }
+    </MudSelect>
+
 
     <MudTable @ref="table" Items="@formModel.Entries" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Entries</MudText>
+            <MudSpacer />
+            <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<EntryModel, object>(x=>x.EntryType)">Type</MudTableSortLabel></MudTh>
@@ -142,7 +151,7 @@
         entries.Add(
                new CreateEntry
                {
-                   AccountNo = 1510, // 1930,
+                   AccountNo = formModel.TargetAccount == TargetAccount.AccountReceivable ? 1510 : formModel.TargetAccount == TargetAccount.CorporateAccount ? 1930 : -1,
                    Description = string.Empty,
                    Debit = formModel.Total
                });
@@ -224,6 +233,8 @@
         [MaxLength(240, ErrorMessage = "Max 240 characters")]
         public string Description { get; set; } = null!;
 
+        public TargetAccount TargetAccount { get; set; }
+
         public List<EntryModel> Entries { get; set; } = new List<EntryModel>();
 
         public decimal Total => Entries.Sum(e => e.Total);
@@ -257,5 +268,17 @@
 
         [Display(Name = "Försäljning 6% moms")]
         SalesVat6Percent
+    }
+
+    public enum TargetAccount
+    {
+        [Display(Name = "Företagskonto")]
+        CorporateAccount,
+
+        //[Display(Name = "Kassa")]
+        //Cash,
+
+        [Display(Name = "Kundfordringar")]
+        AccountReceivable
     }
 }

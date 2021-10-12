@@ -11,7 +11,11 @@
 <MudText Typo="Typo.h3" Class="mt-4 mb-2">Verifications</MudText>
 
 <MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
-    Add verification
+    Create verification
+</MudButton>
+
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/verifications/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+    Register sale
 </MudButton>
 
 <MudTable Items="verifications" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(verifications is null)" LoadingProgressColor="Color.Info">
