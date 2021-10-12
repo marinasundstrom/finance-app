@@ -2,11 +2,11 @@
 
 public static class Seed
 {
-    public static bool RecreateDatabase { get; set; } = false;
+    public static bool RecreateDatabase { get; set; } = true;
 
-    public static bool SeedAccounts { get; set; } = false;
+    public static bool SeedAccounts { get; set; } = true;
 
-    public static bool SeedVerifications { get; set; } = false;
+    public static bool SeedVerifications { get; set; } = true;
 
     static int verificationNo = 1;
 
@@ -39,17 +39,94 @@ public static class Seed
         context.Accounts.AddRange(
             new Account
             {
-                AccountNo = 2640,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Ingående moms",
-                Description = String.Empty
-            },
-            new Account
-            {
                 AccountNo = 1510,
                 Class = AccountClass.Assets,
                 Name = "Kundfordringar",
                 Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 1930,
+                Class = AccountClass.Assets,
+                Name = "Företagskonto",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 1910,
+                Class = AccountClass.Assets,
+                Name = "Kassa",
+                Description = "Insättningar av kontanter från kassan"
+            },
+            new Account
+            {
+                AccountNo = 1920,
+                Class = AccountClass.Assets,
+                Name = "PlusGiro",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 1630,
+                Class = AccountClass.Assets,
+                Name = "Skattekonto",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 1940,
+                Class = AccountClass.Assets,
+                Name = "Placeringskonto",
+                Description = "Överföringar till och från placeringskonto/sparkonto"
+            },
+            new Account
+            {
+                AccountNo = 2013,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Egna Uttag",
+                Description = "Privata uttag \"lön\" i enskild firma"
+            },
+            new Account
+            {
+                AccountNo = 2018,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Egna Insättningar",
+                Description = "Privata insättningar i enskild firma"
+            },
+            new Account
+            {
+                AccountNo = 2440,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Leverantörsskulder",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 2610,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms 25%",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 2611,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms Försäljning Sverige 25%",
+                Description = String.Empty
+            }, 
+            new Account
+            {
+                AccountNo = 2640,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Ingående moms",
+                Description = String.Empty
+            },   
+            new Account
+            {
+                AccountNo = 2650,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Redovisningskonto för moms",
+                Description = "Får tillbaka eller betalar moms till skatteverket"
             },
             new Account
             {
@@ -74,23 +151,9 @@ public static class Seed
             },
             new Account
             {
-                AccountNo = 2610,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Utgående moms 25%",
-                Description = String.Empty
-            },
-            new Account
-            {
-                AccountNo = 2611,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Utgående moms Försäljning Sverige 25%",
-                Description = String.Empty
-            },
-            new Account
-            {
-                AccountNo = 1930,
-                Class = AccountClass.Assets,
-                Name = "Företagskonto",
+                AccountNo = 3740,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Öresavrundning",
                 Description = String.Empty
             },
             new Account
@@ -193,48 +256,6 @@ public static class Seed
             },
             new Account
             {
-                AccountNo = 1910,
-                Class = AccountClass.Assets,
-                Name = "Kassa",
-                Description = "Insättningar av kontanter från kassan"
-            },
-            new Account
-            {
-                AccountNo = 1940,
-                Class = AccountClass.Assets,
-                Name = "Placeringskonto",
-                Description = "Överföringar till och från placeringskonto/sparkonto"
-            },
-            new Account
-            {
-                AccountNo = 2013,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Egna Uttag",
-                Description = "Privata uttag \"lön\" i enskild firma"
-            },
-            new Account
-            {
-                AccountNo = 2018,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Egna Insättningar",
-                Description = "Privata insättningar i enskild firma"
-            },
-            new Account
-            {
-                AccountNo = 2650,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Redovisningskonto för moms",
-                Description = "Får tillbaka eller betalar moms till skatteverket"
-            },
-            new Account
-            {
-                AccountNo = 3740,
-                Class = AccountClass.OperatingIncomeRevenue,
-                Name = "Öresavrundning",
-                Description = String.Empty
-            },
-            new Account
-            {
                 AccountNo = 8310,
                 Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Ränteintäkter",
@@ -245,27 +266,6 @@ public static class Seed
                 AccountNo = 8410,
                 Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Räntekostnader",
-                Description = String.Empty
-            },
-            new Account
-            {
-                AccountNo = 1920,
-                Class = AccountClass.Assets,
-                Name = "PlusGiro",
-                Description = String.Empty
-            },
-            new Account
-            {
-                AccountNo = 2440,
-                Class = AccountClass.EquityAndLiabilites,
-                Name = "Leverantörsskulder",
-                Description = String.Empty
-            },
-            new Account
-            {
-                AccountNo = 1630,
-                Class = AccountClass.Assets,
-                Name = "Skattekonto",
                 Description = String.Empty
             });
     }
