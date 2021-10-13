@@ -156,9 +156,16 @@
                    Debit = formModel.Total
                });
 
-        foreach (var entry in formModel.Entries)
+
+        var entryGroups = formModel.Entries.GroupBy(e => e.EntryType);
+
+        foreach (var entryGroup in entryGroups)
         {
-            switch (entry.EntryType)
+            var entryType = entryGroup.Key;
+            var subTotal = entryGroup.Sum(e => e.SubTotal);
+            var vat = entryGroup.Sum(e => e.Vat);
+
+            switch (entryType)
             {
                 case EntryType.SalesVat25Percent:
                     entries.Add(
@@ -166,15 +173,15 @@
                         {
                             AccountNo = 3001,
                             Description = string.Empty,
-                            Credit = entry.SubTotal
+                            Credit = subTotal
                         });
 
                     entries.Add(
                         new CreateEntry
                         {
-                            AccountNo = 2610,
+                            AccountNo = 2611,
                             Description = string.Empty,
-                            Credit = entry.Vat
+                            Credit = vat
                         });
                     break;
 
@@ -184,15 +191,15 @@
                             {
                                 AccountNo = 3002,
                                 Description = string.Empty,
-                                Credit = entry.SubTotal
+                                Credit = subTotal
                             });
 
                     entries.Add(
                         new CreateEntry
                         {
-                            AccountNo = 2620,
+                            AccountNo = 2621,
                             Description = string.Empty,
-                            Credit = entry.Vat
+                            Credit = vat
                         });
                     break;
 
@@ -202,15 +209,15 @@
                             {
                                 AccountNo = 3003,
                                 Description = string.Empty,
-                                Credit = entry.SubTotal
+                                Credit = subTotal
                             });
 
                     entries.Add(
                         new CreateEntry
                         {
-                            AccountNo = 2630,
+                            AccountNo = 2631,
                             Description = string.Empty,
-                            Credit = entry.Vat
+                            Credit = vat
                         });
                     break;
 
