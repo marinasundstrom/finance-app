@@ -81,3 +81,8 @@ In the terminal, while in Server directory, run the following command:
 ```
 dotnet run
 ```
+
+### Seed data
+By default, the database will be (re)created with initial data being seeded eveytime you (re)start the app. 
+
+This can be turned on/off in the file ```Server/Data/Seed.cs.```
