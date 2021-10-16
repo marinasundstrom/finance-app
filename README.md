@@ -8,7 +8,7 @@ Built in C# with Blazor Web Assembly and ASP.NET Core.
 
 To build an accounting app with user experience in mind.
 
-Thanks to my friend for this idea.
+Thanks to my friend for giving me the idea to build this app.
 
 ## Features
 * View accounts (BAS plans) and balances
