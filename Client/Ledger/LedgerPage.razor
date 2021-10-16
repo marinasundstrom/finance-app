@@ -16,7 +16,7 @@
     </HeaderContent>
     <RowTemplate Context="entry">
         <MudTd DataLabel="Verification No">
-            <MudLink Href="@($"/verifications?verificationNo={entry.Verification.VerificationNo}")">@entry.Verification.VerificationNo</MudLink>
+            <MudLink Href="@($"/ledger?verificationNo={entry.Verification.VerificationNo}")">@entry.Verification.VerificationNo</MudLink>
         </MudTd>
         <MudTd DataLabel="Account No">@entry.Account.AccountNo</MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
@@ -62,7 +62,7 @@
 
         if (VerificationNo is not null)
         {
-            title = $"Verification {VerificationNo}";
+            title = $"{VerificationNo} - {entries.First().Verification.Description}";
         }
     }
 }

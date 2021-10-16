@@ -25,12 +25,14 @@
     <HeaderContent>
         <MudTh>Account No</MudTh>
         <MudTh>Name</MudTh>
+        <MudTh>Description</MudTh>
         <MudTh>Balance</MudTh>
     </HeaderContent>
     <RowTemplate Context="account">
         <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
         <MudTd DataLabel="Name">@account.Name</MudTd>
-        <MudTd DataLabel="balance">@account.Balance.ToString("c")</MudTd>
+        <MudTd DataLabel="Description">@account.Description</MudTd>
+        <MudTd DataLabel="Balance">@account.Balance.ToString("c")</MudTd>
     </RowTemplate>
 </MudTable>
 
