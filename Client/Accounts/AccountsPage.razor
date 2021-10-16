@@ -26,7 +26,7 @@
         <MudTh>Account No</MudTh>
         <MudTh>Name</MudTh>
         <MudTh>Description</MudTh>
-        <MudTh>Balance</MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Account, object>(x=>x.Balance)">Balance</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate Context="account">
         <MudTd DataLabel="Account No">@account.AccountNo</MudTd>
