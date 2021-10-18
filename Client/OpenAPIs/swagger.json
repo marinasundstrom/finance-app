@@ -71,6 +71,36 @@
         }
       }
     },
+    "/api/Accounts/History": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountHistory",
+        "parameters": [
+          {
+            "type": "array",
+            "name": "accountNo",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/AccountSummary"
+            }
+          }
+        }
+      }
+    },
     "/api/Entries": {
       "get": {
         "tags": [
@@ -194,6 +224,46 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "AccountSummary": {
+      "type": "object",
+      "required": [
+        "labels",
+        "series"
+      ],
+      "properties": {
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "series": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountSeries"
+          }
+        }
+      }
+    },
+    "AccountSeries": {
+      "type": "object",
+      "required": [
+        "name",
+        "data"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "decimal"
+          }
         }
       }
     },

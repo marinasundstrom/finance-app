@@ -71,34 +71,94 @@ namespace Accounting.Server.Controllers
                 };
             });
         }
+
+        [HttpGet("History")]
+        public async Task<AccountSummary> GetAccountHistoryAsync(int[] accountNo)
+        {
+            List<(int Year, int Month)> months = new();
+
+            DateTime startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
+            DateTime endDate = DateTime.Today;
+            for (DateTime dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
+            {
+                months.Add((dt.Year, dt.Month));
+            }
+
+            var query = context.Accounts
+                .Include(a => a.Entries)
+                .ThenInclude(e => e.Verification)
+                .Where(a => a.Entries.Any())
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (accountNo.Any())
+            {
+                query = query.Where(a => accountNo.Any(x => x == a.AccountNo));
+            }
+
+            var accounts = await query.ToListAsync();
+
+            List<string> labels = months.Select(m => new DateOnly(m.Year, m.Month, 1).ToString("MMM yy")).ToList();
+            Dictionary<Data.Account, List<decimal>> series = new();
+
+            foreach (var month in months)
+            {
+                foreach(var account in accounts)
+                {
+                    if (!series.ContainsKey(account))
+                    {
+                        series[account] = new List<decimal>();
+                    }
+
+                    var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
+                    var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
+
+                    if(sum < 0)
+                    {
+                        // Assume it is supposed to be a negative value but that we want to represent it as a positve value.
+                        sum = sum * -1;
+                    }
+
+                    series[account].Add(sum);
+                }
+            }
+
+            return new AccountSummary(
+                labels.ToArray(),
+                series.Select(asum => new AccountSeries(
+                    $"{asum.Key.AccountNo} {asum.Key.Name}",
+                    asum.Value)));
+        }
+    }
+
+    public record class AccountSeries(string Name, IEnumerable<decimal> Data);
+
+    public record class AccountSummary(string[] Labels, IEnumerable<AccountSeries> Series);
+
+    public class Account
+    {
+        public int AccountNo { get; set; }
+
+        public AccountClass Class { get; set; } = null!;
+
+        public string Name { get; set; } = null!;
+
+        public string Description { get; set; } = null!;
+
+        public decimal Balance { get; set; }
+    }
+
+    public class AccountShort
+    {
+        public int AccountNo { get; set; }
+
+        public string Name { get; set; } = null!;
+    }
+
+    public class AccountClass
+    {
+        public int Id { get; set; }
+
+        public string Description { get; set; } = null!;
     }
 }
-
-public class Account
-{
-    public int AccountNo { get; set; }
-
-    public AccountClass Class { get; set; } = null!;
-
-    public string Name { get; set; } = null!;
-
-    public string Description { get; set; } = null!;
-
-    public decimal Balance { get; set; }
-}
-
-public class AccountShort
-{
-    public int AccountNo { get; set; }
-
-    public string Name { get; set; } = null!;
-}
-
-public class AccountClass
-{
-    public int Id { get; set; }
-
-    public string Description { get; set; } = null!;
-}
-
-

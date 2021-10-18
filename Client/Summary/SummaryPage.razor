@@ -1,0 +1,36 @@
+@page "/"
+@using System.ComponentModel.DataAnnotations
+@using Accounting.Client
+@inject IAccountsClient AccountsClient
+
+<PageTitle>Summary</PageTitle>
+
+<MudText Typo="Typo.h3" Class="mt-4 mb-2">Summary</MudText>
+
+<MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+
+@code {
+    private int[] accounts = new [] { 1510, 1930, 2013, 2018, 2440, 4000,
+        3000, 3001, 3002, 3003, 3040, 3041, 3042, 3043, 3050, 3051, 3052, 3053 };
+
+    private ChartOptions options = new ChartOptions();
+    public List<ChartSeries> Series = new List<ChartSeries>();
+    public string[] XAxisLabels = new string[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        //options.InterpolationOption = InterpolationOption.NaturalSpline;
+        options.YAxisFormat = "c2";
+        options.YAxisTicks = 10_000;
+
+        var data = await AccountsClient.GetAccountHistoryAsync(accounts);
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach(var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        StateHasChanged();
+    }
+}
