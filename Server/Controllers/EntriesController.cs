@@ -19,57 +19,52 @@ namespace Accounting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Entry>> GetEntriesAsync(string? verificationNo = null)
+        public async Task<EntriesResult> GetEntriesAsync(string? verificationNo = null, int page = 0, int pageSize = 10)
         {
             var query = context.Entries
                         .Include(e => e.Verification)
                         .Include(e => e.Account)
+                        .AsNoTracking()
                         .AsQueryable();
-
 
             if (verificationNo is not null)
             {
                 query = query.Where(e => e.VerificationNo == verificationNo);
             }
 
+            var totalItems = await query.CountAsync();
+
             var entries = await query
-                .AsNoTracking()
+                .Skip(pageSize * page)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return entries.Select(e => new Entry
-            {
-                Id = e.Id,
-                Verification = new VerificationShort
+            var entries2 = entries.Select(e => new Entry(
+                e.Id,
+                new VerificationShort
                 {
                     VerificationNo = e.VerificationNo,
                     Date = e.Verification.Date,
                     Description = e.Verification.Description,
                 },
-                Account = new AccountShort
+                new AccountShort
                 {
                     AccountNo = e.AccountNo,
                     Name = e.Account.Name
                 },
-                Description = e.Description,
-                Debit = e.Debit,
-                Credit = e.Credit
-            });
+                e.Description,
+                e.Debit,
+                e.Credit
+            ));
+
+            return new EntriesResult(entries2, totalItems);
         }
     }
 
-    public class Entry
-    {
-        public int Id { get; set; }
+    public record EntriesResult(IEnumerable<Entry> Entries, int TotalItems);
 
-        public VerificationShort Verification { get; set; } = null!;
+    public record Entry(int Id, VerificationShort Verification, AccountShort Account,
+        string Description, decimal? Debit, decimal? Credit);
 
-        public AccountShort Account { get; set; } = null!;
-
-        public string Description { get; set; } = null!;
-
-        public decimal? Debit { get; set; }
-
-        public decimal? Credit { get; set; }
-    }
 }
 

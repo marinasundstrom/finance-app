@@ -146,6 +146,22 @@
             "name": "verificationNo",
             "in": "query",
             "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -153,10 +169,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Entry"
-              }
+              "$ref": "#/definitions/EntriesResult"
             }
           }
         }
@@ -318,6 +331,25 @@
             "type": "number",
             "format": "decimal"
           }
+        }
+      }
+    },
+    "EntriesResult": {
+      "type": "object",
+      "required": [
+        "entries",
+        "totalItems"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Entry"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

@@ -7,7 +7,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@title</MudText>
 
-<MudTable Items="entries" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(entries is null)" LoadingProgressColor="Color.Info">
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<Entry>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Verification No</MudTh>
         <MudTh colspan="2">Account</MudTh>
@@ -23,30 +23,38 @@
         <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
         <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
     </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
 </MudTable>
 
 @code
 {
-    IEnumerable<Entry>? entries = null;
+    MudTable<Entry>? table = null!;
 
     string title = "Ledger";
+    bool loading = false;
 
     [SupplyParameterFromQuery]
     [Parameter]
     public string? VerificationNo { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await LoadData();
+        title = $"Ledger";
 
         NavigationManager.LocationChanged += OnLocationChanged;
     }
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs ea)
     {
-        await LoadData();
-
-        StateHasChanged();
+        if (table is not null)
+        {
+            await table.ReloadServerData();
+        }
     }
 
     public void Dispose()
@@ -54,15 +62,30 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private async Task LoadData()
+    private async Task<TableData<Entry>> ServerReload(TableState state)
     {
-        entries = await EntriesClient.GetEntriesAsync(VerificationNo);
+        loading = true;
 
-        title = $"Ledger";
-
-        if (VerificationNo is not null)
+        try
         {
-            title = $"{VerificationNo} - {entries.First().Verification.Description}";
+            var result = await EntriesClient.GetEntriesAsync(VerificationNo, state.Page, state.PageSize);
+
+            if (VerificationNo is not null)
+            {
+                title = $"{VerificationNo} - {result.Entries.First().Verification.Description}";
+            }
+            else
+            {
+                title = $"Ledger";
+            }
+
+            StateHasChanged();
+
+            return new TableData<Entry>() { TotalItems = result.TotalItems, Items = result.Entries };
+        }
+        finally
+        {
+            loading = false;
         }
     }
 }
