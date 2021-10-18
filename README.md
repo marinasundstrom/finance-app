@@ -30,9 +30,13 @@ Nice to have:
 
 ### Summary
 
-View account balance summary and history.
+View account balance by account class.
 
 ![Alt text](/Screenshots/Summary.png "Summary")
+
+Balance history chart.
+
+![Alt text](/Screenshots/Summary2.png "Summary")
 
 ### Accounts
 
