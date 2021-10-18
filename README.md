@@ -28,6 +28,12 @@ Nice to have:
 
 ## Screenshots
 
+### Summary
+
+View account balance summary and history.
+
+![Alt text](/Screenshots/Summary.png "Summary")
+
 ### Accounts
 
 List BAS accounts and their balances.
@@ -47,6 +53,10 @@ The program is verification-centric. You create a verification to which the entr
 ![Alt text](/Screenshots/Verifications.png "Verifications")
 
 At this time, there is no way to attach documents.
+
+Register new verfication:
+
+![Alt text](/Screenshots/NewVerification.png "Register new verifications")
 
 ### Register sales
 
