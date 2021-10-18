@@ -181,15 +181,30 @@
           "Verifications"
         ],
         "operationId": "Verifications_GetVerifications",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "default": 0,
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "default": 10,
+            "x-nullable": false
+          }
+        ],
         "responses": {
           "200": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Verification"
-              }
+              "$ref": "#/definitions/VerificationsResult"
             }
           }
         }
@@ -418,6 +433,25 @@
         },
         "name": {
           "type": "string"
+        }
+      }
+    },
+    "VerificationsResult": {
+      "type": "object",
+      "required": [
+        "verifications",
+        "totalItems"
+      ],
+      "properties": {
+        "verifications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Verification"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

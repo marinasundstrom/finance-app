@@ -21,15 +21,19 @@ namespace Accounting.Server.Controllers
 
         // GET: api/values
         [HttpGet]
-        public async Task<IEnumerable<Verification>> GetVerificationsAsync()
+        public async Task<VerificationsResult> GetVerificationsAsync(int page = 0, int pageSize = 10)
         {
             var query = context.Verifications
                  .Include(x => x.Entries)
+                 .AsNoTracking()
+                 .AsSplitQuery()
                  .AsQueryable();
 
+            var totalItems = await query.CountAsync();
+
             var r = await query
-               .AsNoTracking()
-               .AsSplitQuery()
+               .Skip(pageSize * page)
+               .Take(pageSize)
                .ToListAsync();
 
             var vms = new List<Verification>();
@@ -43,7 +47,7 @@ namespace Accounting.Server.Controllers
                 Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault())
             }));
 
-            return vms;
+            return new VerificationsResult(vms, totalItems);
         }
 
         [HttpPost]
@@ -83,6 +87,8 @@ namespace Accounting.Server.Controllers
             return verification.VerificationNo;
         }
     }
+
+    public record VerificationsResult(IEnumerable<Verification> Verifications, int TotalItems);
 
     public class Verification
     {
