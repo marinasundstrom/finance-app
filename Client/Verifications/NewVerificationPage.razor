@@ -15,7 +15,7 @@
 
     <MudButton OnClick="AddEntry" Disabled="isEditingEntry" Variant="Variant.Outlined" StartIcon="@Icons.Material.Outlined.AddTask" Class="mb-2">Add entry</MudButton>
 
-    <MudTable @ref="table" Items="@formModel.Entries" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By"
+    <MudTable @ref="table" Items="@formModel.Entries" Elevation="0" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By"
               CommitEditTooltip="Commit Edit" OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues" RowEditCommit="ItemHasBeenCommitted">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Entries</MudText>
