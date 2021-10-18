@@ -128,7 +128,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/AccountSummary"
+              "$ref": "#/definitions/AccountBalanceHistory"
             }
           }
         }
@@ -281,7 +281,7 @@
         }
       }
     },
-    "AccountSummary": {
+    "AccountBalanceHistory": {
       "type": "object",
       "required": [
         "labels",

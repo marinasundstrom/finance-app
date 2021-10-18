@@ -92,13 +92,13 @@ namespace Accounting.Server.Controllers
                 return new AccountClassSummary(
                     (int)c.Key,
                     name,
-                    c.Sum(x => x.Entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum())
+                    c.Sum(a => a.Entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum())
                 );
             });
         }
 
         [HttpGet("History")]
-        public async Task<AccountSummary> GetAccountHistoryAsync(int[] accountNo)
+        public async Task<AccountBalanceHistory> GetAccountHistoryAsync(int[] accountNo)
         {
             List<(int Year, int Month)> months = new();
 
@@ -148,7 +148,7 @@ namespace Accounting.Server.Controllers
                 }
             }
 
-            return new AccountSummary(
+            return new AccountBalanceHistory(
                 labels.ToArray(),
                 series.Select(asum => new AccountSeries(
                     $"{asum.Key.AccountNo} {asum.Key.Name}",
@@ -156,11 +156,13 @@ namespace Accounting.Server.Controllers
         }
     }
 
-    public record class AccountClassSummary(int id, string Name, decimal Balance);
+    public record class AccountClassSummary(int Id, string Name, decimal Balance);
+
+    public record class AccountSummary(int AccountNo, string Name, decimal Balance);
 
     public record class AccountSeries(string Name, IEnumerable<decimal> Data);
 
-    public record class AccountSummary(string[] Labels, IEnumerable<AccountSeries> Series);
+    public record class AccountBalanceHistory(string[] Labels, IEnumerable<AccountSeries> Series);
 
     public class Account
     {

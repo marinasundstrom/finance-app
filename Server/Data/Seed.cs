@@ -2,6 +2,8 @@
 
 public static class Seed
 {
+    public static bool Run { get; set; } = false;
+
     public static bool RecreateDatabase { get; set; } = true;
 
     public static bool SeedAccounts { get; set; } = true;
@@ -12,6 +14,11 @@ public static class Seed
 
     public static async void SeedAsync(this IServiceProvider serviceProvider)
     {
+        if (!Run)
+        {
+            return;
+        }
+
         using var scope = serviceProvider.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<AccountingContext>();
 

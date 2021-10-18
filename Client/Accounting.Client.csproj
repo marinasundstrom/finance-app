@@ -46,21 +46,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Shared\Accounting.Shared.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Pages\" />
-    <None Remove="MudBlazor" />
-    <None Remove="Accounts\" />
-    <None Remove="Ledger\" />
-    <None Remove="Verifications\" />
-    <None Remove="Microsoft.AspNetCore.Components.DataAnnotations.Validation" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\" />
-    <Folder Include="Accounts\" />
-    <Folder Include="Ledger\" />
-    <Folder Include="Verifications\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Verifications\NewVerificationDialog.razor" />
-  </ItemGroup>
+
 </Project>
