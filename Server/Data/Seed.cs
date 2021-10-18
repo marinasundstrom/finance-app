@@ -123,9 +123,23 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 2411,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Kortfristiga lån från kreditinstitut",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 2440,
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Leverantörsskulder",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 2455,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Kortfristiga lån i utländsk valuta",
                 Description = String.Empty
             },
             new Account
@@ -305,6 +319,13 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 3960,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Valutakursvinster av rörelsekaraktär",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 4000,
                 Class = AccountClass.Costs,
                 Name = "Inköp av varor från Sverige",
@@ -476,6 +497,13 @@ public static class Seed
                 AccountNo = 8410,
                 Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
                 Name = "Räntekostnader",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 8415,
+                Class = AccountClass.FinancialAndOtherIncomeAndExpenses,
+                Name = "Räntekostnader kreditinstitut",
                 Description = String.Empty
             },
             new Account
