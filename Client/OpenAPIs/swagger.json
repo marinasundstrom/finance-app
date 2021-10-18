@@ -71,6 +71,39 @@
         }
       }
     },
+    "/api/Accounts/Classes/Summary": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccountClassSummary",
+        "parameters": [
+          {
+            "type": "array",
+            "name": "accountNo",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AccountClassSummary"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Accounts/History": {
       "get": {
         "tags": [
@@ -224,6 +257,27 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "AccountClassSummary": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "balance"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "balance": {
+          "type": "number",
+          "format": "decimal"
         }
       }
     },

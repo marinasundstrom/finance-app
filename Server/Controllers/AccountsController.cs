@@ -72,6 +72,31 @@ namespace Accounting.Server.Controllers
             });
         }
 
+
+        [HttpGet("Classes/Summary")]
+        public async Task<IEnumerable<AccountClassSummary>> GetAccountClassSummaryAsync(int[] accountNo)
+        {
+            var query = context.Accounts
+                .Include(a => a.Entries)
+                .Where(a => a.Entries.Any())
+                .AsNoTracking()
+                .AsQueryable();
+
+            var accounts = await query.ToListAsync();
+
+            var classes = accounts.GroupBy(x => x.Class);
+
+            return classes.Select(c =>
+            {
+                var name = c.Key.GetAttribute<DisplayAttribute>()!.Name!;
+                return new AccountClassSummary(
+                    (int)c.Key,
+                    name,
+                    c.Sum(x => x.Entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum())
+                );
+            });
+        }
+
         [HttpGet("History")]
         public async Task<AccountSummary> GetAccountHistoryAsync(int[] accountNo)
         {
@@ -130,6 +155,8 @@ namespace Accounting.Server.Controllers
                     asum.Value)));
         }
     }
+
+    public record class AccountClassSummary(int id, string Name, decimal Balance);
 
     public record class AccountSeries(string Name, IEnumerable<decimal> Data);
 
