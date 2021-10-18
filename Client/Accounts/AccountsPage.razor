@@ -11,7 +11,7 @@
 
 @if (accountClasses is not null)
 {
-    <MudSelect T="int?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mb-4">
+    <MudSelect T="int?" Label="Account Class" HelperText="Filter by Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mb-4">
         <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
         @foreach (AccountClass accountClass in accountClasses)
         {
