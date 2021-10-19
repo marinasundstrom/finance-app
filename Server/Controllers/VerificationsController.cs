@@ -25,6 +25,7 @@ namespace Accounting.Server.Controllers
         {
             var query = context.Verifications
                  .Include(x => x.Entries)
+                 .OrderBy(x => x.Date)
                  .AsNoTracking()
                  .AsSplitQuery()
                  .AsQueryable();
