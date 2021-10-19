@@ -51,6 +51,33 @@
         }
       }
     },
+    "/api/Accounts/{accountNo}": {
+      "get": {
+        "tags": [
+          "Accounts"
+        ],
+        "operationId": "Accounts_GetAccount",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "accountNo",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          }
+        }
+      }
+    },
     "/api/Accounts/Classes": {
       "get": {
         "tags": [

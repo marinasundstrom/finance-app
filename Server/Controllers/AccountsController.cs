@@ -23,9 +23,9 @@ namespace Accounting.Server.Controllers
         public async Task<IEnumerable<Account>> GetAccountsAsync(int? accountClass = null, bool? showUnusedAccounts = false)
         {
             var query = context.Accounts
-            .Include(a => a.Entries)
-            .AsNoTracking()
-            .AsQueryable();
+                .Include(a => a.Entries)
+                .AsNoTracking()
+                .AsQueryable();
 
             if (!showUnusedAccounts.GetValueOrDefault())
             {
@@ -41,22 +41,39 @@ namespace Accounting.Server.Controllers
 
             var vms = new List<Account>();
 
-            vms.AddRange(r.Select(a => new Account
-            {
-                AccountNo = a.AccountNo,
-                Class = new AccountClass
-                {
-                    Id = (int)a.Class,
-                    Description = a.Class.GetAttribute<DisplayAttribute>()!.Name!
-                },
-                Name = a.Name,
-                Description = a.Description,
-                Balance =
-                    a.Entries.Sum(e => e.Debit.GetValueOrDefault())
-                    - a.Entries.Sum(e => e.Credit.GetValueOrDefault())
-            }));
+            vms.AddRange(r.Select(MapAccount));
 
             return vms;
+        }
+
+        [HttpGet("{accountNo:int}")]
+        public async Task<Account> GetAccountAsync(int accountNo)
+        {
+            var account = await context.Accounts
+                .Include(a => a.Entries)
+                .AsNoTracking()
+                .AsQueryable()
+                .FirstAsync(a => a.AccountNo == accountNo);
+
+            return MapAccount(account);
+        }
+
+        private static Account MapAccount(Data.Account account)
+        {
+            return new Account
+            {
+                AccountNo = account.AccountNo,
+                Class = new AccountClass
+                {
+                    Id = (int)account.Class,
+                    Description = account.Class.GetAttribute<DisplayAttribute>()!.Name!
+                },
+                Name = account.Name,
+                Description = account.Description,
+                Balance =
+                    account.Entries.Sum(e => e.Debit.GetValueOrDefault())
+                    - account.Entries.Sum(e => e.Credit.GetValueOrDefault())
+            };
         }
 
         [HttpGet("Classes")]

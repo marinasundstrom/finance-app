@@ -1,0 +1,47 @@
+﻿@page "/accounts/{accountNo:int}"
+@using System.ComponentModel.DataAnnotations
+@using Accounting.Client
+@inject IAccountsClient AccountsClient
+
+@if (account is not null)
+{
+    <PageTitle>@account.AccountNo - @account.Name</PageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@account.AccountNo - @account.Name</MudText>
+
+    <MudText Typo="Typo.body1" Class="mt-4 mb-8">@account.Description</MudText>
+
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
+
+    <MudChart Class="mt-8" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+}
+
+@code
+{
+    Account? account;
+
+    ChartOptions options = new ChartOptions();
+    List<ChartSeries> Series = new List<ChartSeries>();
+    string[] XAxisLabels = new string[0];
+
+    [Parameter]
+    public int AccountNo { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        account = await AccountsClient.GetAccountAsync(AccountNo);
+
+        options.YAxisFormat = "c2";
+        options.YAxisTicks = 10_000;
+
+        var data = await AccountsClient.GetAccountHistoryAsync(new int[] { AccountNo });
+        XAxisLabels = data.Labels.ToArray();
+
+        foreach (var d in data.Series)
+        {
+            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+        }
+
+        StateHasChanged();
+    }
+}

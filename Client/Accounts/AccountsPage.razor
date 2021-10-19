@@ -1,6 +1,7 @@
 ﻿@page "/accounts"
 @using System.ComponentModel.DataAnnotations
-@using Accounting.Client
+@using Accounting
+@inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
 
 <PageTitle>Accounts</PageTitle>
@@ -9,7 +10,7 @@
 
 <MudCheckBox Checked="showUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnShowUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
-<MudTable Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<Account,bool>(FilterFunc)">
+<MudTable Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<Account,bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<Account> e) => ItemClicked(e)">
     <ToolBarContent>
         @if (accountClasses is not null)
         {
@@ -74,6 +75,11 @@
         await LoadData();
 
         StateHasChanged();
+    }
+
+    void ItemClicked(TableRowClickEventArgs<Account> e)
+    {
+        NavigationManager.NavigateTo($"/accounts/{e.Item.AccountNo}");
     }
 
     private bool FilterFunc(Account account) => FilterFunc2(account, searchString);
