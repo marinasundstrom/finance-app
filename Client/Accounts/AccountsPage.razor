@@ -9,18 +9,21 @@
 
 <MudCheckBox Checked="showUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnShowUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
-@if (accountClasses is not null)
-{
-    <MudSelect T="int?" Label="Account Class" HelperText="Filter by Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mb-4">
-        <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
-        @foreach (AccountClass accountClass in accountClasses)
+<MudTable Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<Account,bool>(FilterFunc)">
+    <ToolBarContent>
+        @if (accountClasses is not null)
         {
-            <MudSelectItem Value="@((int?)accountClass.Id)">@accountClass.Description</MudSelectItem>
+            <MudSelect T="int?" Label="Account Class" Value="@accountClass" ValueChanged="OnAccountClassChanged" Class="mt-0">
+                <MudSelectItem Value="@((int?)null)">All</MudSelectItem>
+                @foreach (AccountClass accountClass in accountClasses)
+                {
+                    <MudSelectItem Value="@((int?)accountClass.Id)">@accountClass.Description</MudSelectItem>
+                }
+            </MudSelect>
         }
-    </MudSelect>
-}
-
-<MudTable Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info">
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Immediate="true" DebounceInterval="200"></MudTextField>
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>Account No</MudTh>
         <MudTh>Name</MudTh>
@@ -41,6 +44,7 @@
     IEnumerable<Account>? accounts = null;
     bool showUnusedAccounts = false;
     int? accountClass = null;
+    private string searchString = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,5 +74,27 @@
         await LoadData();
 
         StateHasChanged();
+    }
+
+    private bool FilterFunc(Account account) => FilterFunc2(account, searchString);
+
+    private bool FilterFunc2(Account account, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        if(int.TryParse(searchString, out int v))
+        {
+            if (account.AccountNo.ToString().StartsWith(searchString))
+                return true;
+        }
+
+        if (account.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (account.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
     }
 }
