@@ -68,7 +68,7 @@
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(VerificationNo, state.Page, state.PageSize);
+            var result = await EntriesClient.GetEntriesAsync(null, VerificationNo, state.Page, state.PageSize);
 
             if (VerificationNo is not null)
             {

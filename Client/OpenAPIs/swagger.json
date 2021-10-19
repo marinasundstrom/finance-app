@@ -169,6 +169,13 @@
         "operationId": "Entries_GetEntries",
         "parameters": [
           {
+            "type": "integer",
+            "name": "accountNo",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
             "type": "string",
             "name": "verificationNo",
             "in": "query",

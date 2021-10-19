@@ -19,13 +19,18 @@ namespace Accounting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<EntriesResult> GetEntriesAsync(string? verificationNo = null, int page = 0, int pageSize = 10)
+        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10)
         {
             var query = context.Entries
                         .Include(e => e.Verification)
                         .Include(e => e.Account)
                         .AsNoTracking()
                         .AsQueryable();
+
+            if (accountNo is not null)
+            {
+                query = query.Where(e => e.AccountNo == accountNo);
+            }
 
             if (verificationNo is not null)
             {
