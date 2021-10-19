@@ -42,14 +42,9 @@
     </PagerContent>
 </MudTable>
 
-
 @code
 {
     bool loading = false;
-
-    [SupplyParameterFromQuery]
-    [Parameter]
-    public string? VerificationNo { get; set; }
 
     private async Task<TableData<Verification>> ServerReload(TableState state)
     {
