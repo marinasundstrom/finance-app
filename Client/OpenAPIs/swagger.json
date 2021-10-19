@@ -196,6 +196,20 @@
             "format": "int32",
             "default": 10,
             "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "direction",
+            "in": "query",
+            "x-schema": {
+              "$ref": "#/definitions/ResultDirection"
+            },
+            "default": "Asc",
+            "x-nullable": false,
+            "enum": [
+              "Desc",
+              "Asc"
+            ]
           }
         ],
         "responses": {
@@ -406,6 +420,7 @@
       "type": "object",
       "required": [
         "id",
+        "date",
         "verification",
         "account",
         "description"
@@ -414,6 +429,10 @@
         "id": {
           "type": "integer",
           "format": "int32"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
         },
         "verification": {
           "$ref": "#/definitions/VerificationShort"
@@ -469,6 +488,18 @@
           "type": "string"
         }
       }
+    },
+    "ResultDirection": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Desc",
+        "Asc"
+      ],
+      "enum": [
+        "Desc",
+        "Asc"
+      ]
     },
     "VerificationsResult": {
       "type": "object",

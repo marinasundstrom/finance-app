@@ -72,6 +72,8 @@ public class Entry
     [Key]
     public int Id { get; set; }
 
+    public DateTime Date { get; set; } = DateTime.Now;
+
     public string VerificationNo { get; set; } = null!;
 
     [ForeignKey(nameof(VerificationNo))]

@@ -22,8 +22,11 @@
         <MudTh>Verification No</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Description</MudTh>
+        @*
         <MudTh>Debit</MudTh>
         <MudTh>Credit</MudTh>
+        *@
+        <MudTh>Amount</MudTh>
     </HeaderContent>
     <RowTemplate Context="verification">
         <MudTd DataLabel="Verification No">
@@ -31,8 +34,11 @@
         </MudTd>
         <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Description">@verification.Description</MudTd>
+        @*
         <MudTd DataLabel="Debit">@verification.Debit.ToString("c")</MudTd>
         <MudTd DataLabel="Credit">@verification.Credit.ToString("c")</MudTd>
+        *@
+        <MudTd DataLabel="Amount">@verification.Debit.ToString("c")</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

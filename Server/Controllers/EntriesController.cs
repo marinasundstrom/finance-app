@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Accounting.Server.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Accounting.Server.Controllers
 {
@@ -19,13 +21,22 @@ namespace Accounting.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10)
+        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
         {
             var query = context.Entries
                         .Include(e => e.Verification)
                         .Include(e => e.Account)
                         .AsNoTracking()
                         .AsQueryable();
+
+            if(direction == ResultDirection.Asc)
+            {
+                query = query.OrderBy(e => e.Date);
+            }
+            else
+            {
+                query = query.OrderByDescending(e => e.Date);
+            }
 
             if (accountNo is not null)
             {
@@ -46,6 +57,7 @@ namespace Accounting.Server.Controllers
 
             var entries2 = entries.Select(e => new Entry(
                 e.Id,
+                e.Date,
                 new VerificationShort
                 {
                     VerificationNo = e.VerificationNo,
@@ -66,9 +78,16 @@ namespace Accounting.Server.Controllers
         }
     }
 
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ResultDirection
+    {
+        Desc,
+        Asc
+    }
+
     public record EntriesResult(IEnumerable<Entry> Entries, int TotalItems);
 
-    public record Entry(int Id, VerificationShort Verification, AccountShort Account,
+    public record Entry(int Id, DateTime Date, VerificationShort Verification, AccountShort Account,
         string Description, decimal? Debit, decimal? Credit);
 
 }

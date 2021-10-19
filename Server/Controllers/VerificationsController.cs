@@ -74,6 +74,7 @@ namespace Accounting.Server.Controllers
 
                 verification.Entries.Add(new Data.Entry
                 {
+                    Date = verification.Date,
                     AccountNo = entryDto.AccountNo,
                     Description = entryDto.Description ?? String.Empty,
                     Debit = entryDto.Debit,

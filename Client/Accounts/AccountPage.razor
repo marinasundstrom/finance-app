@@ -12,6 +12,15 @@
 
     <MudText Typo="Typo.body1" Class="mt-4 mb-8">@account.Description</MudText>
 
+    <MudGrid Class="mt-4 mb-8">
+        <MudItem xs="6">
+            <MudField Label="Balance" Variant="Variant.Text" Class="px-16">@account.Balance.ToString("c")</MudField>
+        </MudItem>
+        <MudItem xs="6">
+            
+        </MudItem>
+    </MudGrid>
+
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
 
     <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
@@ -20,16 +29,24 @@
 
     <MudTable ServerData="@(new Func<TableState, Task<TableData<Entry>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
+            <MudTh>Date</MudTh>
             <MudTh>Verification No</MudTh>
-            <MudTh>Debit</MudTh>
-            <MudTh>Credit</MudTh>
+            @*
+        <MudTh>Debit</MudTh>
+        <MudTh>Credit</MudTh>
+            *@
+            <MudTh>Sum</MudTh>
         </HeaderContent>
         <RowTemplate Context="entry">
+            <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
             <MudTd DataLabel="Verification No">
                 <MudLink Href="@($"/ledger?verificationNo={entry.Verification.VerificationNo}")">@entry.Verification.VerificationNo</MudLink>
             </MudTd>
-            <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
-            <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+            @*
+        <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
+        <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+            *@
+            <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).ToString("c"))</MudTd>
         </RowTemplate>
         <LoadingContent>
             <MudText>Loading...</MudText>
@@ -76,7 +93,7 @@
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(AccountNo, null, state.Page, state.PageSize);
+            var result = await EntriesClient.GetEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
             return new TableData<Entry>() { TotalItems = result.TotalItems, Items = result.Entries };
         }

@@ -9,19 +9,27 @@
 
 <MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<Entry>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
+        <MudTh>Date</MudTh>
         <MudTh>Verification No</MudTh>
         <MudTh colspan="2">Account</MudTh>
+        @*
         <MudTh>Debit</MudTh>
-        <MudTh>Credit</MudTh>
+        <MudTh>Credit</MudTh
+        *@
+        <MudTh>Amount</MudTh>
     </HeaderContent>
     <RowTemplate Context="entry">
+        <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
         <MudTd DataLabel="Verification No">
             <MudLink Href="@($"/ledger?verificationNo={entry.Verification.VerificationNo}")">@entry.Verification.VerificationNo</MudLink>
         </MudTd>
         <MudTd DataLabel="Account No">@entry.Account.AccountNo</MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
+        @*
         <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
         <MudTd DataLabel="Credit">@entry.Credit?.ToString("c")</MudTd>
+        *@
+        <MudTd DataLabel="Amount">@((entry.Debit.GetValueOrDefault() - entry.Credit.GetValueOrDefault()).ToString("c"))</MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
@@ -68,7 +76,7 @@
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(null, VerificationNo, state.Page, state.PageSize);
+            var result = await EntriesClient.GetEntriesAsync(null, VerificationNo, state.Page, state.PageSize, ResultDirection.Desc);
 
             if (VerificationNo is not null)
             {
