@@ -78,7 +78,7 @@ It is built with C# and Blazor for Web Assembly, and it uses the MudBlazor compo
 
 The actual logic is in the backend service, and data is stored in a Sqlite database.
 
-The parts can be 
+The parts are: 
 
 * Frontend Web App
 * Backend with Web API
