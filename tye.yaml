@@ -28,3 +28,22 @@ services:
     - source: .data/sql-edge
       target: /var/opt/mssql/data
 
+- name: azurite
+  image: mcr.microsoft.com/azure-storage/azurite
+  args: "azurite-blob --loose --blobHost 0.0.0.0 -l /data"
+  bindings:
+    - name: blob
+      port: 10000
+      containerPort: 10000
+      protocol: http
+    - name: queue
+      port: 10001
+      containerPort: 10001
+      protocol: http
+    - name: table
+      port: 10002
+      containerPort: 10002
+      protocol: http
+  volumes:
+    - source: .data/azurite
+      target: /data

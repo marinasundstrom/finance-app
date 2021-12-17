@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Accounting.Server.Data;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +14,12 @@ namespace Accounting.Server.Controllers
     public class VerificationsController : Controller
     {
         private readonly AccountingContext context;
+        private readonly BlobServiceClient blobServiceClient;
 
-        public VerificationsController(AccountingContext context)
+        public VerificationsController(AccountingContext context, BlobServiceClient blobServiceClient)
         {
             this.context = context;
+            this.blobServiceClient = blobServiceClient;
         }
 
         // GET: api/values
@@ -45,7 +48,8 @@ namespace Accounting.Server.Controllers
                 Date = v.Date,
                 Description = v.Description,
                 Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
-                Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault())
+                Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
+                Attachment = GetAttachmentUrl(v.Attachment)
             }));
 
             return new VerificationsResult(vms, totalItems);
@@ -88,6 +92,45 @@ namespace Accounting.Server.Controllers
 
             return verification.VerificationNo;
         }
+
+        [HttpPost("/{verificationNo}/Attachment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string?>> AddFileAttachmentToVerification(string verificationNo, IFormFile file)
+        {
+            var verification = await context.Verifications
+                 .Include(x => x.Entries)
+                 .OrderBy(x => x.Date)
+                 .AsNoTracking()
+                 .AsSplitQuery()
+                 .FirstAsync(x => x.VerificationNo == verificationNo);
+
+            if(!string.IsNullOrEmpty(verification.Attachment)) 
+            {
+                return Problem(title: "Attachment could not be set", detail: "There is already an attachment to this verification.");
+            }
+            
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient("attachments");
+
+#if DEBUG
+            await blobContainerClient.CreateIfNotExistsAsync();
+#endif
+
+            var response = await blobContainerClient.UploadBlobAsync(file.FileName, file.OpenReadStream());
+
+            verification.Attachment = file.FileName;
+
+            await context.SaveChangesAsync();
+
+            return GetAttachmentUrl(verification.Attachment);
+        }
+
+        private string? GetAttachmentUrl(string attachment)
+        {
+            if (attachment is null) return null;
+
+            return $"http://127.0.0.1:10000/devstoreaccount1/attachments/{attachment}";
+        }
     }
 
     public record VerificationsResult(IEnumerable<Verification> Verifications, int TotalItems);
@@ -103,6 +146,8 @@ namespace Accounting.Server.Controllers
         public decimal Debit { get; set; }
 
         public decimal Credit { get; set; }
+
+        public string? Attachment { get; set; }
     }
 
     public class VerificationShort

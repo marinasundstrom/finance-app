@@ -59,17 +59,19 @@
                   @bind-Value="formModel.Description" Lines="3" Class="my-4" For="@(() => formModel.Description)" />
 
     <MudPaper Class="mt-4 py-4 px-4">
-        <MudText Typo="Typo.h6" Class="mt-4 mb-4">Document</MudText>
+        <MudText Typo="Typo.h6" Class="mb-4">Document</MudText>
 
-        <InputFile id="fileInput112" OnChange="UploadFiles" hidden multiple accept=".jpg, .jpeg, .png, .pdf" />
+        <InputFile id="fileInput112" OnChange="UploadFile" hidden multiple accept=".jpg, .jpeg, .png, .pdf, .docx, .doc" />
 
         <MudButton HtmlTag="label"
                    Variant="Variant.Filled"
                    Color="Color.Primary"
                    StartIcon="@Icons.Filled.CloudUpload"
                    for="fileInput112">
-            Upload your images
+            Upload file
         </MudButton>
+
+        <MudText Typo="Typo.body1">@file?.Name</MudText>
     </MudPaper>
 
     <MudPaper Class="mt-4 py-4 px-4">
@@ -149,13 +151,26 @@
         StateHasChanged();
     }
 
-    private void UploadFiles(InputFileChangeEventArgs e)
-    {
+    IBrowserFile? file;
 
+    private void UploadFile(InputFileChangeEventArgs e)
+    {
+        file = e.GetMultipleFiles().First();
     }
 
     private async Task OnValidSubmit()
     {
+        if(file is null) 
+        {
+            var r = await DialogService.ShowMessageBox("Verification lacks attachment", "Are you sure that you want to continue?", "Yes", "No");
+
+            if(!r.GetValueOrDefault())
+            {
+                // Abort
+                return;
+            }
+        }
+
         var verification = new CreateVerification
         {
             Description = formModel.Description ?? String.Empty
@@ -173,7 +188,12 @@
 
         verification.Entries = entries;
 
-        await VerificationsClient.CreateVerificationAsync(verification);
+        var verificationNo = await VerificationsClient.CreateVerificationAsync(verification);
+
+        if(file is not null) 
+        {
+            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationNo, new FileParameter(file.OpenReadStream(10 * 10000), file.Name));
+        }
 
         NavigationManager.NavigateTo("/verifications");
     }

@@ -2,8 +2,13 @@
 using Accounting.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Azure;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
 
 // Add services to the container.
 
@@ -26,6 +31,19 @@ builder.Services.AddDbContext<AccountingContext>(
                     options.EnableSensitiveDataLogging();
 #endif
                 });
+
+builder.Services.AddAzureClients(builder =>
+{
+    // Add a KeyVault client
+    //builder.AddSecretClient(keyVaultUrl);
+
+    // Add a Storage account client
+    builder.AddBlobServiceClient(configuration.GetConnectionString("Azure:Storage"))
+            .WithVersion(BlobClientOptions.ServiceVersion.V2019_07_07);
+
+    // Use DefaultAzureCredential by default
+    builder.UseCredential(new DefaultAzureCredential());
+});
 
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");

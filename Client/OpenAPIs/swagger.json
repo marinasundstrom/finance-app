@@ -1,11 +1,11 @@
 ﻿{
-  "x-generator": "NSwag v13.13.2.0 (NJsonSchema v10.5.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v13.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Accounting API",
     "version": "0.1"
   },
-  "host": "localhost:7011",
+  "host": "localhost:5010",
   "schemes": [
     "https"
   ],
@@ -288,6 +288,44 @@
           }
         }
       }
+    },
+    "/{verificationNo}/Attachment": {
+      "post": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_AddFileAttachmentToVerification",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "verificationNo",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -547,6 +585,9 @@
         "credit": {
           "type": "number",
           "format": "decimal"
+        },
+        "attachment": {
+          "type": "string"
         }
       }
     },
