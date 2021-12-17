@@ -289,6 +289,35 @@
         }
       }
     },
+    "/api/Verifications/{verificationNo}": {
+      "get": {
+        "tags": [
+          "Verifications"
+        ],
+        "operationId": "Verifications_GetVerification",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "verificationNo",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Verification"
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/{verificationNo}/Attachment": {
       "post": {
         "tags": [

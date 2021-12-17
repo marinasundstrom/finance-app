@@ -55,6 +55,31 @@ namespace Accounting.Server.Controllers
             return new VerificationsResult(vms, totalItems);
         }
 
+        [HttpGet("{verificationNo}")]
+        [ProducesResponseType(typeof(Verification), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Verification>> GetVerificationAsync(string verificationNo)
+        {
+            var v = await context.Verifications
+                 .Include(x => x.Entries)
+                 .OrderBy(x => x.Date)
+                 .AsNoTracking()
+                 .AsSplitQuery()
+                 .FirstOrDefaultAsync(x => x.VerificationNo == verificationNo);
+
+            if (v is null) return NotFound();
+
+            return new Verification
+            {
+                VerificationNo = v.VerificationNo,
+                Date = v.Date,
+                Description = v.Description,
+                Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
+                Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
+                Attachment = GetAttachmentUrl(v.Attachment)
+            };
+        }
+
         [HttpPost]
         public async Task<string> CreateVerification([FromBody] CreateVerification dto)
         {
