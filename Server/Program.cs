@@ -16,15 +16,17 @@ builder.Services.AddSwaggerDocument(c =>
     c.Version = "0.1";
 });
 
-
 builder.Services.AddDbContext<AccountingContext>(
                 (sp, options) =>
                 {
-                    options.UseSqlite("Data Source=mydb.db;");
+                    options.UseSqlServer(configuration.GetConnectionString("mssql"));
+
+                    //options.UseSqlite("Data Source=mydb.db;");
 #if DEBUG
                     options.EnableSensitiveDataLogging();
 #endif
                 });
+
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
@@ -58,7 +60,7 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-app.Services.SeedAsync();
+await app.Services.SeedAsync();
 
 app.Run();
 

@@ -1,4 +1,6 @@
-﻿namespace Accounting.Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Accounting.Server.Data;
 
 public static class Seed
 {
@@ -12,7 +14,7 @@ public static class Seed
 
     static int verificationNo = 1;
 
-    public static async void SeedAsync(this IServiceProvider serviceProvider)
+    public static async Task SeedAsync(this IServiceProvider serviceProvider)
     {
         if (!Run)
         {
