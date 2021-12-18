@@ -20,9 +20,6 @@ You can also:
 
 ### Lacking
 In order for this to be a functional program:
-* A way to attach documents to verifications
-
-Nice to have:
 * A better template system
 * More specialized views - for other business events
 
