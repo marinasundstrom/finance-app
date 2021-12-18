@@ -124,10 +124,6 @@ namespace Accounting.Server.Controllers
         public async Task<ActionResult<string?>> AddFileAttachmentToVerification(string verificationNo, IFormFile file)
         {
             var verification = await context.Verifications
-                 .Include(x => x.Entries)
-                 .OrderBy(x => x.Date)
-                 .AsNoTracking()
-                 .AsSplitQuery()
                  .FirstAsync(x => x.VerificationNo == verificationNo);
 
             if(!string.IsNullOrEmpty(verification.Attachment)) 
