@@ -16,14 +16,12 @@
     <MudTextField T="string" Label="Description" HelperText="@(formModel.Description is null ? null : $"{formModel.Description.Length}/240")" Variant="Variant.Outlined"
                   @bind-Value="formModel.Description" Lines="3" Class="my-4" For="@(() => formModel.Description)" />
 
-
     <MudSelect Label="Account" Variant="Variant.Outlined" Class="my-4" @bind-Value="formModel.TargetAccount" For="@(() => formModel.TargetAccount)">
         @foreach (TargetAccount targetAccount in Enum.GetValues<TargetAccount>())
         {
             <MudSelectItem Value="@targetAccount">@(targetAccount.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
         }
     </MudSelect>
-
 
     <MudTable @ref="table" Items="@formModel.Entries" Elevation="0" Dense="false" Hover="@true" ReadOnly="@false" CanCancelEdit="@true" SortLabel="Sort By">
         <ToolBarContent>
@@ -131,7 +129,7 @@
 
         table.SetEditingItem(item);
 
-        //isEditingEntry = true;
+        isEditingEntry = true;
 
         StateHasChanged();
     }
