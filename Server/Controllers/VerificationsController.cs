@@ -137,9 +137,11 @@ namespace Accounting.Server.Controllers
             await blobContainerClient.CreateIfNotExistsAsync();
 #endif
 
-            var response = await blobContainerClient.UploadBlobAsync(file.FileName, file.OpenReadStream());
+            var blobName = $"{verificationNo}-{file.FileName}";
 
-            verification.Attachment = file.FileName;
+            var response = await blobContainerClient.UploadBlobAsync(blobName, file.OpenReadStream());
+
+            verification.Attachment = blobName;
 
             await context.SaveChangesAsync();
 
