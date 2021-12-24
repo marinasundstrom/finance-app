@@ -4,6 +4,8 @@ Concept app for doing accounting.
 
 Built in C# with Blazor Web Assembly and ASP.NET Core.
 
+[Video](https://youtu.be/ImbcwK30oMM)
+
 ## Goal
 
 To build an accounting app with user experience in mind.
