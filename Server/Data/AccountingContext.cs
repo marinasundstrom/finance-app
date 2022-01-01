@@ -11,14 +11,7 @@ public class AccountingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .Entity<Account>()
-            .HasKey(x => x.AccountNo);
-
-        modelBuilder
-            .Entity<Account>()
-            .Property(x => x.AccountNo)
-            .ValueGeneratedNever();
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Account).Assembly); 
     }
 
 #nullable disable
