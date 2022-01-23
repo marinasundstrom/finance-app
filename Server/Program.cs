@@ -1,14 +1,21 @@
 ﻿using System.Globalization;
-using Accounting.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Azure;
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using MediatR;
+using Accounting.Infrastructure.Persistence;
+using Accounting.Application.Common.Interfaces;
+using Accounting.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
+
+builder.Services.AddMediatR(typeof(Program));
+
+builder.Services.AddScoped<IBlobService, BlobService>();
 
 // Add services to the container.
 
@@ -31,6 +38,8 @@ builder.Services.AddDbContext<AccountingContext>(
                     options.EnableSensitiveDataLogging();
 #endif
                 });
+
+builder.Services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());
 
 builder.Services.AddAzureClients(builder =>
 {

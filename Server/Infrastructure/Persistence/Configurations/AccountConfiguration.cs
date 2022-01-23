@@ -1,8 +1,9 @@
 ﻿using System;
+using Accounting.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Accounting.Server.Data.Configurations;
+namespace Accounting.Infrastructure.Persistence.Configurations;
 
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
@@ -16,21 +17,5 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder
             .Property(x => x.AccountNo)
             .ValueGeneratedNever();
-    }
-}
-
-public class Verificationfiguration : IEntityTypeConfiguration<Verification>
-{
-    public void Configure(EntityTypeBuilder<Verification> builder)
-    {
-        builder.ToTable("Verifications", t => t.IsTemporal());
-    }
-}
-
-public class Entryfiguration : IEntityTypeConfiguration<Entry>
-{
-    public void Configure(EntityTypeBuilder<Entry> builder)
-    {
-        builder.ToTable("Entries", t => t.IsTemporal());
     }
 }

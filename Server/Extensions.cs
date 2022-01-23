@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Accounting.Server;
+namespace Accounting;
 
 public static class Extensions
 {

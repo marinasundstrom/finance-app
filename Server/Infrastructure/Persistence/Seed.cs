@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Accounting.Domain.Entities;
+using Accounting.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Server.Data;
+namespace Accounting.Infrastructure.Persistence;
 
 public static class Seed
 {

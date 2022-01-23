@@ -2,93 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Accounting.Server.Data;
+using Accounting.Application.Accounts;
+using Accounting.Application.Common.Interfaces;
+using Accounting.Application.Entries;
+using Accounting.Application.Entries.Queries;
+using Accounting.Application.Verifications;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Accounting.Server.Controllers
+namespace Accounting.Controllers
 {
     [Route("api/[controller]")]
     public class EntriesController : Controller
     {
-        private readonly AccountingContext context;
+        private IMediator mediator;
 
-        public EntriesController(AccountingContext context)
+        public EntriesController(IMediator mediator)
         {
-            this.context = context;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
+        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
         {
-            var query = context.Entries
-                        .Include(e => e.Verification)
-                        .Include(e => e.Account)
-                        .AsNoTracking()
-                        .AsQueryable();
-
-            if(direction == ResultDirection.Asc)
-            {
-                query = query.OrderBy(e => e.Date);
-            }
-            else
-            {
-                query = query.OrderByDescending(e => e.Date);
-            }
-
-            if (accountNo is not null)
-            {
-                query = query.Where(e => e.AccountNo == accountNo);
-            }
-
-            if (verificationNo is not null)
-            {
-                query = query.Where(e => e.VerificationNo == verificationNo);
-            }
-
-            var totalItems = await query.CountAsync();
-
-            var entries = await query
-                .Skip(pageSize * page)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var entries2 = entries.Select(e => new Entry(
-                e.Id,
-                e.Date,
-                new VerificationShort
-                {
-                    VerificationNo = e.VerificationNo,
-                    Date = e.Verification.Date,
-                    Description = e.Verification.Description,
-                },
-                new AccountShort
-                {
-                    AccountNo = e.AccountNo,
-                    Name = e.Account.Name
-                },
-                e.Description,
-                e.Debit,
-                e.Credit
-            ));
-
-            return new EntriesResult(entries2, totalItems);
+            return await mediator.Send(new GetEntriesQuery(accountNo, verificationNo, page, pageSize, direction), cancellationToken);
         }
     }
-
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum ResultDirection
-    {
-        Desc,
-        Asc
-    }
-
-    public record EntriesResult(IEnumerable<Entry> Entries, int TotalItems);
-
-    public record Entry(int Id, DateTime Date, VerificationShort Verification, AccountShort Account,
-        string Description, decimal? Debit, decimal? Credit);
-
 }
-

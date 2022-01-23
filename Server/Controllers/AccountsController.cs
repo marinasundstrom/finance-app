@@ -3,208 +3,55 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Accounting.Server.Data;
+using Accounting.Application.Accounts;
+using Accounting.Application.Accounts.Queries;
+using Accounting.Application.Common.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Server.Controllers
+using static Accounting.Application.Accounts.Mappings;
+
+namespace Accounting.Controllers
 {
     [Route("api/[controller]")]
     public class AccountsController : Controller
     {
-        private readonly AccountingContext context;
+        private readonly IMediator mediator;
 
-        public AccountsController(AccountingContext context)
+        public AccountsController(IMediator mediator)
         {
-            this.context = context;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Account>> GetAccountsAsync(int? accountClass = null, bool? showUnusedAccounts = false)
+        public async Task<IEnumerable<AccountDto>> GetAccounts(int? accountClass = null, bool? showUnusedAccounts = false, CancellationToken cancellationToken = default)
         {
-            var query = context.Accounts
-                .Include(a => a.Entries)
-                .AsNoTracking()
-                .AsQueryable();
-
-            if (!showUnusedAccounts.GetValueOrDefault())
-            {
-                query = query.Where(a => a.Entries.Any());
-            }
-
-            if (accountClass is not null)
-            {
-                query = query.Where(a => a.Class == (Data.AccountClass)accountClass);
-            }
-
-            var r = await query.ToListAsync();
-
-            var vms = new List<Account>();
-
-            vms.AddRange(r.Select(MapAccount));
-
-            return vms;
+            return await mediator.Send(new GetAccountsQuery(accountClass, showUnusedAccounts), cancellationToken);
         }
 
         [HttpGet("{accountNo:int}")]
-        public async Task<Account> GetAccountAsync(int accountNo)
+        public async Task<AccountDto> GetAccount(int accountNo, CancellationToken cancellationToken)
         {
-            var account = await context.Accounts
-                .Include(a => a.Entries)
-                .AsNoTracking()
-                .AsQueryable()
-                .FirstAsync(a => a.AccountNo == accountNo);
-
-            return MapAccount(account);
-        }
-
-        private static Account MapAccount(Data.Account account)
-        {
-            return new Account
-            {
-                AccountNo = account.AccountNo,
-                Class = new AccountClass
-                {
-                    Id = (int)account.Class,
-                    Description = account.Class.GetAttribute<DisplayAttribute>()!.Name!
-                },
-                Name = account.Name,
-                Description = account.Description,
-                Balance =
-                    account.Entries.Sum(e => e.Debit.GetValueOrDefault())
-                    - account.Entries.Sum(e => e.Credit.GetValueOrDefault())
-            };
+            return await mediator.Send(new GetAccountQuery(accountNo), cancellationToken);
         }
 
         [HttpGet("Classes")]
-        public IEnumerable<AccountClass> GetAccountClassesAsync()
+        public async Task<IEnumerable<AccountClassDto>> GetAccountClasses(CancellationToken cancellationToken)
         {
-            return Enum.GetValues<Data.AccountClass>().Select(ac =>
-            {
-                return new AccountClass
-                {
-                    Id = (int)ac,
-                    Description = ac.GetAttribute<DisplayAttribute>()!.Name!
-                };
-            });
+            return await mediator.Send(new GetAccountClassesQuery(), cancellationToken);
         }
 
-
         [HttpGet("Classes/Summary")]
-        public async Task<IEnumerable<AccountClassSummary>> GetAccountClassSummaryAsync(int[] accountNo)
+        public async Task<IEnumerable<AccountClassSummary>> GetAccountClassSummary(int[] accountNo, CancellationToken cancellationToken)
         {
-            var query = context.Accounts
-                .Include(a => a.Entries)
-                .Where(a => a.Entries.Any())
-                .AsNoTracking()
-                .AsQueryable();
-
-            var accounts = await query.ToListAsync();
-
-            var classes = accounts.GroupBy(x => x.Class);
-
-            return classes.Select(c =>
-            {
-                var name = c.Key.GetAttribute<DisplayAttribute>()!.Name!;
-                return new AccountClassSummary(
-                    (int)c.Key,
-                    name,
-                    c.Sum(a => a.Entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum())
-                );
-            });
+            return await mediator.Send(new GetAccountsClassesSummaryQuery(accountNo), cancellationToken);
         }
 
         [HttpGet("History")]
-        public async Task<AccountBalanceHistory> GetAccountHistoryAsync(int[] accountNo)
+        public async Task<AccountBalanceHistory> GetAccountHistory(int[] accountNo, CancellationToken cancellationToken)
         {
-            List<(int Year, int Month)> months = new();
-
-            DateTime startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
-            DateTime endDate = DateTime.Today;
-            for (DateTime dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
-            {
-                months.Add((dt.Year, dt.Month));
-            }
-
-            var query = context.Accounts
-                .Include(a => a.Entries)
-                .ThenInclude(e => e.Verification)
-                .Where(a => a.Entries.Any())
-                .AsNoTracking()
-                .AsQueryable();
-
-            if (accountNo.Any())
-            {
-                query = query.Where(a => accountNo.Any(x => x == a.AccountNo));
-            }
-
-            var accounts = await query.ToListAsync();
-
-            List<string> labels = months.Select(m => new DateOnly(m.Year, m.Month, 1).ToString("MMM yy")).ToList();
-            Dictionary<Data.Account, List<decimal>> series = new();
-
-            foreach (var month in months)
-            {
-                foreach(var account in accounts)
-                {
-                    if (!series.ContainsKey(account))
-                    {
-                        series[account] = new List<decimal>();
-                    }
-
-                    var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
-                    var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
-
-                    if(sum < 0)
-                    {
-                        // Assume it is supposed to be a negative value but that we want to represent it as a positve value.
-                        sum = sum * -1;
-                    }
-
-                    series[account].Add(sum);
-                }
-            }
-
-            return new AccountBalanceHistory(
-                labels.ToArray(),
-                series.Select(asum => new AccountSeries(
-                    $"{asum.Key.AccountNo} {asum.Key.Name}",
-                    asum.Value)));
+            return await mediator.Send(new GetAccountHistoryQuery(accountNo), cancellationToken);
         }
-    }
-
-    public record class AccountClassSummary(int Id, string Name, decimal Balance);
-
-    public record class AccountSummary(int AccountNo, string Name, decimal Balance);
-
-    public record class AccountSeries(string Name, IEnumerable<decimal> Data);
-
-    public record class AccountBalanceHistory(string[] Labels, IEnumerable<AccountSeries> Series);
-
-    public class Account
-    {
-        public int AccountNo { get; set; }
-
-        public AccountClass Class { get; set; } = null!;
-
-        public string Name { get; set; } = null!;
-
-        public string Description { get; set; } = null!;
-
-        public decimal Balance { get; set; }
-    }
-
-    public class AccountShort
-    {
-        public int AccountNo { get; set; }
-
-        public string Name { get; set; } = null!;
-    }
-
-    public class AccountClass
-    {
-        public int Id { get; set; }
-
-        public string Description { get; set; } = null!;
     }
 }

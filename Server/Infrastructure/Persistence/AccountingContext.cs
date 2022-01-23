@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Accounting.Application.Common.Interfaces;
+using Accounting.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Server.Data;
+namespace Accounting.Infrastructure.Persistence;
 
-public class AccountingContext : DbContext
+public class AccountingContext : DbContext, IAccountingContext
 {
     public AccountingContext(DbContextOptions options) : base(options)
     {
@@ -11,7 +13,7 @@ public class AccountingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Account).Assembly); 
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Account).Assembly);
     }
 
 #nullable disable
