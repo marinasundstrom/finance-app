@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Commands
 {
-	public class AddFileAttachmentToVerificationCommand : IRequest<string>
-	{
+    public class AddFileAttachmentToVerificationCommand : IRequest<string>
+    {
         public AddFileAttachmentToVerificationCommand(string verificationNo, string name, Stream stream)
         {
             VerificationNo = verificationNo;
@@ -58,4 +61,3 @@ namespace Accounting.Application.Verifications.Commands
         }
     }
 }
-

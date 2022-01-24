@@ -1,15 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+
 using Accounting.Application.Common.Interfaces;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Accounts.Mappings;
 
 namespace Accounting.Application.Accounts.Queries
 {
-	public class GetAccountClassesQuery : IRequest<IEnumerable<AccountClassDto>>
-	{
+    public class GetAccountClassesQuery : IRequest<IEnumerable<AccountClassDto>>
+    {
         public class GetAccountClassesQueryHandler : IRequestHandler<GetAccountClassesQuery, IEnumerable<AccountClassDto>>
         {
             public Task<IEnumerable<AccountClassDto>> Handle(GetAccountClassesQuery request, CancellationToken cancellationToken)
@@ -26,4 +29,3 @@ namespace Accounting.Application.Accounts.Queries
         }
     }
 }
-

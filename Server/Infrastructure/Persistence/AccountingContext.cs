@@ -1,5 +1,6 @@
 ﻿using Accounting.Application.Common.Interfaces;
 using Accounting.Domain.Entities;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounting.Infrastructure.Persistence;

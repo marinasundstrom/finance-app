@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿using System.Globalization;
+
 using Accounting.Client;
-using MudBlazor.Services;
+
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
 using MudBlazor;
-using System.Globalization;
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -47,4 +50,3 @@ builder.Services.AddHttpClient(nameof(IEntriesClient), (sp, http) =>
 .AddTypedClient<IEntriesClient>((http, sp) => new EntriesClient(http));
 
 await builder.Build().RunAsync();
-

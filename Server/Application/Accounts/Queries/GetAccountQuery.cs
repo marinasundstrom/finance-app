@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Common.Interfaces;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Accounts.Mappings;
 
 namespace Accounting.Application.Accounts.Queries
 {
-	public class GetAccountQuery : IRequest<AccountDto>
-	{
-		public GetAccountQuery(int accountNo)
-		{
+    public class GetAccountQuery : IRequest<AccountDto>
+    {
+        public GetAccountQuery(int accountNo)
+        {
             AccountNo = accountNo;
         }
 
@@ -38,4 +41,3 @@ namespace Accounting.Application.Accounts.Queries
         }
     }
 }
-

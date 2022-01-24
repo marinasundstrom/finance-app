@@ -1,4 +1,5 @@
 ﻿using Accounting.Domain.Entities;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounting.Application.Common.Interfaces;

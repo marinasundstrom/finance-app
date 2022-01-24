@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Common.Interfaces;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Accounts.Mappings;
 
 namespace Accounting.Application.Accounts.Queries
 {
-	public class GetAccountsQuery : IRequest<IEnumerable<AccountDto>>
-	{
-		public GetAccountsQuery(int? accountClass = null, bool? showUnusedAccounts = false)
-		{
+    public class GetAccountsQuery : IRequest<IEnumerable<AccountDto>>
+    {
+        public GetAccountsQuery(int? accountClass = null, bool? showUnusedAccounts = false)
+        {
             AccountClass = accountClass;
             ShowUnusedAccounts = showUnusedAccounts;
         }
@@ -56,4 +59,3 @@ namespace Accounting.Application.Accounts.Queries
         }
     }
 }
-

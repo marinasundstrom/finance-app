@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounting.Application.Entries.Queries
 {
-	public class GetEntriesQuery : IRequest<EntriesResult>
-	{
-		public GetEntriesQuery(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
-		{
+    public class GetEntriesQuery : IRequest<EntriesResult>
+    {
+        public GetEntriesQuery(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
+        {
             AccountNo = accountNo;
             VerificationNo = verificationNo;
             Page = page;
@@ -95,4 +98,3 @@ namespace Accounting.Application.Entries.Queries
         }
     }
 }
-

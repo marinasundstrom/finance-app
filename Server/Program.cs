@@ -1,13 +1,17 @@
 ﻿using System.Globalization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Azure;
+
+using Accounting.Application.Common.Interfaces;
+using Accounting.Infrastructure.Persistence;
+using Accounting.Services;
+
 using Azure.Identity;
 using Azure.Storage.Blobs;
+
 using MediatR;
-using Accounting.Infrastructure.Persistence;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Services;
+
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,4 +93,3 @@ app.MapFallbackToFile("index.html");
 await app.Services.SeedAsync();
 
 app.Run();
-

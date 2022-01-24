@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Azure.Storage.Blobs;
-
 using Accounting.Application.Common.Interfaces;
+
+using Azure.Storage.Blobs;
 
 namespace Accounting.Services;
 

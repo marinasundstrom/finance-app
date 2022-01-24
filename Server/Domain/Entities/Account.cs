@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 using Accounting.Domain.Enums;
 
 namespace Accounting.Domain.Entities;

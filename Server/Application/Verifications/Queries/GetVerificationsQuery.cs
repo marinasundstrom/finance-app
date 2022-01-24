@@ -1,18 +1,21 @@
 ﻿using System;
+
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Queries
 {
-	public class GetVerificationsQuery : IRequest<VerificationsResult>
-	{
-		public GetVerificationsQuery(int page = 0, int pageSize = 10)
-		{
+    public class GetVerificationsQuery : IRequest<VerificationsResult>
+    {
+        public GetVerificationsQuery(int page = 0, int pageSize = 10)
+        {
             Page = page;
             PageSize = pageSize;
         }
@@ -63,4 +66,3 @@ namespace Accounting.Application.Verifications.Queries
         }
     }
 }
-

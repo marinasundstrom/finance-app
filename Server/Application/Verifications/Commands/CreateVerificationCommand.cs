@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Commands
 {
-	public class CreateVerificationCommand : IRequest<string>
-	{
+    public class CreateVerificationCommand : IRequest<string>
+    {
         public CreateVerificationCommand(string description, List<CreateEntry> entries)
         {
             Description = description;
@@ -69,4 +72,3 @@ namespace Accounting.Application.Verifications.Commands
         }
     }
 }
-

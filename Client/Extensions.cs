@@ -18,4 +18,3 @@ public static class Extensions
                         .GetCustomAttribute<TAttribute>();
     }
 }
-

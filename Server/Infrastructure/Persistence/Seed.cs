@@ -1,5 +1,6 @@
 ﻿using Accounting.Domain.Entities;
 using Accounting.Domain.Enums;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Accounting.Infrastructure.Persistence;
@@ -189,12 +190,12 @@ public static class Seed
                 Description = String.Empty
             },
             new Account
-             {
-                 AccountNo = 2630,
-                 Class = AccountClass.EquityAndLiabilites,
-                 Name = "Utgående moms 6%",
-                 Description = String.Empty
-             },
+            {
+                AccountNo = 2630,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Utgående moms 6%",
+                Description = String.Empty
+            },
             new Account
             {
                 AccountNo = 2631,
@@ -208,7 +209,7 @@ public static class Seed
                 Class = AccountClass.EquityAndLiabilites,
                 Name = "Ingående moms",
                 Description = String.Empty
-            },   
+            },
             new Account
             {
                 AccountNo = 2650,
@@ -547,7 +548,7 @@ public static class Seed
             });
     }
 
-    
+
 
     private static void DoSeedVerifications(AccountingContext context)
     {
@@ -582,7 +583,7 @@ public static class Seed
                  VerificationNo = $"V{verificationNo}",
                  Description = string.Empty,
                  Credit = 30000m
-            },
+             },
             new Entry
             {
                 AccountNo = 1930,

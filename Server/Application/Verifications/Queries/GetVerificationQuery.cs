@@ -1,16 +1,19 @@
 ﻿using System;
+
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Queries
 {
-	public class GetVerificationQuery : IRequest<VerificationDto>
-	{
+    public class GetVerificationQuery : IRequest<VerificationDto>
+    {
         public GetVerificationQuery(string verificationNo)
         {
             VerificationNo = verificationNo;
@@ -51,4 +54,3 @@ namespace Accounting.Application.Verifications.Queries
         }
     }
 }
-
