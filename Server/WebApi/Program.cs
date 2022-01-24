@@ -1,15 +1,14 @@
 ﻿using System.Globalization;
 
+using Accounting.Application;
 using Accounting.Application.Common.Interfaces;
+using Accounting.Infrastructure;
 using Accounting.Infrastructure.Persistence;
 using Accounting.Services;
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
-using MediatR;
-
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
@@ -17,7 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Services.AddMediatR(typeof(Program));
+builder.Services
+    .AddApplication(configuration)
+    .AddInfrastructure(configuration);
 
 builder.Services.AddScoped<IBlobService, BlobService>();
 
@@ -31,19 +32,6 @@ builder.Services.AddSwaggerDocument(c =>
     c.Title = "Accounting API";
     c.Version = "0.1";
 });
-
-builder.Services.AddDbContext<AccountingContext>(
-                (sp, options) =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("mssql"));
-
-                    //options.UseSqlite("Data Source=mydb.db;");
-#if DEBUG
-                    options.EnableSensitiveDataLogging();
-#endif
-                });
-
-builder.Services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());
 
 builder.Services.AddAzureClients(builder =>
 {
@@ -67,8 +55,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
-
     app.UseOpenApi();
     app.UseSwaggerUi3();
 }
@@ -81,14 +67,10 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseBlazorFrameworkFiles();
-app.UseStaticFiles();
-
 app.UseRouting();
 
 app.MapRazorPages();
 app.MapControllers();
-app.MapFallbackToFile("index.html");
 
 await app.Services.SeedAsync();
 

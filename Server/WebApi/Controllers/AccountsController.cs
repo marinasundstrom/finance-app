@@ -17,7 +17,7 @@ using static Accounting.Application.Accounts.Mappings;
 
 namespace Accounting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AccountsController : Controller
     {
         private readonly IMediator mediator;

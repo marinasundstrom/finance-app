@@ -2,6 +2,7 @@
 using Accounting.Domain.Enums;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Accounting.Infrastructure.Persistence;
 

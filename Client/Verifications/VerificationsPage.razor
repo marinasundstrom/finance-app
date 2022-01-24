@@ -52,7 +52,7 @@
 {
     bool loading = false;
 
-    private async Task<TableData<Verification>> ServerReload(TableState state)
+    private async Task<TableData<VerificationDto>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -60,7 +60,7 @@
         {
             var result = await VerificationsClient.GetVerificationsAsync(state.Page, state.PageSize);
 
-            return new TableData<Verification>() { TotalItems = result.TotalItems, Items = result.Verifications };
+            return new TableData<VerificationDto>() { TotalItems = result.TotalItems, Items = result.Verifications };
         }
         finally
         {

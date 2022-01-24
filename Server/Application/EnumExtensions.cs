@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Accounting;
+namespace Accounting.Application;
 
-public static class Extensions
+public static class EnumExtensions
 {
     /// <summary>
     ///     A generic extension method that aids in reflecting 

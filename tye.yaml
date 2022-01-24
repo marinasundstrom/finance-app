@@ -6,11 +6,17 @@
 #
 name: accounting
 services:
-- name: accounting-server
-  project: Server/Accounting.Server.csproj
+- name: webapp
+  project: Client/Client.csproj
   bindings:
     - protocol: https
       port: 5010
+
+- name: webapi
+  project: Server/WebApi/WebApi.csproj
+  bindings:
+    - protocol: https
+      port: 5020
 
 - name: mssql
   image: mcr.microsoft.com/azure-sql-edge:latest
@@ -47,3 +53,14 @@ services:
   volumes:
     - source: .data/azurite
       target: /data
+
+- name: nginx
+  image: nginx
+  bindings:
+    - protocol: https
+      port: 8080
+  volumes:
+    - source: nginx.conf
+      target: /etc/nginx/templates/default.conf.template
+    - source: certs
+      target: /etc/nginx/certs

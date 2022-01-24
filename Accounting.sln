@@ -3,18 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.Shared", "Shared\Accounting.Shared.csproj", "{FE5A5A69-89DA-4EDB-8A82-082197F4142A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{D44472AB-3565-42DD-86B1-FCDCF0D87140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.Client", "Client\Accounting.Client.csproj", "{D44472AB-3565-42DD-86B1-FCDCF0D87140}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.Server", "Server\Accounting.Server.csproj", "{8B06D02D-D355-4583-B7E5-E96CF050CE65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Server\WebApi\WebApi.csproj", "{8B06D02D-D355-4583-B7E5-E96CF050CE65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E692565-5456-4181-BD6B-4188F6BF3E63}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 		LICENSE = LICENSE
 		tye.yaml = tye.yaml
+		nginx.conf = nginx.conf
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4A1850E7-F3F7-41CC-929A-E2C2795AA29E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Server\Application\Application.csproj", "{13C9DEB0-991B-4037-B145-CAF3550C17A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Server\Infrastructure\Infrastructure.csproj", "{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Server\Domain\Domain.csproj", "{1C4838D4-0160-4D16-9055-4DB35F3342FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,10 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE5A5A69-89DA-4EDB-8A82-082197F4142A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE5A5A69-89DA-4EDB-8A82-082197F4142A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE5A5A69-89DA-4EDB-8A82-082197F4142A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE5A5A69-89DA-4EDB-8A82-082197F4142A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D44472AB-3565-42DD-86B1-FCDCF0D87140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D44472AB-3565-42DD-86B1-FCDCF0D87140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D44472AB-3565-42DD-86B1-FCDCF0D87140}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,11 +37,29 @@ Global
 		{8B06D02D-D355-4583-B7E5-E96CF050CE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B06D02D-D355-4583-B7E5-E96CF050CE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B06D02D-D355-4583-B7E5-E96CF050CE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13C9DEB0-991B-4037-B145-CAF3550C17A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13C9DEB0-991B-4037-B145-CAF3550C17A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13C9DEB0-991B-4037-B145-CAF3550C17A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13C9DEB0-991B-4037-B145-CAF3550C17A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {393B04C0-3BD2-448C-A725-3AC072158666}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8B06D02D-D355-4583-B7E5-E96CF050CE65} = {4A1850E7-F3F7-41CC-929A-E2C2795AA29E}
+		{13C9DEB0-991B-4037-B145-CAF3550C17A6} = {4A1850E7-F3F7-41CC-929A-E2C2795AA29E}
+		{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793} = {4A1850E7-F3F7-41CC-929A-E2C2795AA29E}
+		{1C4838D4-0160-4D16-9055-4DB35F3342FF} = {4A1850E7-F3F7-41CC-929A-E2C2795AA29E}
 	EndGlobalSection
 EndGlobal

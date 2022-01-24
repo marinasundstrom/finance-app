@@ -5,7 +5,7 @@
     "title": "Accounting API",
     "version": "0.1"
   },
-  "host": "localhost:5010",
+  "host": "localhost:5020",
   "schemes": [
     "https"
   ],
@@ -15,7 +15,7 @@
     "text/json"
   ],
   "paths": {
-    "/api/Accounts": {
+    "/Accounts": {
       "get": {
         "tags": [
           "Accounts"
@@ -44,14 +44,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Account"
+                "$ref": "#/definitions/AccountDto"
               }
             }
           }
         }
       }
     },
-    "/api/Accounts/{accountNo}": {
+    "/Accounts/{accountNo}": {
       "get": {
         "tags": [
           "Accounts"
@@ -72,13 +72,13 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/Account"
+              "$ref": "#/definitions/AccountDto"
             }
           }
         }
       }
     },
-    "/api/Accounts/Classes": {
+    "/Accounts/Classes": {
       "get": {
         "tags": [
           "Accounts"
@@ -91,14 +91,14 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/AccountClass"
+                "$ref": "#/definitions/AccountClassDto"
               }
             }
           }
         }
       }
     },
-    "/api/Accounts/Classes/Summary": {
+    "/Accounts/Classes/Summary": {
       "get": {
         "tags": [
           "Accounts"
@@ -131,7 +131,7 @@
         }
       }
     },
-    "/api/Accounts/History": {
+    "/Accounts/History": {
       "get": {
         "tags": [
           "Accounts"
@@ -161,7 +161,7 @@
         }
       }
     },
-    "/api/Entries": {
+    "/Entries": {
       "get": {
         "tags": [
           "Entries"
@@ -223,7 +223,7 @@
         }
       }
     },
-    "/api/Verifications": {
+    "/Verifications": {
       "get": {
         "tags": [
           "Verifications"
@@ -289,7 +289,7 @@
         }
       }
     },
-    "/api/Verifications/{verificationNo}": {
+    "/Verifications/{verificationNo}": {
       "get": {
         "tags": [
           "Verifications"
@@ -309,7 +309,7 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/Verification"
+              "$ref": "#/definitions/VerificationDto"
             }
           },
           "404": {
@@ -358,7 +358,7 @@
     }
   },
   "definitions": {
-    "Account": {
+    "AccountDto": {
       "type": "object",
       "required": [
         "accountNo",
@@ -373,7 +373,7 @@
           "format": "int32"
         },
         "class": {
-          "$ref": "#/definitions/AccountClass"
+          "$ref": "#/definitions/AccountClassDto"
         },
         "name": {
           "type": "string"
@@ -387,7 +387,7 @@
         }
       }
     },
-    "AccountClass": {
+    "AccountClassDto": {
       "type": "object",
       "required": [
         "id",
@@ -474,7 +474,7 @@
         "entries": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Entry"
+            "$ref": "#/definitions/EntryDto"
           }
         },
         "totalItems": {
@@ -483,7 +483,7 @@
         }
       }
     },
-    "Entry": {
+    "EntryDto": {
       "type": "object",
       "required": [
         "id",
@@ -505,7 +505,7 @@
           "$ref": "#/definitions/VerificationShort"
         },
         "account": {
-          "$ref": "#/definitions/AccountShort"
+          "$ref": "#/definitions/AccountShortDto"
         },
         "description": {
           "type": "string"
@@ -540,7 +540,7 @@
         }
       }
     },
-    "AccountShort": {
+    "AccountShortDto": {
       "type": "object",
       "required": [
         "accountNo",
@@ -578,7 +578,7 @@
         "verifications": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Verification"
+            "$ref": "#/definitions/VerificationDto"
           }
         },
         "totalItems": {
@@ -587,7 +587,7 @@
         }
       }
     },
-    "Verification": {
+    "VerificationDto": {
       "type": "object",
       "required": [
         "verificationNo",

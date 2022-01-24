@@ -19,7 +19,7 @@
     </MudCard>
 }
 
-<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<Entry>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+<MudTable @ref="table" ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Date</MudTh>
         <MudTh>Verification No</MudTh>
@@ -53,8 +53,8 @@
 
 @code
 {
-    MudTable<Entry>? table = null!;
-    Verification? verification;
+    MudTable<EntryDto>? table = null!;
+    VerificationDto? verification;
 
     string title = "Ledger";
     bool loading = false;
@@ -83,7 +83,7 @@
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 
-    private async Task<TableData<Entry>> ServerReload(TableState state)
+    private async Task<TableData<EntryDto>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -104,7 +104,7 @@
 
             StateHasChanged();
 
-            return new TableData<Entry>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {

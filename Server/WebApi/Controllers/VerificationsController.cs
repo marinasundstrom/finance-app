@@ -20,7 +20,7 @@ using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class VerificationsController : Controller
     {
         private readonly IMediator mediator;

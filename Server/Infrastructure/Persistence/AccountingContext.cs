@@ -7,7 +7,7 @@ namespace Accounting.Infrastructure.Persistence;
 
 public class AccountingContext : DbContext, IAccountingContext
 {
-    public AccountingContext(DbContextOptions options) : base(options)
+    public AccountingContext(DbContextOptions<AccountingContext> options) : base(options)
     {
 
     }

@@ -19,7 +19,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Accounting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class EntriesController : Controller
     {
         private readonly IMediator mediator;

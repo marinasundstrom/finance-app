@@ -21,9 +21,9 @@
             <MudText Typo="Typo.h6">Entries</MudText>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object>(x=>x.Account.AccountNo)">Account</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Entry, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryDto, object>(x=>x.Account.AccountNo)">Account</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryDto, object?>(x=>x.Debit)">Debit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<EntryDto, object?>(x=>x.Credit)">Credit</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate Context="account">
             <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
@@ -90,7 +90,7 @@
 {
     MudTable<EntryFormModel> table = null!;
 
-    List<Account> accounts = new List<Account>();
+    List<AccountDto> accounts = new List<AccountDto>();
 
     VerificationFormModel formModel = new VerificationFormModel();
 
@@ -215,7 +215,7 @@
     class EntryFormModel
     {
         [Required]
-        public Account? Account { get; set; }
+        public AccountDto? Account { get; set; }
 
         public decimal? Debit { get; set; }
 

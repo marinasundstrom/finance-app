@@ -27,7 +27,7 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
-    <MudTable ServerData="@(new Func<TableState, Task<TableData<Entry>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<EntryDto>>>(ServerReload))" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
             <MudTh>Verification No</MudTh>
@@ -59,7 +59,7 @@
 
 @code
 {
-    Account? account;
+    AccountDto? account;
     bool loading;
 
     ChartOptions options = new ChartOptions();
@@ -87,7 +87,7 @@
         StateHasChanged();
     }
 
-    private async Task<TableData<Entry>> ServerReload(TableState state)
+    private async Task<TableData<EntryDto>> ServerReload(TableState state)
     {
         loading = true;
 
@@ -95,7 +95,7 @@
         {
             var result = await EntriesClient.GetEntriesAsync(AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
 
-            return new TableData<Entry>() { TotalItems = result.TotalItems, Items = result.Entries };
+            return new TableData<EntryDto>() { TotalItems = result.TotalItems, Items = result.Entries };
         }
         finally
         {
