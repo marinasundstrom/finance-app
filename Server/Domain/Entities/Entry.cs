@@ -3,9 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Accounting.Domain.Common;
+
 namespace Accounting.Domain.Entities;
 
-public class Entry
+public class Entry : IHasDomainEvent
 {
     [Key]
     public int Id { get; set; }
@@ -27,4 +29,6 @@ public class Entry
     public decimal? Debit { get; set; }
 
     public decimal? Credit { get; set; }
+
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

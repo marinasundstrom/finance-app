@@ -20,5 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Microsoft.EntityFrameworkCore.Relational" />
+    <None Remove="EventHandlers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EventHandlers\" />
   </ItemGroup>
 </Project>

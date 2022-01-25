@@ -2,6 +2,7 @@
 
 using Accounting.Application.Common.Interfaces;
 using Accounting.Infrastructure.Persistence;
+using Accounting.Infrastructure.Services;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +24,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());
 
-        //services.AddScoped<IDomainEventService, DomainEventService>();
+        services.AddScoped<IDomainEventService, DomainEventService>();
 
-        //services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IDateTime, DateTimeService>();
 
         return services;
     }

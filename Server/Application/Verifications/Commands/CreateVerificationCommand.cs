@@ -3,6 +3,7 @@
 using Accounting.Application.Accounts;
 using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
+using Accounting.Domain.Events;
 
 using MediatR;
 
@@ -53,14 +54,18 @@ namespace Accounting.Application.Verifications.Commands
                         throw new Exception("Cannot set both Debit and Credit.");
                     }
 
-                    verification.Entries.Add(new Domain.Entities.Entry
+                    var entry = new Domain.Entities.Entry
                     {
                         Date = verification.Date,
                         AccountNo = entryDto.AccountNo,
                         Description = entryDto.Description ?? String.Empty,
                         Debit = entryDto.Debit,
                         Credit = entryDto.Credit
-                    });
+                    };
+
+                    verification.Entries.Add(entry);
+
+                    entry.DomainEvents.Add(new EntryCreatedEvent(entry));
                 }
 
                 context.Verifications.Add(verification);

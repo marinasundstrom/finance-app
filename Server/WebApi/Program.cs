@@ -20,6 +20,9 @@ builder.Services
     .AddApplication(configuration)
     .AddInfrastructure(configuration);
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IBlobService, BlobService>();
 
 // Add services to the container.
