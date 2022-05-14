@@ -8,7 +8,7 @@ namespace Accounting.Infrastructure.Persistence;
 
 public static class Seed
 {
-    public static bool Run { get; set; } = false;
+    public static bool Run { get; set; } = true;
 
     public static bool RecreateDatabase { get; set; } = true;
 

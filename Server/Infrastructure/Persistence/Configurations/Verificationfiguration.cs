@@ -9,6 +9,6 @@ public class Verificationfiguration : IEntityTypeConfiguration<Verification>
 {
     public void Configure(EntityTypeBuilder<Verification> builder)
     {
-        builder.ToTable("Verifications", t => t.IsTemporal());
+        builder.ToTable("Verifications");
     }
 }

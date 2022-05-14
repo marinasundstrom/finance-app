@@ -9,7 +9,7 @@ public class Entryfiguration : IEntityTypeConfiguration<Entry>
 {
     public void Configure(EntityTypeBuilder<Entry> builder)
     {
-        builder.ToTable("Entries", t => t.IsTemporal());
+        builder.ToTable("Entries");
 
         builder.Ignore(e => e.DomainEvents);
     }

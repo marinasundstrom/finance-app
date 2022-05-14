@@ -11,7 +11,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        builder.ToTable("Accounts", t => t.IsTemporal());
+        builder.ToTable("Accounts");
         //builder.HasQueryFilter(i => i.Deleted == null);
 
         builder.HasKey(x => x.AccountNo);
