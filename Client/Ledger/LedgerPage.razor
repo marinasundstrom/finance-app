@@ -14,7 +14,10 @@
         <MudCardContent>
             <MudText Typo="@Typo.body1">  @verification.Date.Date.ToShortDateString()</MudText>
             <MudText Typo="@Typo.body1">  @verification.Description</MudText>
-            <MudLink Typo="@Typo.body1" Href="@verification.Attachment">Attachment</MudLink>
+            @foreach (var attachment in verification.Attachments)
+            {
+                <MudLink Typo="@Typo.body1" Href="@attachment.Url">Attachment</MudLink>
+            }
         </MudCardContent>
     </MudCard>
 }
@@ -33,7 +36,7 @@
     <RowTemplate Context="entry">
         <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
         <MudTd DataLabel="Verification No">
-            <MudLink Href="@($"/ledger?verificationNo={entry.Verification.VerificationNo}")">@entry.Verification.VerificationNo</MudLink>
+            <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Account No">@entry.Account.AccountNo</MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
@@ -61,7 +64,7 @@
 
     [SupplyParameterFromQuery]
     [Parameter]
-    public string? VerificationNo { get; set; }
+    public int? VerificationId { get; set; }
 
     protected override void OnInitialized()
     {
@@ -89,13 +92,13 @@
 
         try
         {
-            var result = await EntriesClient.GetEntriesAsync(null, VerificationNo, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await EntriesClient.GetEntriesAsync(null, VerificationId, state.Page, state.PageSize, ResultDirection.Desc);
 
-            if (VerificationNo is not null)
+            if (VerificationId is not null)
             {
-                title = $"{VerificationNo} - {result.Entries.First().Verification.Description}";
+                title = $"{VerificationId} - {result.Entries.First().Verification.Description}";
 
-                verification = await VerificationsClient.GetVerificationAsync(VerificationNo);
+                verification = await VerificationsClient.GetVerificationAsync(VerificationId.GetValueOrDefault());
             }
             else
             {

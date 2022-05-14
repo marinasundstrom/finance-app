@@ -4,6 +4,7 @@ using Accounting.Application.Common.Interfaces;
 using Accounting.Infrastructure.Persistence;
 using Accounting.Infrastructure.Services;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +21,12 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSqlServer<AccountingContext>(configuration.GetConnectionString("mssql"));
+        services.AddDbContext<AccountingContext>(options => {
+            options.UseSqlServer(configuration.GetConnectionString("mssql"), o => o.EnableRetryOnFailure());
+            #if DEBUG
+            options.EnableSensitiveDataLogging();
+            #endif
+        });
 
         services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());
 

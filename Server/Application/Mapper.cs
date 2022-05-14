@@ -1,4 +1,4 @@
-using Accounting.Application.Accounts;
+﻿using Accounting.Application.Accounts;
 using Accounting.Application.Entries;
 using Accounting.Application.Verifications;
 using Accounting.Domain.Entities;
@@ -16,13 +16,13 @@ public static class Mappings
                     e.Date,
                     new VerificationShort
                     {
-                        VerificationNo = e.VerificationNo,
+                        Id = e.Verification.Id,
                         Date = e.Verification.Date,
                         Description = e.Verification.Description,
                     },
                     new AccountShortDto
                     {
-                        AccountNo = e.AccountNo,
+                        AccountNo = e.Account.AccountNo,
                         Name = e.Account.Name
                     },
                     e.Description,
@@ -35,7 +35,7 @@ public static class Mappings
     {
         return new VerificationDto
         {
-            VerificationNo = v.VerificationNo,
+            Id = v.Id,
             Date = v.Date,
             Description = v.Description,
             Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),

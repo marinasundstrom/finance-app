@@ -30,9 +30,9 @@ namespace Accounting.Controllers
         }
 
         [HttpGet]
-        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
+        public async Task<EntriesResult> GetEntriesAsync(int? accountNo = null, int? verificationId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
         {
-            return await mediator.Send(new GetEntriesQuery(accountNo, verificationNo, page, pageSize, direction), cancellationToken);
+            return await mediator.Send(new GetEntriesQuery(accountNo, verificationId, page, pageSize, direction), cancellationToken);
         }
     }
 }

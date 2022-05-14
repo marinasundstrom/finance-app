@@ -14,9 +14,9 @@ public class Entry : IHasDomainEvent
 
     public DateTime Date { get; set; } = DateTime.Now;
 
-    public string VerificationNo { get; set; } = null!;
+    public int VerificationId { get; set; }
 
-    [ForeignKey(nameof(VerificationNo))]
+    [ForeignKey(nameof(VerificationId))]
     public Verification Verification { get; set; } = null!;
 
     public int AccountNo { get; set; }

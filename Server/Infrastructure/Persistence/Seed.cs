@@ -16,7 +16,7 @@ public static class Seed
 
     public static bool SeedVerifications { get; set; } = true;
 
-    static int verificationNo = 1;
+    static int verificationId = 1;
 
     public static async Task SeedAsync(this IServiceProvider serviceProvider)
     {
@@ -549,8 +549,6 @@ public static class Seed
             });
     }
 
-
-
     private static void DoSeedVerifications(AccountingContext context)
     {
         InsertMoney(context);
@@ -567,248 +565,235 @@ public static class Seed
 
     private static void InsertMoney(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du sätter in egna pengar på företagskontot",
+        };
 
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du sätter in egna pengar på företagskontot",
-            });
+        context.Verifications.Add(verification);
 
-        context.Entries.AddRange(
+        verification.Entries.AddRange(new[] {
              new Entry
              {
                  AccountNo = 2018,
-                 VerificationNo = $"V{verificationNo}",
+                 VerificationId = verificationId,
                  Description = string.Empty,
                  Credit = 30000m
              },
             new Entry
             {
                 AccountNo = 1930,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 30000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void YouSendAnInvoiceToCustomer(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du skickar en faktura"
+        };
 
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du skickar en faktura"
-            });
+        context.Verifications.Add(verification);
 
-        context.Entries.AddRange(
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 1510,
-                VerificationNo = $"V{verificationNo}",
                 Description = string.Empty,
                 Debit = 10000m
             },
             new Entry
             {
                 AccountNo = 2610,
-                VerificationNo = $"V{verificationNo}",
                 Description = string.Empty,
                 Credit = 2000m
             },
             new Entry
             {
                 AccountNo = 3001,
-                VerificationNo = $"V{verificationNo}",
                 Description = string.Empty,
                 Credit = 8000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void TheCustomerPaysTheInvoice(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Kunden betalar fakturan"
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Kunden betalar fakturan"
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 1920,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 10000m
             },
             new Entry
             {
                 AccountNo = 1510,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 10000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void YouReceiveAInvoice(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du tar emot fakturan"
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du tar emot fakturan"
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 4000,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 4000m
             },
             new Entry
             {
                 AccountNo = 2640,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 1000m
             }, new Entry
             {
                 AccountNo = 2440,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 5000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void YouPayForTheInvoice(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du betalar fakturan"
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du betalar fakturan"
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 2440,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 5000m
             }, new Entry
             {
                 AccountNo = 1930,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 5000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
 
     private static void YouWithdrawMoneyAsSalary(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du tar ut egen lön"
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du tar ut egen lön"
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 2013,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 30000m
             },
             new Entry
             {
                 AccountNo = 1930,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 30000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void YouTransferFromPlusGiroToCorporateAccount(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du överför pengar från PlusGiro till företagskonto"
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du överför pengar från PlusGiro till företagskonto"
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 1920,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 10000m
             },
             new Entry
             {
                 AccountNo = 1930,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 10000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 
     private static void YouTransferFromTaxAccountToCorporateAccount(AccountingContext context)
     {
-        context.Verifications.AddRange(
-            new Verification
-            {
-                VerificationNo = $"V{verificationNo}",
-                Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du överför pengar från skattekonto till företagskonto",
-            });
+        var verification = new Verification
+        {
+            Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
+            Description = "Du överför pengar från skattekonto till företagskonto",
+        };
 
-        context.Entries.AddRange(
+        context.Verifications.Add(verification);
+
+        verification.Entries.AddRange(new[] {
             new Entry
             {
                 AccountNo = 1630,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Credit = 4000m
             },
             new Entry
             {
                 AccountNo = 1930,
-                VerificationNo = $"V{verificationNo}",
+                VerificationId = verificationId,
                 Description = string.Empty,
                 Debit = 4000m
-            });
-
-        verificationNo++;
+            }
+        });
     }
 }

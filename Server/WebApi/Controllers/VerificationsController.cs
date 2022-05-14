@@ -41,26 +41,26 @@ namespace Accounting.Controllers
             return await mediator.Send(new GetVerificationsQuery(page, pageSize), cancellationToken);
         }
 
-        [HttpGet("{verificationNo}")]
+        [HttpGet("{verificationId}")]
         [ProducesResponseType(typeof(VerificationDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<VerificationDto>> GetVerificationAsync(string verificationNo, CancellationToken cancellationToken)
+        public async Task<ActionResult<VerificationDto>> GetVerificationAsync(int verificationId, CancellationToken cancellationToken)
         {
-            return await mediator.Send(new GetVerificationQuery(verificationNo), cancellationToken);
+            return await mediator.Send(new GetVerificationQuery(verificationId), cancellationToken);
         }
 
         [HttpPost]
-        public async Task<string> CreateVerification([FromBody] CreateVerification dto, CancellationToken cancellationToken)
+        public async Task<int> CreateVerification([FromBody] CreateVerification dto, CancellationToken cancellationToken)
         {
             return await mediator.Send(new CreateVerificationCommand(dto.Description, dto.Entries), cancellationToken);
         }
 
-        [HttpPost("/{verificationNo}/Attachment")]
+        [HttpPost("/{verificationId}/Attachment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string?>> AddFileAttachmentToVerification(string verificationNo, IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult<string?>> AddFileAttachmentToVerification(int verificationId, IFormFile file, CancellationToken cancellationToken)
         {
-            return await mediator.Send(new AddFileAttachmentToVerificationCommand(verificationNo, file.FileName, file.OpenReadStream()), cancellationToken);
+            return await mediator.Send(new AddFileAttachmentToVerificationCommand(verificationId, file.FileName, file.OpenReadStream()), cancellationToken);
         }
     }
 }

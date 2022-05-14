@@ -12,10 +12,10 @@ namespace Accounting.Application.Entries.Queries
 {
     public class GetEntriesQuery : IRequest<EntriesResult>
     {
-        public GetEntriesQuery(int? accountNo = null, string? verificationNo = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
+        public GetEntriesQuery(int? accountNo = null, int? verificationId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
         {
             AccountNo = accountNo;
-            VerificationNo = verificationNo;
+            VerificationId = verificationId;
             Page = page;
             PageSize = pageSize;
             Direction = direction;
@@ -23,7 +23,7 @@ namespace Accounting.Application.Entries.Queries
 
         public int? AccountNo { get; }
 
-        public string? VerificationNo { get; }
+        public int? VerificationId { get; }
 
         public int Page { get; }
 
@@ -62,9 +62,9 @@ namespace Accounting.Application.Entries.Queries
                     query = query.Where(e => e.AccountNo == request.AccountNo);
                 }
 
-                if (request.VerificationNo is not null)
+                if (request.VerificationId is not null)
                 {
-                    query = query.Where(e => e.VerificationNo == request.VerificationNo);
+                    query = query.Where(e => e.VerificationId == request.VerificationId);
                 }
 
                 var totalItems = await query.CountAsync(cancellationToken);

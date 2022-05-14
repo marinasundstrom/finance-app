@@ -14,12 +14,12 @@ namespace Accounting.Application.Verifications.Queries
 {
     public class GetVerificationQuery : IRequest<VerificationDto>
     {
-        public GetVerificationQuery(string verificationNo)
+        public GetVerificationQuery(int verificationId)
         {
-            VerificationNo = verificationNo;
+            VerificationId = verificationId;
         }
 
-        public string VerificationNo { get; }
+        public int VerificationId { get; }
 
         public class GetVerificationQueryHandler : IRequestHandler<GetVerificationQuery, VerificationDto>
         {
@@ -38,7 +38,7 @@ namespace Accounting.Application.Verifications.Queries
                     .OrderBy(x => x.Date)
                     .AsNoTracking()
                     .AsSplitQuery()
-                    .FirstOrDefaultAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
+                    .FirstOrDefaultAsync(x => x.Id == request.VerificationId, cancellationToken);
 
                 if (v is null) throw new Exception();
 

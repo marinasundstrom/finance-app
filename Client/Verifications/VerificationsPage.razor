@@ -30,7 +30,7 @@
     </HeaderContent>
     <RowTemplate Context="verification">
         <MudTd DataLabel="Verification No">
-            <MudLink Href="@($"/ledger?verificationNo={verification.VerificationNo}")">@verification.VerificationNo</MudLink>
+            <MudLink Href="@($"/ledger?verificationId={verification.Id}")">@verification.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Date">@verification.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Description">@verification.Description</MudTd>
@@ -85,7 +85,7 @@
 
     class VerificationViewModel
     {
-        public string VerificationNo { get; set; } = null!;
+        public int VerificationId { get; set; }
 
         public DateTime Date { get; set; }
 

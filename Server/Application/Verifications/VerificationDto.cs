@@ -2,7 +2,7 @@
 
 public class VerificationDto
 {
-    public string VerificationNo { get; set; } = null!;
+    public int Id { get; set; }
 
     public DateTime Date { get; set; }
 

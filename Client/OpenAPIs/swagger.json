@@ -176,9 +176,10 @@
             "x-nullable": true
           },
           {
-            "type": "string",
-            "name": "verificationNo",
+            "type": "integer",
+            "name": "verificationId",
             "in": "query",
+            "format": "int32",
             "x-nullable": true
           },
           {
@@ -283,13 +284,14 @@
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         }
       }
     },
-    "/Verifications/{verificationNo}": {
+    "/Verifications/{verificationId}": {
       "get": {
         "tags": [
           "Verifications"
@@ -297,11 +299,12 @@
         "operationId": "Verifications_GetVerification",
         "parameters": [
           {
-            "type": "string",
-            "name": "verificationNo",
+            "type": "integer",
+            "name": "verificationId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "format": "int32",
+            "x-nullable": false
           }
         ],
         "responses": {
@@ -318,7 +321,7 @@
         }
       }
     },
-    "/{verificationNo}/Attachment": {
+    "/{verificationId}/Attachment": {
       "post": {
         "tags": [
           "Verifications"
@@ -329,11 +332,12 @@
         ],
         "parameters": [
           {
-            "type": "string",
-            "name": "verificationNo",
+            "type": "integer",
+            "name": "verificationId",
             "in": "path",
             "required": true,
-            "x-nullable": true
+            "format": "int32",
+            "x-nullable": false
           },
           {
             "type": "file",
@@ -523,13 +527,14 @@
     "VerificationShort": {
       "type": "object",
       "required": [
-        "verificationNo",
+        "id",
         "date",
         "description"
       ],
       "properties": {
-        "verificationNo": {
-          "type": "string"
+        "id": {
+          "type": "integer",
+          "format": "int32"
         },
         "date": {
           "type": "string",
@@ -590,15 +595,17 @@
     "VerificationDto": {
       "type": "object",
       "required": [
-        "verificationNo",
+        "id",
         "date",
         "description",
         "debit",
-        "credit"
+        "credit",
+        "attachments"
       ],
       "properties": {
-        "verificationNo": {
-          "type": "string"
+        "id": {
+          "type": "integer",
+          "format": "int32"
         },
         "date": {
           "type": "string",
@@ -615,7 +622,25 @@
           "type": "number",
           "format": "decimal"
         },
-        "attachment": {
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AttachmentDto"
+          }
+        }
+      }
+    },
+    "AttachmentDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "url"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
           "type": "string"
         }
       }

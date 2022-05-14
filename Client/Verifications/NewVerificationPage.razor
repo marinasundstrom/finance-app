@@ -215,11 +215,11 @@
 
         verification.Entries = entries;
 
-        var verificationNo = await VerificationsClient.CreateVerificationAsync(verification);
+        var verificationId = await VerificationsClient.CreateVerificationAsync(verification);
 
         if (file is not null)
         {
-            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationNo, new FileParameter(file.OpenReadStream(10
+            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter(file.OpenReadStream(10
             * 10000), file.Name));
         }
 

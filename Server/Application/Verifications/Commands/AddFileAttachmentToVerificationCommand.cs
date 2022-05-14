@@ -11,14 +11,14 @@ namespace Accounting.Application.Verifications.Commands
 {
     public class AddFileAttachmentToVerificationCommand : IRequest<string>
     {
-        public AddFileAttachmentToVerificationCommand(string verificationNo, string name, Stream stream)
+        public AddFileAttachmentToVerificationCommand(int verificationId, string name, Stream stream)
         {
-            VerificationNo = verificationNo;
+            VerificationId = verificationId;
             Name = name;
             Stream = stream;
         }
 
-        public string VerificationNo { get; }
+        public int VerificationId { get; }
 
         public string Name { get; }
 
@@ -39,14 +39,14 @@ namespace Accounting.Application.Verifications.Commands
             {
                 var verification = await context.Verifications
                     .Include(v => v.Attachments)
-                    .FirstAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
+                    .FirstAsync(x => x.Id == request.VerificationId, cancellationToken);
 
                 if (verification.Attachments.Any())
                 {
                     throw new Exception("There is already an attachment to this verification.");
                 }
 
-                var blobName = $"{request.VerificationNo}-{request.Name}";
+                var blobName = $"{request.VerificationId}-{request.Name}";
 
                 await blobService.UploadBloadAsync(blobName, request.Stream);
 

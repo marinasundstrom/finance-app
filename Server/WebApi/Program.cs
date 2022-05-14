@@ -75,6 +75,6 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 
-//await app.Services.SeedAsync();
+await app.Services.SeedAsync();
 
 app.Run();

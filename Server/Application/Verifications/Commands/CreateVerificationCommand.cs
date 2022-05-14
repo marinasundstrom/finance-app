@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Accounting.Application.Verifications.Commands
 {
-    public class CreateVerificationCommand : IRequest<string>
+    public class CreateVerificationCommand : IRequest<int>
     {
         public CreateVerificationCommand(string description, List<CreateEntry> entries)
         {
@@ -19,7 +19,7 @@ namespace Accounting.Application.Verifications.Commands
 
         public List<CreateEntry> Entries { get; set; } = new List<CreateEntry>()!;
 
-        public class CreateVerificationCommandHandler : IRequestHandler<CreateVerificationCommand, string>
+        public class CreateVerificationCommandHandler : IRequestHandler<CreateVerificationCommand, int>
         {
             private readonly IAccountingContext context;
 
@@ -28,18 +28,15 @@ namespace Accounting.Application.Verifications.Commands
                 this.context = context;
             }
 
-            public async Task<string> Handle(CreateVerificationCommand request, CancellationToken cancellationToken)
+            public async Task<int> Handle(CreateVerificationCommand request, CancellationToken cancellationToken)
             {
                 if (request.Entries.Sum(x => x.Credit ?? x.Debit) != 0)
                 {
                     throw new Exception("The sum of all entries must be 0.");
                 }
 
-                var verificationCount = await context.Verifications.CountAsync(cancellationToken);
-
                 var verification = new Domain.Entities.Verification
                 {
-                    VerificationNo = $"V{verificationCount + 1}",
                     Description = request.Description,
                     Date = DateTime.Now
                 };
@@ -70,7 +67,7 @@ namespace Accounting.Application.Verifications.Commands
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return verification.VerificationNo;
+                return verification.Id;
             }
         }
     }
