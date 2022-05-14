@@ -10,9 +10,9 @@ namespace Accounting.Infrastructure.Persistence;
 
 public class AccountingContext : DbContext, IAccountingContext
 {
-    private ICurrentUserService _currentUserService;
-    private IDomainEventService _domainEventService;
-    private IDateTime _dateTime;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IDomainEventService _domainEventService;
+    private readonly IDateTime _dateTime;
 
     public AccountingContext(DbContextOptions<AccountingContext> options,
         ICurrentUserService currentUserService,

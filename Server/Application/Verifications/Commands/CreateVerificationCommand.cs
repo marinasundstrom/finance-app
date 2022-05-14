@@ -1,15 +1,9 @@
-﻿using System;
-
-using Accounting.Application.Accounts;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Verifications;
+﻿using Accounting.Application.Common.Interfaces;
 using Accounting.Domain.Events;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-
-using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Commands
 {

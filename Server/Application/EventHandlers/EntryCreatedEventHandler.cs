@@ -26,4 +26,3 @@ namespace Accounting.Application.EventHandlers
         }
     }
 }
-

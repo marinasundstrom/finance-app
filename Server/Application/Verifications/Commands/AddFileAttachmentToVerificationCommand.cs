@@ -1,8 +1,4 @@
-﻿using System;
-
-using Accounting.Application.Accounts;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Verifications;
+﻿using Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
