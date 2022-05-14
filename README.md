@@ -81,7 +81,7 @@ The parts are:
 
 * Frontend Web App
 * Backend with Web API
-* Sqlite database 
+* SQL Server database (running in a container)
 
 ## Development environment
 
