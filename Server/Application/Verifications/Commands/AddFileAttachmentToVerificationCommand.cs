@@ -1,10 +1,11 @@
 ﻿using Accounting.Application.Common.Interfaces;
+using Accounting.Domain.Entities;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Verifications.Shared;
+using static Accounting.Application.Shared;
 
 namespace Accounting.Application.Verifications.Commands
 {
@@ -37,9 +38,10 @@ namespace Accounting.Application.Verifications.Commands
             public async Task<string> Handle(AddFileAttachmentToVerificationCommand request, CancellationToken cancellationToken)
             {
                 var verification = await context.Verifications
-                     .FirstAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
+                    .Include(v => v.Attachments)
+                    .FirstAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
 
-                if (!string.IsNullOrEmpty(verification.Attachment))
+                if (verification.Attachments.Any())
                 {
                     throw new Exception("There is already an attachment to this verification.");
                 }
@@ -48,11 +50,15 @@ namespace Accounting.Application.Verifications.Commands
 
                 await blobService.UploadBloadAsync(blobName, request.Stream);
 
-                verification.Attachment = blobName;
+                var attachment = new Attachment();
+
+                attachment.Id = blobName;
+
+                verification.Attachments.Add(attachment);
 
                 await context.SaveChangesAsync(cancellationToken);
 
-                return GetAttachmentUrl(verification.Attachment)!;
+                return GetAttachmentUrl(attachment.Id)!;
             }
         }
     }

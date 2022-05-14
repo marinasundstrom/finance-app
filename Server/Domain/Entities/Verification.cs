@@ -11,7 +11,7 @@ public class Verification
 
     public string Description { get; set; } = null!;
 
-    public string Attachment { get; set; } = null!;
-
     public List<Entry> Entries { get; set; } = new List<Entry>();
+
+    public List<Attachment> Attachments { get; set; } = new List<Attachment>();
 }

@@ -74,24 +74,7 @@ namespace Accounting.Application.Entries.Queries
                     .Take(request.PageSize)
                     .ToListAsync(cancellationToken);
 
-                var entries2 = entries.Select(e => new EntryDto(
-                    e.Id,
-                    e.Date,
-                    new VerificationShort
-                    {
-                        VerificationNo = e.VerificationNo,
-                        Date = e.Verification.Date,
-                        Description = e.Verification.Description,
-                    },
-                    new AccountShortDto
-                    {
-                        AccountNo = e.AccountNo,
-                        Name = e.Account.Name
-                    },
-                    e.Description,
-                    e.Debit,
-                    e.Credit
-                ));
+                var entries2 = entries.Select(e => e.ToDto());
 
                 return new EntriesResult(entries2, totalItems);
             }

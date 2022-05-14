@@ -12,5 +12,5 @@ public class VerificationDto
 
     public decimal Credit { get; set; }
 
-    public string? Attachment { get; set; }
+    public IEnumerable<AttachmentDto> Attachments { get; set; } = null!;
 }

@@ -16,7 +16,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Verifications.Shared;
+using static Accounting.Application.Shared;
 
 namespace Accounting.Controllers
 {

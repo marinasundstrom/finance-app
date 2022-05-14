@@ -8,7 +8,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Verifications.Shared;
+using static Accounting.Application.Shared;
 
 namespace Accounting.Application.Verifications.Queries
 {
@@ -33,23 +33,16 @@ namespace Accounting.Application.Verifications.Queries
             public async Task<VerificationDto> Handle(GetVerificationQuery request, CancellationToken cancellationToken)
             {
                 var v = await context.Verifications
-                                 .Include(x => x.Entries)
-                                 .OrderBy(x => x.Date)
-                                 .AsNoTracking()
-                                 .AsSplitQuery()
-                                 .FirstOrDefaultAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
+                    .Include(x => x.Entries)
+                    .Include(x => x.Attachments)
+                    .OrderBy(x => x.Date)
+                    .AsNoTracking()
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync(x => x.VerificationNo == request.VerificationNo, cancellationToken);
 
                 if (v is null) throw new Exception();
 
-                return new VerificationDto
-                {
-                    VerificationNo = v.VerificationNo,
-                    Date = v.Date,
-                    Description = v.Description,
-                    Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
-                    Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
-                    Attachment = GetAttachmentUrl(v.Attachment)
-                };
+                return v.ToDto();
             }
         }
     }

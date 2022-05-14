@@ -8,8 +8,9 @@ namespace Accounting.Application.Common.Interfaces;
 public interface IAccountingContext
 {
     DbSet<Account> Accounts { get; }
-    DbSet<Verification> Verifications { get; }
     DbSet<Entry> Entries { get; }
+    DbSet<Verification> Verifications { get; }
+    DbSet<Attachment> Attachments { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

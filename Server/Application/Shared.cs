@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Accounting.Application.Verifications;
+namespace Accounting.Application;
 
 public static class Shared
 {

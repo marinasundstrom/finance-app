@@ -30,14 +30,18 @@ namespace Accounting.Application.Verifications.Commands
 
             public async Task<string> Handle(CreateVerificationCommand request, CancellationToken cancellationToken)
             {
+                if (request.Entries.Sum(x => x.Credit ?? x.Debit) != 0)
+                {
+                    throw new Exception("The sum of all entries must be 0.");
+                }
+
                 var verificationCount = await context.Verifications.CountAsync(cancellationToken);
 
                 var verification = new Domain.Entities.Verification
                 {
                     VerificationNo = $"V{verificationCount + 1}",
                     Description = request.Description,
-                    Date = DateTime.Now,
-                    Attachment = String.Empty
+                    Date = DateTime.Now
                 };
 
                 foreach (var entryDto in request.Entries)

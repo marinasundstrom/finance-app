@@ -574,7 +574,6 @@ public static class Seed
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
                 Description = "Du sätter in egna pengar på företagskontot",
-                Attachment = String.Empty
             });
 
         context.Entries.AddRange(
@@ -604,8 +603,7 @@ public static class Seed
 
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du skickar en faktura",
-                Attachment = String.Empty
+                Description = "Du skickar en faktura"
             });
 
         context.Entries.AddRange(
@@ -641,8 +639,7 @@ public static class Seed
             {
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Kunden betalar fakturan",
-                Attachment = String.Empty
+                Description = "Kunden betalar fakturan"
             });
 
         context.Entries.AddRange(
@@ -671,8 +668,7 @@ public static class Seed
             {
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du tar emot fakturan",
-                Attachment = String.Empty
+                Description = "Du tar emot fakturan"
             });
 
         context.Entries.AddRange(
@@ -707,8 +703,7 @@ public static class Seed
             {
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du betalar fakturan",
-                Attachment = String.Empty
+                Description = "Du betalar fakturan"
             });
 
         context.Entries.AddRange(
@@ -737,8 +732,7 @@ public static class Seed
             {
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du tar ut egen lön",
-                Attachment = String.Empty
+                Description = "Du tar ut egen lön"
             });
 
         context.Entries.AddRange(
@@ -767,8 +761,7 @@ public static class Seed
             {
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
-                Description = "Du överför pengar från PlusGiro till företagskonto",
-                Attachment = String.Empty
+                Description = "Du överför pengar från PlusGiro till företagskonto"
             });
 
         context.Entries.AddRange(
@@ -798,7 +791,6 @@ public static class Seed
                 VerificationNo = $"V{verificationNo}",
                 Date = DateTime.Now.Subtract(TimeSpan.FromDays(19)),
                 Description = "Du överför pengar från skattekonto till företagskonto",
-                Attachment = String.Empty
             });
 
         context.Entries.AddRange(

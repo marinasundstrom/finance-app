@@ -1,14 +1,8 @@
-﻿using System;
-
-using Accounting.Application.Accounts;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Verifications;
+﻿using Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-
-using static Accounting.Application.Verifications.Shared;
 
 namespace Accounting.Application.Verifications.Queries
 {
@@ -36,11 +30,12 @@ namespace Accounting.Application.Verifications.Queries
             public async Task<VerificationsResult> Handle(GetVerificationsQuery request, CancellationToken cancellationToken)
             {
                 var query = context.Verifications
-                     .Include(x => x.Entries)
-                     .OrderBy(x => x.Date)
-                     .AsNoTracking()
-                     .AsSplitQuery()
-                     .AsQueryable();
+                    .Include(x => x.Entries)
+                    .Include(x => x.Attachments)
+                    .OrderBy(x => x.Date)
+                    .AsNoTracking()
+                    .AsSplitQuery()
+                    .AsQueryable();
 
                 var totalItems = await query.CountAsync();
 
@@ -51,15 +46,7 @@ namespace Accounting.Application.Verifications.Queries
 
                 var vms = new List<VerificationDto>();
 
-                vms.AddRange(r.Select(v => new VerificationDto
-                {
-                    VerificationNo = v.VerificationNo,
-                    Date = v.Date,
-                    Description = v.Description,
-                    Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
-                    Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
-                    Attachment = GetAttachmentUrl(v.Attachment)
-                }));
+                vms.AddRange(r.Select(v => v.ToDto()));
 
                 return new VerificationsResult(vms, totalItems);
             }

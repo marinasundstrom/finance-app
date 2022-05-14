@@ -35,9 +35,11 @@ public class AccountingContext : DbContext, IAccountingContext
 
     public DbSet<Account> Accounts { get; set; }
 
+    public DbSet<Entry> Entries { get; set; }
+
     public DbSet<Verification> Verifications { get; set; }
 
-    public DbSet<Entry> Entries { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
 
 #nullable restore
 
