@@ -38,7 +38,7 @@
         <MudTd DataLabel="Verification No">
             <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
         </MudTd>
-        <MudTd DataLabel="Account No">@entry.Account.AccountNo</MudTd>
+        <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
         @*
         <MudTd DataLabel="Debit">@entry.Debit?.ToString("c")</MudTd>
