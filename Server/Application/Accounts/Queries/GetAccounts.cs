@@ -12,15 +12,18 @@ namespace Accounting.Application.Accounts.Queries
 {
     public class GetAccountsQuery : IRequest<IEnumerable<AccountDto>>
     {
-        public GetAccountsQuery(int? accountClass = null, bool? showUnusedAccounts = false)
+        public GetAccountsQuery(int? accountClass = null, bool showUnusedAccounts = false, bool showBlankAccounts = true)
         {
             AccountClass = accountClass;
             ShowUnusedAccounts = showUnusedAccounts;
+            ShowBlankAccounts = showBlankAccounts;
         }
 
         public int? AccountClass { get; }
 
-        public bool? ShowUnusedAccounts { get; }
+        public bool ShowUnusedAccounts { get; }
+
+        public bool ShowBlankAccounts { get; }
 
         public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
         {
@@ -38,9 +41,14 @@ namespace Accounting.Application.Accounts.Queries
                                 .AsNoTracking()
                                 .AsQueryable();
 
-                if (!request.ShowUnusedAccounts.GetValueOrDefault())
+                if (!request.ShowUnusedAccounts)
                 {
                     query = query.Where(a => a.Entries.Any());
+                }
+
+                if(!request.ShowBlankAccounts) 
+                {
+                    query = query.Where(a => a.Entries.Select(e => e.Debit.GetValueOrDefault() - e.Credit.GetValueOrDefault()).Sum() != 0);
                 }
 
                 if (request.AccountClass is not null)

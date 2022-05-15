@@ -140,7 +140,7 @@
         protected override async Task OnInitializedAsync()
         {
             accounts.AddRange(
-            await AccountsClient.GetAccountsAsync(null, true));
+            await AccountsClient.GetAccountsAsync(null, true, true));
         }
 
         void AddEntry()

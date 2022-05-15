@@ -10,6 +10,9 @@
 
 <MudCheckBox Checked="showUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnShowUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
+<MudCheckBox Checked="showBlankAccounts" CheckedChanged="new Func<bool, Task>(OnShowBlankAccountsChecked)" Label="Show blank accounts" Class="mb-4"></MudCheckBox>
+
+
 <MudTable Items="accounts" Elevation="0" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<AccountDto, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
     <ToolBarContent>
         @if (accountClasses is not null)
@@ -44,6 +47,7 @@
     IEnumerable<AccountClassDto>? accountClasses = null;
     IEnumerable<AccountDto>? accounts = null;
     bool showUnusedAccounts = false;
+    bool showBlankAccounts = false;
     int? accountClass = null;
     private string searchString = "";
 
@@ -56,12 +60,21 @@
 
     async Task LoadData()
     {
-        accounts = await AccountsClient.GetAccountsAsync(accountClass, showUnusedAccounts);
+        accounts = await AccountsClient.GetAccountsAsync(accountClass, showUnusedAccounts, showBlankAccounts);
     }
 
     async Task OnShowUnusedAccountsChecked(bool v)
     {
         showUnusedAccounts = v;
+
+        await LoadData();
+
+        StateHasChanged();
+    }
+
+    async Task OnShowBlankAccountsChecked(bool v)
+    {
+        showBlankAccounts = v;
 
         await LoadData();
 

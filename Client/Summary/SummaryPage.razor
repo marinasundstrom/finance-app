@@ -87,7 +87,7 @@
 
         if (vm.Accounts is null)
         {
-            vm.Accounts = await AccountsClient.GetAccountsAsync(vm.AccountClass.Id, false);
+            vm.Accounts = await AccountsClient.GetAccountsAsync(vm.AccountClass.Id, false, false);
         }
 
         vm.IsExpanded = !vm.IsExpanded;

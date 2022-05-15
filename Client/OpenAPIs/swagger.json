@@ -34,7 +34,14 @@
             "name": "showUnusedAccounts",
             "in": "query",
             "default": false,
-            "x-nullable": true
+            "x-nullable": false
+          },
+          {
+            "type": "boolean",
+            "name": "showBlankAccounts",
+            "in": "query",
+            "default": true,
+            "x-nullable": false
           }
         ],
         "responses": {

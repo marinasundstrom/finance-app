@@ -220,6 +220,13 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 2731,
+                Class = AccountClass.EquityAndLiabilites,
+                Name = "Avräkning arbetsgivaravgift",
+                Description = string.Empty
+            },
+            new Account
+            {
                 AccountNo = 3000,
                 Class = AccountClass.OperatingIncomeRevenue,
                 Name = "Försäljning",
@@ -304,6 +311,13 @@ public static class Seed
             },
             new Account
             {
+                AccountNo = 3231,
+                Class = AccountClass.OperatingIncomeRevenue,
+                Name = "Försäljning med omvänd byggmoms",
+                Description = String.Empty
+            },
+            new Account
+            {
                 AccountNo = 3550,
                 Class = AccountClass.OperatingIncomeRevenue,
                 Name = "Fakturerade resekostnader",
@@ -342,6 +356,13 @@ public static class Seed
                 AccountNo = 4000,
                 Class = AccountClass.Costs,
                 Name = "Inköp av varor från Sverige",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 4010,
+                Class = AccountClass.Costs,
+                Name = "Inköp av varor och material",
                 Description = String.Empty
             },
             new Account
@@ -461,6 +482,13 @@ public static class Seed
                 AccountNo = 7332,
                 Class = AccountClass.PersonnelCosts,
                 Name = "Bilersättningar, skattepliktiga",
+                Description = String.Empty
+            },
+            new Account
+            {
+                AccountNo = 7510,
+                Class = AccountClass.PersonnelCosts,
+                Name = "Arbetsgivaravgifter",
                 Description = String.Empty
             },
             new Account

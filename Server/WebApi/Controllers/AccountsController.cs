@@ -28,9 +28,9 @@ namespace Accounting.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<AccountDto>> GetAccounts(int? accountClass = null, bool? showUnusedAccounts = false, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AccountDto>> GetAccounts(int? accountClass = null, bool showUnusedAccounts = false, bool showBlankAccounts = true, CancellationToken cancellationToken = default)
         {
-            return await mediator.Send(new GetAccountsQuery(accountClass, showUnusedAccounts), cancellationToken);
+            return await mediator.Send(new GetAccountsQuery(accountClass, showUnusedAccounts, showBlankAccounts), cancellationToken);
         }
 
         [HttpGet("{accountNo:int}")]
