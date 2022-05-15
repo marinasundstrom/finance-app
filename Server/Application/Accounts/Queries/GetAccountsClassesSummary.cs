@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 using Accounting.Application.Common.Interfaces;
 
@@ -7,19 +6,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Accounts.Mappings;
-
 namespace Accounting.Application.Accounts.Queries
 {
-    public class GetAccountsClassesSummaryQuery : IRequest<IEnumerable<AccountClassSummary>>
+    public record GetAccountsClassesSummaryQuery(int[] AccountNo) : IRequest<IEnumerable<AccountClassSummary>>
     {
-        public GetAccountsClassesSummaryQuery(int[] accountNo)
-        {
-            AccountNo = accountNo;
-        }
-
-        public int[] AccountNo { get; }
-
         public class GetAccountsClassesSummaryQueryHandler : IRequestHandler<GetAccountsClassesSummaryQuery, IEnumerable<AccountClassSummary>>
         {
             private readonly IAccountingContext context;

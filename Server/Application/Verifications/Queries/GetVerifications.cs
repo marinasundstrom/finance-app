@@ -4,52 +4,41 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Application.Verifications.Queries
+namespace Accounting.Application.Verifications.Queries;
+
+public record GetVerificationsQuery(int Page = 0, int PageSize = 10) : IRequest<VerificationsResult>
 {
-    public class GetVerificationsQuery : IRequest<VerificationsResult>
+    public class GetVerificationsQueryHandler : IRequestHandler<GetVerificationsQuery, VerificationsResult>
     {
-        public GetVerificationsQuery(int page = 0, int pageSize = 10)
+        private readonly IAccountingContext context;
+
+        public GetVerificationsQueryHandler(IAccountingContext context)
         {
-            Page = page;
-            PageSize = pageSize;
+            this.context = context;
         }
 
-        public int Page { get; }
-
-        public int PageSize { get; }
-
-        public class GetVerificationsQueryHandler : IRequestHandler<GetVerificationsQuery, VerificationsResult>
+        public async Task<VerificationsResult> Handle(GetVerificationsQuery request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
+            var query = context.Verifications
+                .Include(x => x.Entries)
+                .Include(x => x.Attachments)
+                .OrderBy(x => x.Date)
+                .AsNoTracking()
+                .AsSplitQuery()
+                .AsQueryable();
 
-            public GetVerificationsQueryHandler(IAccountingContext context)
-            {
-                this.context = context;
-            }
+            var totalItems = await query.CountAsync();
 
-            public async Task<VerificationsResult> Handle(GetVerificationsQuery request, CancellationToken cancellationToken)
-            {
-                var query = context.Verifications
-                    .Include(x => x.Entries)
-                    .Include(x => x.Attachments)
-                    .OrderBy(x => x.Date)
-                    .AsNoTracking()
-                    .AsSplitQuery()
-                    .AsQueryable();
+            var r = await query
+               .Skip(request.PageSize * request.Page)
+               .Take(request.PageSize)
+               .ToListAsync(cancellationToken);
 
-                var totalItems = await query.CountAsync();
+            var vms = new List<VerificationDto>();
 
-                var r = await query
-                   .Skip(request.PageSize * request.Page)
-                   .Take(request.PageSize)
-                   .ToListAsync(cancellationToken);
+            vms.AddRange(r.Select(v => v.ToDto()));
 
-                var vms = new List<VerificationDto>();
-
-                vms.AddRange(r.Select(v => v.ToDto()));
-
-                return new VerificationsResult(vms, totalItems);
-            }
+            return new VerificationsResult(vms, totalItems);
         }
     }
 }

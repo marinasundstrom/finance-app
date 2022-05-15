@@ -8,36 +8,28 @@ using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Accounts.Mappings;
 
-namespace Accounting.Application.Accounts.Queries
+namespace Accounting.Application.Accounts.Queries;
+
+public record GetAccountQuery(int AccountNo) : IRequest<AccountDto>
 {
-    public class GetAccountQuery : IRequest<AccountDto>
+    public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDto>
     {
-        public GetAccountQuery(int accountNo)
+        private readonly IAccountingContext context;
+
+        public GetAccountQueryHandler(IAccountingContext context)
         {
-            AccountNo = accountNo;
+            this.context = context;
         }
 
-        public int AccountNo { get; }
-
-        public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDto>
+        public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
+            var account = await context.Accounts
+                .Include(a => a.Entries)
+                .AsNoTracking()
+                .AsQueryable()
+                .FirstAsync(a => a.AccountNo == request.AccountNo, cancellationToken);
 
-            public GetAccountQueryHandler(IAccountingContext context)
-            {
-                this.context = context;
-            }
-
-            public async Task<AccountDto> Handle(GetAccountQuery request, CancellationToken cancellationToken)
-            {
-                var account = await context.Accounts
-                    .Include(a => a.Entries)
-                    .AsNoTracking()
-                    .AsQueryable()
-                    .FirstAsync(a => a.AccountNo == request.AccountNo, cancellationToken);
-
-                return MapAccount(account);
-            }
+            return MapAccount(account);
         }
     }
 }

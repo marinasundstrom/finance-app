@@ -7,59 +7,45 @@ using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Shared;
 
-namespace Accounting.Application.Verifications.Commands
+namespace Accounting.Application.Verifications.Commands;
+
+public record AddFileAttachmentToVerificationCommand(int VerificationId, string Name, Stream Stream) : IRequest<string>
 {
-    public class AddFileAttachmentToVerificationCommand : IRequest<string>
+    public class AddFileAttachmentToVerificationCommandHandler : IRequestHandler<AddFileAttachmentToVerificationCommand, string>
     {
-        public AddFileAttachmentToVerificationCommand(int verificationId, string name, Stream stream)
+        private readonly IAccountingContext context;
+        private readonly IBlobService blobService;
+
+        public AddFileAttachmentToVerificationCommandHandler(IAccountingContext context, IBlobService blobService)
         {
-            VerificationId = verificationId;
-            Name = name;
-            Stream = stream;
+            this.context = context;
+            this.blobService = blobService;
         }
 
-        public int VerificationId { get; }
-
-        public string Name { get; }
-
-        public Stream Stream { get; }
-
-        public class AddFileAttachmentToVerificationCommandHandler : IRequestHandler<AddFileAttachmentToVerificationCommand, string>
+        public async Task<string> Handle(AddFileAttachmentToVerificationCommand request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
-            private readonly IBlobService blobService;
+            var verification = await context.Verifications
+                .Include(v => v.Attachments)
+                .FirstAsync(x => x.Id == request.VerificationId, cancellationToken);
 
-            public AddFileAttachmentToVerificationCommandHandler(IAccountingContext context, IBlobService blobService)
+            if (verification.Attachments.Any())
             {
-                this.context = context;
-                this.blobService = blobService;
+                throw new Exception("There is already an attachment to this verification.");
             }
 
-            public async Task<string> Handle(AddFileAttachmentToVerificationCommand request, CancellationToken cancellationToken)
-            {
-                var verification = await context.Verifications
-                    .Include(v => v.Attachments)
-                    .FirstAsync(x => x.Id == request.VerificationId, cancellationToken);
+            var blobName = $"{request.VerificationId}-{request.Name}";
 
-                if (verification.Attachments.Any())
-                {
-                    throw new Exception("There is already an attachment to this verification.");
-                }
+            await blobService.UploadBloadAsync(blobName, request.Stream);
 
-                var blobName = $"{request.VerificationId}-{request.Name}";
+            var attachment = new Attachment();
 
-                await blobService.UploadBloadAsync(blobName, request.Stream);
+            attachment.Id = blobName;
 
-                var attachment = new Attachment();
+            verification.Attachments.Add(attachment);
 
-                attachment.Id = blobName;
+            await context.SaveChangesAsync(cancellationToken);
 
-                verification.Attachments.Add(attachment);
-
-                await context.SaveChangesAsync(cancellationToken);
-
-                return GetAttachmentUrl(attachment.Id)!;
-            }
+            return GetAttachmentUrl(attachment.Id)!;
         }
     }
 }

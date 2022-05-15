@@ -1,89 +1,78 @@
-﻿using System;
-
+﻿
 using Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using static Accounting.Application.Accounts.Mappings;
+namespace Accounting.Application.Accounts.Queries;
 
-namespace Accounting.Application.Accounts.Queries
+public record GetAccountHistoryQuery(int[] AccountNo) : IRequest<AccountBalanceHistory>
 {
-    public class GetAccountHistoryQuery : IRequest<AccountBalanceHistory>
+    public class GetAccountHistoryQueryHandler : IRequestHandler<GetAccountHistoryQuery, AccountBalanceHistory>
     {
-        public GetAccountHistoryQuery(int[] accountNo)
+        private readonly IAccountingContext context;
+
+        public GetAccountHistoryQueryHandler(IAccountingContext context)
         {
-            AccountNo = accountNo;
+            this.context = context;
         }
 
-        public int[] AccountNo { get; }
-
-        public class GetAccountHistoryQueryHandler : IRequestHandler<GetAccountHistoryQuery, AccountBalanceHistory>
+        public async Task<AccountBalanceHistory> Handle(GetAccountHistoryQuery request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
+            List<(int Year, int Month)> months = new();
 
-            public GetAccountHistoryQueryHandler(IAccountingContext context)
+            DateTime startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
+            DateTime endDate = DateTime.Today;
+            for (DateTime dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
             {
-                this.context = context;
+                months.Add((dt.Year, dt.Month));
             }
 
-            public async Task<AccountBalanceHistory> Handle(GetAccountHistoryQuery request, CancellationToken cancellationToken)
+            var query = context.Accounts
+                .Include(a => a.Entries)
+                .ThenInclude(e => e.Verification)
+                .Where(a => a.Entries.Any())
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (request.AccountNo.Any())
             {
-                List<(int Year, int Month)> months = new();
+                query = query.Where(a => request.AccountNo.Any(x => x == a.AccountNo));
+            }
 
-                DateTime startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
-                DateTime endDate = DateTime.Today;
-                for (DateTime dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
+            var accounts = await query.ToListAsync(cancellationToken);
+
+            List<string> labels = months.Select(m => new DateOnly(m.Year, m.Month, 1).ToString("MMM yy")).ToList();
+            Dictionary<Domain.Entities.Account, List<decimal>> series = new();
+
+            foreach (var month in months)
+            {
+                foreach (var account in accounts)
                 {
-                    months.Add((dt.Year, dt.Month));
-                }
-
-                var query = context.Accounts
-                    .Include(a => a.Entries)
-                    .ThenInclude(e => e.Verification)
-                    .Where(a => a.Entries.Any())
-                    .AsNoTracking()
-                    .AsQueryable();
-
-                if (request.AccountNo.Any())
-                {
-                    query = query.Where(a => request.AccountNo.Any(x => x == a.AccountNo));
-                }
-
-                var accounts = await query.ToListAsync(cancellationToken);
-
-                List<string> labels = months.Select(m => new DateOnly(m.Year, m.Month, 1).ToString("MMM yy")).ToList();
-                Dictionary<Domain.Entities.Account, List<decimal>> series = new();
-
-                foreach (var month in months)
-                {
-                    foreach (var account in accounts)
+                    if (!series.ContainsKey(account))
                     {
-                        if (!series.ContainsKey(account))
-                        {
-                            series[account] = new List<decimal>();
-                        }
-
-                        var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
-                        var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
-
-                        if (sum < 0)
-                        {
-                            // Assume it is supposed to be a negative value but that we want to represent it as a positve value.
-                            sum = sum * -1;
-                        }
-
-                        series[account].Add(sum);
+                        series[account] = new List<decimal>();
                     }
-                }
 
-                return new AccountBalanceHistory(
-                    labels.ToArray(),
-                    series.Select(asum => new AccountSeries(
-                        $"{asum.Key.AccountNo} {asum.Key.Name}",
-                        asum.Value)));
+                    var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
+                    var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
+
+                    if (sum < 0)
+                    {
+                        // Assume it is supposed to be a negative value but that we want to represent it as a positve value.
+                        sum = sum * -1;
+                    }
+
+                    series[account].Add(sum);
+                }
             }
+
+            return new AccountBalanceHistory(
+                labels.ToArray(),
+                series.Select(asum => new AccountSeries(
+                    $"{asum.Key.AccountNo} {asum.Key.Name}",
+                    asum.Value)));
         }
     }
 }

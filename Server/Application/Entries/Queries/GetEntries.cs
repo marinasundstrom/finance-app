@@ -1,83 +1,59 @@
-﻿using System;
-
-using Accounting.Application.Accounts;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Verifications;
+﻿using Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Accounting.Application.Entries.Queries
+namespace Accounting.Application.Entries.Queries;
+
+public record GetEntriesQuery(int? AccountNo = null, int? VerificationId = null, int Page = 0, int PageSize = 10, ResultDirection Direction = ResultDirection.Asc) : IRequest<EntriesResult>
 {
-    public class GetEntriesQuery : IRequest<EntriesResult>
+    public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, EntriesResult>
     {
-        public GetEntriesQuery(int? accountNo = null, int? verificationId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc)
+        private readonly IAccountingContext context;
+
+        public GetEntriesQueryHandler(IAccountingContext context)
         {
-            AccountNo = accountNo;
-            VerificationId = verificationId;
-            Page = page;
-            PageSize = pageSize;
-            Direction = direction;
+            this.context = context;
         }
 
-        public int? AccountNo { get; }
-
-        public int? VerificationId { get; }
-
-        public int Page { get; }
-
-        public int PageSize { get; }
-
-        public ResultDirection Direction { get; }
-
-        public class GetEntriesQueryHandler : IRequestHandler<GetEntriesQuery, EntriesResult>
+        public async Task<EntriesResult> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
+            var query = context.Entries
+                   .Include(e => e.Verification)
+                   .Include(e => e.Account)
+                   .AsNoTracking()
+                   .AsQueryable();
 
-            public GetEntriesQueryHandler(IAccountingContext context)
+            if (request.Direction == ResultDirection.Asc)
             {
-                this.context = context;
+                query = query.OrderBy(e => e.Date);
+            }
+            else
+            {
+                query = query.OrderByDescending(e => e.Date);
             }
 
-            public async Task<EntriesResult> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
+            if (request.AccountNo is not null)
             {
-                var query = context.Entries
-                       .Include(e => e.Verification)
-                       .Include(e => e.Account)
-                       .AsNoTracking()
-                       .AsQueryable();
-
-                if (request.Direction == ResultDirection.Asc)
-                {
-                    query = query.OrderBy(e => e.Date);
-                }
-                else
-                {
-                    query = query.OrderByDescending(e => e.Date);
-                }
-
-                if (request.AccountNo is not null)
-                {
-                    query = query.Where(e => e.AccountNo == request.AccountNo);
-                }
-
-                if (request.VerificationId is not null)
-                {
-                    query = query.Where(e => e.VerificationId == request.VerificationId);
-                }
-
-                var totalItems = await query.CountAsync(cancellationToken);
-
-                var entries = await query
-                    .Skip(request.PageSize * request.Page)
-                    .Take(request.PageSize)
-                    .ToListAsync(cancellationToken);
-
-                var entries2 = entries.Select(e => e.ToDto());
-
-                return new EntriesResult(entries2, totalItems);
+                query = query.Where(e => e.AccountNo == request.AccountNo);
             }
+
+            if (request.VerificationId is not null)
+            {
+                query = query.Where(e => e.VerificationId == request.VerificationId);
+            }
+
+            var totalItems = await query.CountAsync(cancellationToken);
+
+            var entries = await query
+                .Skip(request.PageSize * request.Page)
+                .Take(request.PageSize)
+                .ToListAsync(cancellationToken);
+
+            var entries2 = entries.Select(e => e.ToDto());
+
+            return new EntriesResult(entries2, totalItems);
         }
     }
 }

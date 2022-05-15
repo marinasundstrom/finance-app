@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 using Accounting.Application.Common.Interfaces;
 
 using MediatR;
@@ -8,62 +7,52 @@ using Microsoft.EntityFrameworkCore;
 
 using static Accounting.Application.Accounts.Mappings;
 
-namespace Accounting.Application.Accounts.Queries
+namespace Accounting.Application.Accounts.Queries;
+
+public record GetAccountsQuery(
+    int? AccountClass = null,
+    bool ShowUnusedAccounts = false,
+    bool ShowBlankAccounts = true)
+    : IRequest<IEnumerable<AccountDto>>
 {
-    public class GetAccountsQuery : IRequest<IEnumerable<AccountDto>>
+    public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
     {
-        public GetAccountsQuery(int? accountClass = null, bool showUnusedAccounts = false, bool showBlankAccounts = true)
+        private readonly IAccountingContext context;
+
+        public GetAccountsQueryHandler(IAccountingContext context)
         {
-            AccountClass = accountClass;
-            ShowUnusedAccounts = showUnusedAccounts;
-            ShowBlankAccounts = showBlankAccounts;
+            this.context = context;
         }
 
-        public int? AccountClass { get; }
-
-        public bool ShowUnusedAccounts { get; }
-
-        public bool ShowBlankAccounts { get; }
-
-        public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
+        public async Task<IEnumerable<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
-            private readonly IAccountingContext context;
+            var query = context.Accounts
+                            .Include(a => a.Entries)
+                            .AsNoTracking()
+                            .AsQueryable();
 
-            public GetAccountsQueryHandler(IAccountingContext context)
+            if (!request.ShowUnusedAccounts)
             {
-                this.context = context;
+                query = query.Where(a => a.Entries.Any());
             }
 
-            public async Task<IEnumerable<AccountDto>> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
+            if(!request.ShowBlankAccounts) 
             {
-                var query = context.Accounts
-                                .Include(a => a.Entries)
-                                .AsNoTracking()
-                                .AsQueryable();
-
-                if (!request.ShowUnusedAccounts)
-                {
-                    query = query.Where(a => a.Entries.Any());
-                }
-
-                if(!request.ShowBlankAccounts) 
-                {
-                    query = query.Where(a => a.Entries.Select(e => e.Debit.GetValueOrDefault() - e.Credit.GetValueOrDefault()).Sum() != 0);
-                }
-
-                if (request.AccountClass is not null)
-                {
-                    query = query.Where(a => a.Class == (Domain.Enums.AccountClass)request.AccountClass);
-                }
-
-                var r = await query.ToListAsync(cancellationToken);
-
-                var vms = new List<AccountDto>();
-
-                vms.AddRange(r.Select(MapAccount));
-
-                return vms;
+                query = query.Where(a => a.Entries.Select(e => e.Debit.GetValueOrDefault() - e.Credit.GetValueOrDefault()).Sum() != 0);
             }
+
+            if (request.AccountClass is not null)
+            {
+                query = query.Where(a => a.Class == (Domain.Enums.AccountClass)request.AccountClass);
+            }
+
+            var r = await query.ToListAsync(cancellationToken);
+
+            var vms = new List<AccountDto>();
+
+            vms.AddRange(r.Select(MapAccount));
+
+            return vms;
         }
     }
 }
