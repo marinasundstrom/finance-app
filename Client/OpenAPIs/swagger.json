@@ -31,16 +31,16 @@
           },
           {
             "type": "boolean",
-            "name": "showUnusedAccounts",
+            "name": "includeBlankAccounts",
             "in": "query",
-            "default": false,
+            "default": true,
             "x-nullable": false
           },
           {
             "type": "boolean",
-            "name": "showBlankAccounts",
+            "name": "includeUnusedAccounts",
             "in": "query",
-            "default": true,
+            "default": false,
             "x-nullable": false
           }
         ],

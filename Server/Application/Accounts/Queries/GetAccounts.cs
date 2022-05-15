@@ -11,8 +11,8 @@ namespace Accounting.Application.Accounts.Queries;
 
 public record GetAccountsQuery(
     int? AccountClass = null,
-    bool ShowUnusedAccounts = false,
-    bool ShowBlankAccounts = true)
+    bool IncludeBlankAccounts = true,
+    bool IncludeUnusedAccounts = false)
     : IRequest<IEnumerable<AccountDto>>
 {
     public class GetAccountsQueryHandler : IRequestHandler<GetAccountsQuery, IEnumerable<AccountDto>>
@@ -31,14 +31,14 @@ public record GetAccountsQuery(
                             .AsNoTracking()
                             .AsQueryable();
 
-            if (!request.ShowUnusedAccounts)
-            {
-                query = query.Where(a => a.Entries.Any());
-            }
-
-            if(!request.ShowBlankAccounts) 
+            if (!request.IncludeBlankAccounts)
             {
                 query = query.Where(a => a.Entries.Select(e => e.Debit.GetValueOrDefault() - e.Credit.GetValueOrDefault()).Sum() != 0);
+            }
+
+            if (!request.IncludeUnusedAccounts)
+            {
+                query = query.Where(a => a.Entries.Any());
             }
 
             if (request.AccountClass is not null)
