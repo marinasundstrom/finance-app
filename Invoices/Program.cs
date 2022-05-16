@@ -2,13 +2,14 @@
 
 using MassTransit;
 
-using Transactions.Data;
-using Transactions;
-using Transactions.Contracts;
+using Invoices.Data;
+using Invoices;
+using Invoices.Contracts;
 using MassTransit.MessageData;
-using Transactions.Queries;
+using Invoices.Queries;
 using MediatR;
-using Transactions.Commands;
+using Invoices.Commands;
+using Invoices.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,15 +19,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerDocument(c =>
 {
-    c.Title = "Transactions API";
+    c.Title = "Invoices API";
     c.Version = "0.1";
 });
 
 const string ConnectionStringKey = "mssql";
 
-var connectionString = Configuration.GetConnectionString(ConnectionStringKey, "Transactions");
+var connectionString = Configuration.GetConnectionString(ConnectionStringKey, "Invoices");
 
-builder.Services.AddDbContext<TransactionsContext>((sp, options) =>
+builder.Services.AddDbContext<InvoicesContext>((sp, options) =>
 {
     options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
 #if DEBUG
@@ -34,7 +35,7 @@ builder.Services.AddDbContext<TransactionsContext>((sp, options) =>
 #endif
 });
 
-builder.Services.AddScoped<ITransactionsContext>(sp => sp.GetRequiredService<TransactionsContext>());
+builder.Services.AddScoped<IInvoicesContext>(sp => sp.GetRequiredService<InvoicesContext>());
 
 builder.Services.AddMediatR(typeof(Program));
 
@@ -44,7 +45,7 @@ builder.Services.AddMassTransit(x =>
 
     //x.AddConsumers(typeof(Program).Assembly);
 
-    x.AddRequestClient<TransactionBatch>();
+    //x.AddRequestClient<TransactionBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -77,11 +78,29 @@ await SeedData.EnsureSeedData(app);
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator mediator)
-    => await mediator.Send(new PostTransactions(transactions)))
-    .WithName("Transactions_PostTransactions")
-    .WithTags("Transactions")
-    //.RequireAuthorization()
-    .Produces(StatusCodes.Status200OK);;
+app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
+    => await mediator.Send(new GetInvoice(invoiceId)))
+    .WithName("Invoices_GetInvoice")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator)
+    => await mediator.Send(command))
+    .WithName("Invoices_CreateInvoice")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/invoices/{invoiceId}/status", async (int invoiceId, InvoiceStatus status, IMediator mediator)
+    => await mediator.Send(new SetInvoiceStatus(invoiceId, status)))
+    .WithName("Invoices_SetInvoiceStatus")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+
+app.MapPut("/invoices/{invoiceId}/paid", async (int invoiceId, decimal amount, IMediator mediator)
+    => await mediator.Send(new SetPaidAmount(invoiceId, amount)))
+    .WithName("Invoices_SetPaidAmount")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
 
 app.Run();

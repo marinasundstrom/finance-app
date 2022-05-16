@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.Client", "Accoun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoices.Contracts", "Invoices.Contracts\Invoices.Contracts.csproj", "{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoices", "Invoices\Invoices.csproj", "{C1ABE473-98DE-46D9-8FAB-1F72C607A660}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoices.Client", "Invoices.Client\Invoices.Client.csproj", "{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +84,14 @@ Global
 		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1ABE473-98DE-46D9-8FAB-1F72C607A660}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1ABE473-98DE-46D9-8FAB-1F72C607A660}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1ABE473-98DE-46D9-8FAB-1F72C607A660}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1ABE473-98DE-46D9-8FAB-1F72C607A660}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

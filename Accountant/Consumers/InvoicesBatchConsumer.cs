@@ -1,5 +1,6 @@
 ﻿using Accounting.Client;
 
+using Invoices.Client;
 using Invoices.Contracts;
 
 using MassTransit;
@@ -9,10 +10,12 @@ namespace Transactions.Consumers;
 public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 {
     private readonly IVerificationsClient _verificationsClient;
+    private readonly IInvoicesClient _invoicesClient;
 
-    public InvoicesBatchConsumer(IVerificationsClient verificationsClient)
+    public InvoicesBatchConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient)
     {
         _verificationsClient = verificationsClient;
+        _invoicesClient = invoicesClient;
     }
 
     public async Task Consume(ConsumeContext<InvoicesBatch> context)
@@ -21,39 +24,41 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 
         foreach (var invoice in batch.Invoices)
         {
-            await HandleInvoice(invoice);
+            await HandleInvoice(invoice, context.CancellationToken);
         }
     }
 
-    private async Task HandleInvoice(Invoice invoice)
+    private async Task HandleInvoice(Invoice i, CancellationToken cancellationToken)
     {
         // Get invoice
         // Register entries
 
+        var invoice = await _invoicesClient.GetInvoiceAsync(i.Id, cancellationToken);
+
         await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
-            Description = string.Empty,
+            Description = $"Skickade ut faktura #{i.Id}",
             Entries = new[]
             {
                 new CreateEntry
                 {
                     AccountNo = 1510,
                     Description = string.Empty,
-                    Debit = 10000m
+                    Debit = invoice.Total
                 },
                 new CreateEntry
                 {
                     AccountNo = 2610,
                     Description = string.Empty,
-                    Credit = 2000m
+                    Credit = invoice.Vat
                 },
                 new CreateEntry
                 {
                     AccountNo = 3001,
                     Description = string.Empty,
-                    Credit = 8000m
+                    Credit = invoice.Total - invoice.Vat
                 }
             }
-        });
+        }, cancellationToken);
     }
 }

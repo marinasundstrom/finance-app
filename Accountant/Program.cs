@@ -1,6 +1,6 @@
-﻿using Accountant.Services;
+﻿using Accounting.Client;
 
-using Accounting.Client;
+using Invoices.Client;
 
 using MassTransit;
 
@@ -16,6 +16,7 @@ builder.Services.AddMassTransit(x =>
 
     //x.AddConsumers(typeof(Program).Assembly);
 
+    x.AddConsumer<InvoicesBatchConsumer>();
     x.AddConsumer<TransactionBatchConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
@@ -31,7 +32,10 @@ builder.Services.AddAccountingClients((sp, http) =>
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/");
 });
 
-builder.Services.AddSingleton<IInvoiceService, InvoiceService>();
+builder.Services.AddInvoicesClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/invoices/");
+});
 
 var app = builder.Build();
 

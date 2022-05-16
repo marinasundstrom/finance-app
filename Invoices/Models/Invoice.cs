@@ -1,10 +1,12 @@
-﻿namespace Accountant.Services;
+﻿using System;
+namespace Invoices.Models;
 
-public class Invoice 
+public class Invoice
 {
-    public Invoice(int invoiceNo, DateTime date, InvoiceStatus status, decimal total, decimal vat, decimal vatRate)
+    private Invoice() { }
+
+    public Invoice(DateTime date, InvoiceStatus status, decimal total, decimal vat, decimal vatRate)
     {
-        InvoiceNo = invoiceNo;
         Date = date;
         Status = status;
         Total = total;
@@ -12,7 +14,7 @@ public class Invoice
         VatRate = vatRate;
     }
 
-    public int InvoiceNo { get; set; }
+    public int Id { get; set; }
     public DateTime Date { get; set; }
     public InvoiceStatus Status { get; set; }
     public decimal Total { get; set; }

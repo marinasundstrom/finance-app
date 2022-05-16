@@ -1,6 +1,6 @@
-﻿using Accountant.Services;
+﻿using Accounting.Client;
 
-using Accounting.Client;
+using Invoices.Client;
 
 using MassTransit;
 
@@ -11,12 +11,12 @@ namespace Transactions.Consumers;
 public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 {
     private readonly IVerificationsClient _verificationsClient;
-    private readonly IInvoiceService _invoiceService;
+    private readonly IInvoicesClient _invoicesClient;
 
-    public TransactionBatchConsumer(IVerificationsClient verificationsClient, IInvoiceService invoiceService)
+    public TransactionBatchConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient)
     {
         _verificationsClient = verificationsClient;
-        _invoiceService = invoiceService;
+        _invoicesClient = invoicesClient;
     }
 
     public async Task Consume(ConsumeContext<TransactionBatch> context)
@@ -25,11 +25,11 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
         foreach (var transaction in batch.Transactions)
         {
-            await HandleTransaction(transaction);
+            await HandleTransaction(transaction, context.CancellationToken);
         }
     }
 
-    private async Task HandleTransaction(Transaction transaction)
+    private async Task HandleTransaction(Transaction transaction, CancellationToken cancellationToken)
     {
         // Find invoice
         // Check invoice status
@@ -47,7 +47,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
             return;
         }
 
-        var invoice = await _invoiceService.GetInvoiceAsync(invoiceId);
+        var invoice = await _invoicesClient.GetInvoiceAsync(invoiceId, cancellationToken);
 
         if(invoice is null)
         {
@@ -66,23 +66,36 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                 case InvoiceStatus.Sent:
                     if (receivedAmount < invoice.Total)
                     {
-                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.PartiallyPaid);
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyPaid, cancellationToken);
                     }
                     else if (receivedAmount == invoice.Total)
                     {
-                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Paid);
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Paid, cancellationToken);
                     }
                     else if (receivedAmount > invoice.Total)
                     {
-                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Overpaid);
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Overpaid, cancellationToken);
                     }
-                    invoice.Paid = receivedAmount;
-
+                    await _invoicesClient.SetPaidAmountAsync(invoice.Id, invoice.Paid.GetValueOrDefault() + receivedAmount);
                     break;
 
                 case InvoiceStatus.Paid:
-                    await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Overpaid);
-                    invoice.Paid += receivedAmount;
+                case InvoiceStatus.PartiallyPaid:
+                case InvoiceStatus.Overpaid:
+                    var paidAmount = invoice.Paid.GetValueOrDefault() + receivedAmount;
+                    if (paidAmount < invoice.Total)
+                    {
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyPaid, cancellationToken);
+                    }
+                    else if (paidAmount == invoice.Total)
+                    {
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Paid, cancellationToken);
+                    }
+                    else if (paidAmount > invoice.Total)
+                    {
+                        await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Overpaid, cancellationToken);
+                    }
+                    await _invoicesClient.SetPaidAmountAsync(invoice.Id, paidAmount);
                     break;
 
                 case InvoiceStatus.Cancelled:
@@ -92,23 +105,23 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
             var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
             {
-                Description = $"Betalar faktura #{invoice.InvoiceNo}",
+                Description = $"Betalade faktura #{invoice.Id}",
                 Entries = new[]
                 {
                     new CreateEntry
                     {
                         AccountNo = 1920,
                         Description = string.Empty,
-                        Debit = invoice.Total
+                        Debit = transaction.Amount
                     },
                     new CreateEntry
                     {
                         AccountNo = 1510,
                         Description = string.Empty,
-                        Credit = invoice.Total
+                        Credit = transaction.Amount
                     }
                 }
-            });
+            }, cancellationToken);
 
             //await _verificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
         }

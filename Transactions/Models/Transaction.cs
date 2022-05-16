@@ -15,10 +15,3 @@ public class Transaction
 
     public decimal Amount { get; set; }
 }
-
-public enum TransactionStatus
-{
-    Unverified,
-    Verified,
-    Unknown,
-}

@@ -30,6 +30,12 @@ services:
     - protocol: https
       port: 5040
 
+- name: invoices
+  project: Invoices/Invoices.csproj
+  bindings:
+    - protocol: https
+      port: 5050
+
 - name: mssql
   image: mcr.microsoft.com/azure-sql-edge:latest
   env:
