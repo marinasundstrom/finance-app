@@ -1,4 +1,6 @@
-﻿using Accounting.Client;
+﻿using Accountant.Services;
+
+using Accounting.Client;
 
 using MassTransit;
 
@@ -9,10 +11,12 @@ namespace Transactions.Consumers;
 public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 {
     private readonly IVerificationsClient _verificationsClient;
+    private readonly IInvoiceService _invoiceService;
 
-    public TransactionBatchConsumer(IVerificationsClient verificationsClient)
+    public TransactionBatchConsumer(IVerificationsClient verificationsClient, IInvoiceService invoiceService)
     {
         _verificationsClient = verificationsClient;
+        _invoiceService = invoiceService;
     }
 
     public async Task Consume(ConsumeContext<TransactionBatch> context)
@@ -36,26 +40,77 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
         // Not found set transaction status unknown
 
-        var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+        if(!int.TryParse(transaction.Reference, out var invoiceId))
         {
-            Description = string.Empty,
-            Entries = new[]
-            {
-                new CreateEntry
-                {
-                    AccountNo = 1920,
-                    Description = string.Empty,
-                    Debit = 10000m
-                },
-                new CreateEntry
-                {
-                    AccountNo = 1510,
-                    Description = string.Empty,
-                    Credit = 10000m
-                }
-            }
-        });
+            // Mark transaction as unknown
 
-        //await _verificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
+            return;
+        }
+
+        var invoice = await _invoiceService.GetInvoiceAsync(invoiceId);
+
+        if(invoice is null)
+        {
+            // Mark transaction as unknown
+        }
+        else
+        {
+            var receivedAmount = transaction.Amount;
+
+            switch(invoice.Status)
+            {
+                case InvoiceStatus.Created:
+                    // Do nothing
+                    break;
+
+                case InvoiceStatus.Sent:
+                    if (receivedAmount < invoice.Total)
+                    {
+                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.PartiallyPaid);
+                    }
+                    else if (receivedAmount == invoice.Total)
+                    {
+                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Paid);
+                    }
+                    else if (receivedAmount > invoice.Total)
+                    {
+                        await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Overpaid);
+                    }
+                    invoice.Paid = receivedAmount;
+
+                    break;
+
+                case InvoiceStatus.Paid:
+                    await _invoiceService.SetInvoiceStatus(invoice.InvoiceNo, InvoiceStatus.Overpaid);
+                    invoice.Paid += receivedAmount;
+                    break;
+
+                case InvoiceStatus.Cancelled:
+                    // Mark transaktion for re-pay
+                    break;
+            }
+
+            var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
+            {
+                Description = $"Betalar faktura #{invoice.InvoiceNo}",
+                Entries = new[]
+                {
+                    new CreateEntry
+                    {
+                        AccountNo = 1920,
+                        Description = string.Empty,
+                        Debit = invoice.Total
+                    },
+                    new CreateEntry
+                    {
+                        AccountNo = 1510,
+                        Description = string.Empty,
+                        Credit = invoice.Total
+                    }
+                }
+            });
+
+            //await _verificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
+        }
     }
 }

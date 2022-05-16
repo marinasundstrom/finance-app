@@ -1,4 +1,6 @@
-﻿using Accounting.Client;
+﻿using Accountant.Services;
+
+using Accounting.Client;
 
 using MassTransit;
 
@@ -28,6 +30,8 @@ builder.Services.AddAccountingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/");
 });
+
+builder.Services.AddSingleton<IInvoiceService, InvoiceService>();
 
 var app = builder.Build();
 
