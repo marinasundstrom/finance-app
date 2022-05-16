@@ -5,7 +5,7 @@ public class Invoice
 {
     private Invoice() { }
 
-    public Invoice(DateTime date, InvoiceStatus status, decimal total, decimal vat, decimal vatRate)
+    public Invoice(DateTime date, InvoiceStatus status, decimal total, decimal vat, double vatRate)
     {
         Date = date;
         Status = status;
@@ -19,7 +19,7 @@ public class Invoice
     public InvoiceStatus Status { get; set; }
     public decimal Total { get; set; }
     public decimal Vat { get; set; }
-    public decimal VatRate { get; set; }
+    public double VatRate { get; set; }
 
     public decimal? Paid { get; set; }
 }

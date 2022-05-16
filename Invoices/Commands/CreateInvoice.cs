@@ -11,7 +11,7 @@ using Invoices.Models;
 
 namespace Invoices.Commands;
 
-public record CreateInvoice(DateTime Date, InvoiceStatus Status, decimal Total, decimal Vat, decimal VatRate) : IRequest<InvoiceDto>
+public record CreateInvoice(DateTime Date, InvoiceStatus Status, decimal Total, decimal Vat, double VatRate) : IRequest<InvoiceDto>
 {
     public class Handler : IRequestHandler<CreateInvoice, InvoiceDto>
     {

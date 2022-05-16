@@ -233,7 +233,7 @@
         },
         "vatRate": {
           "type": "number",
-          "format": "decimal"
+          "format": "double"
         },
         "paid": {
           "type": "number",
@@ -288,7 +288,7 @@
         },
         "vatRate": {
           "type": "number",
-          "format": "decimal"
+          "format": "double"
         }
       }
     },
