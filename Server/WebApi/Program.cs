@@ -9,6 +9,8 @@ using Accounting.Services;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
@@ -49,6 +51,23 @@ builder.Services.AddAzureClients(builder =>
     builder.UseCredential(new DefaultAzureCredential());
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+
+    //x.AddConsumers(typeof(Program).Assembly);
+
+    //x.AddConsumer<TransactionClearedConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        //cfg.UseMessageData(messageDataRepository);
+
+        cfg.ConfigureEndpoints(context);
+    });
+})
+.AddMassTransitHostedService(true)
+.AddGenericRequestClient();
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
@@ -75,6 +94,6 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 
-//await app.Services.SeedAsync();
+await app.Services.SeedAsync();
 
 app.Run();

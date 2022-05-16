@@ -18,6 +18,18 @@ services:
     - protocol: https
       port: 5020
 
+- name: transactions
+  project: Transactions/Transactions.csproj
+  bindings:
+    - protocol: https
+      port: 5030
+
+- name: accountant
+  project: Accountant/Accountant.csproj
+  bindings:
+    - protocol: https
+      port: 5040
+
 - name: mssql
   image: mcr.microsoft.com/azure-sql-edge:latest
   env:
@@ -29,7 +41,7 @@ services:
     value: "Y"
   bindings:
     - port: 1433
-      connectionString: Server=${host},${port};Database=Accounting;User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
+      connectionString: Server=${host},${port};User Id=sa;Password=${env:MSSQL_SA_PASSWORD}
   volumes:
     - source: .data/sql-edge
       target: /var/opt/mssql/data
@@ -64,3 +76,12 @@ services:
       target: /etc/nginx/templates/default.conf.template
     - source: certs
       target: /etc/nginx/certs
+
+- name: rabbitmq
+  image: rabbitmq:3-management
+  bindings:
+    - name: rabbit
+      port: 5672
+      protocol: rabbitmq
+    - name: management
+      port: 15672

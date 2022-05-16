@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		tye.yaml = tye.yaml
 		nginx.conf = nginx.conf
+		Accounting.sln = Accounting.sln
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4A1850E7-F3F7-41CC-929A-E2C2795AA29E}"
@@ -22,6 +23,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Server\Infrastructure\Infrastructure.csproj", "{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Server\Domain\Domain.csproj", "{1C4838D4-0160-4D16-9055-4DB35F3342FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Contracts", "Transactions.Contracts\Transactions.Contracts.csproj", "{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions", "Transactions\Transactions.csproj", "{F444B2D7-BE2D-4027-86A3-6D32F4B7CC3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accountant", "Accountant\Accountant.csproj", "{AD438943-2DE2-47C8-92E5-5A3172BCDE04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accounting.Client", "Accounting.Client\Accounting.Client.csproj", "{152DB86F-76A8-4417-B0C1-1323B99D7883}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Invoices.Contracts", "Invoices.Contracts\Invoices.Contracts.csproj", "{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +60,26 @@ Global
 		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C4838D4-0160-4D16-9055-4DB35F3342FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F444B2D7-BE2D-4027-86A3-6D32F4B7CC3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F444B2D7-BE2D-4027-86A3-6D32F4B7CC3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F444B2D7-BE2D-4027-86A3-6D32F4B7CC3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F444B2D7-BE2D-4027-86A3-6D32F4B7CC3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD438943-2DE2-47C8-92E5-5A3172BCDE04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD438943-2DE2-47C8-92E5-5A3172BCDE04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD438943-2DE2-47C8-92E5-5A3172BCDE04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD438943-2DE2-47C8-92E5-5A3172BCDE04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{152DB86F-76A8-4417-B0C1-1323B99D7883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{152DB86F-76A8-4417-B0C1-1323B99D7883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{152DB86F-76A8-4417-B0C1-1323B99D7883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{152DB86F-76A8-4417-B0C1-1323B99D7883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3CD1A93-9F80-4E4F-9E79-11435D7DE8E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

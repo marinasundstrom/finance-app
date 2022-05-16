@@ -12,8 +12,8 @@
 {
     <MudCard Class="mb-4">
         <MudCardContent>
-            <MudText Typo="@Typo.body1">  @verification.Date.Date.ToShortDateString()</MudText>
-            <MudText Typo="@Typo.body1">  @verification.Description</MudText>
+            <MudText Typo="@Typo.body1">@verification.Date.Date.ToShortDateString()</MudText>
+            <MudText Typo="@Typo.body1">@verification.Description</MudText>
             @foreach (var attachment in verification.Attachments)
             {
                 <MudLink Typo="@Typo.body1" Href="@attachment.Url">Attachment</MudLink>
@@ -99,7 +99,9 @@
 
             if (VerificationId is not null)
             {
-                title = $"{VerificationId} - {result.Entries.First().Verification.Description}";
+                var description = result.Entries.First().Verification.Description;
+
+                title = (!string.IsNullOrEmpty(description) ? $"{VerificationId} - {description}" : VerificationId.ToString())!;
 
                 verification = await VerificationsClient.GetVerificationAsync(VerificationId.GetValueOrDefault());
             }

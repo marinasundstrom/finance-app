@@ -18,7 +18,7 @@ public record CreateVerificationCommand(string Description, List<CreateEntry> En
 
         public async Task<int> Handle(CreateVerificationCommand request, CancellationToken cancellationToken)
         {
-            if (request.Entries.Sum(x => x.Credit ?? x.Debit) != 0)
+            if (request.Entries.Sum(x => x.Debit ?? -(x.Credit.GetValueOrDefault())) != 0)
             {
                 throw new Exception("The sum of all entries must be 0.");
             }

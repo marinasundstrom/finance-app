@@ -31,22 +31,9 @@ CultureInfo? culture = new("sv-SE");
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-builder.Services.AddHttpClient(nameof(IAccountsClient), (sp, http) =>
+builder.Services.AddAccountingClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
-})
-.AddTypedClient<IAccountsClient>((http, sp) => new AccountsClient(http));
-
-builder.Services.AddHttpClient(nameof(IVerificationsClient), (sp, http) =>
-{
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
-})
-.AddTypedClient<IVerificationsClient>((http, sp) => new VerificationsClient(http));
-
-builder.Services.AddHttpClient(nameof(IEntriesClient), (sp, http) =>
-{
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
-})
-.AddTypedClient<IEntriesClient>((http, sp) => new EntriesClient(http));
+});
 
 await builder.Build().RunAsync();

@@ -22,7 +22,7 @@ public static class ServiceExtensions
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AccountingContext>(options => {
-            options.UseSqlServer(configuration.GetConnectionString("mssql"), o => o.EnableRetryOnFailure());
+            options.UseSqlServer(configuration.GetConnectionString("mssql", "Accounting"), o => o.EnableRetryOnFailure());
             #if DEBUG
             options.EnableSensitiveDataLogging();
             #endif
