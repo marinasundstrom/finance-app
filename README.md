@@ -71,6 +71,11 @@ The resulting entries:
 
 ![Alt text](/Screenshots/SalesEntries.png "Sales entries")
 
+## Overview
+
+
+![Alt text](/Screenshots/Overview.png "Overview")
+
 ## Project
 
 It is built with C# and Blazor for Web Assembly, and it uses the MudBlazor component library for UI.
