@@ -27,37 +27,28 @@
         }
       }
     },
-    "/invoices/{invoiceId}": {
+    "/invoices": {
       "get": {
         "tags": [
           "Invoices"
         ],
-        "operationId": "Invoices_GetInvoice",
+        "operationId": "Invoices_GetInvoices",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "invoiceId",
-            "in": "path",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
         ],
         "responses": {
           "200": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "$ref": "#/definitions/InvoiceDto"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/InvoiceDto"
+              }
             }
           }
         }
-      }
-    },
-    "/invoices": {
+      },
       "post": {
         "tags": [
           "Invoices"
@@ -78,6 +69,36 @@
             "schema": {
               "$ref": "#/definitions/CreateInvoice"
             },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      }
+    },
+    "/invoices/{invoiceId}": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoice",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
             "x-nullable": false
           }
         ],

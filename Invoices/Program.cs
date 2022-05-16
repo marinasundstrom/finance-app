@@ -78,17 +78,23 @@ await SeedData.EnsureSeedData(app);
 
 app.MapGet("/", () => "Hello World!");
 
+app.MapGet("/invoices", async (IMediator mediator)
+    => await mediator.Send(new GetInvoices()))
+    .WithName("Invoices_GetInvoices")
+    .WithTags("Invoices")
+    .Produces<IEnumerable<InvoiceDto>>(StatusCodes.Status200OK);
+
 app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
     => await mediator.Send(new GetInvoice(invoiceId)))
     .WithName("Invoices_GetInvoice")
     .WithTags("Invoices")
-    .Produces(StatusCodes.Status200OK);
+    .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
 app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator)
     => await mediator.Send(command))
     .WithName("Invoices_CreateInvoice")
     .WithTags("Invoices")
-    .Produces(StatusCodes.Status200OK);
+    .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
 app.MapPut("/invoices/{invoiceId}/status", async (int invoiceId, InvoiceStatus status, IMediator mediator)
     => await mediator.Send(new SetInvoiceStatus(invoiceId, status)))
