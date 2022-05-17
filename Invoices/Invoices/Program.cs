@@ -103,7 +103,6 @@ app.MapPut("/invoices/{invoiceId}/status", async (int invoiceId, InvoiceStatus s
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-
 app.MapPut("/invoices/{invoiceId}/paid", async (int invoiceId, decimal amount, IMediator mediator)
     => await mediator.Send(new SetPaidAmount(invoiceId, amount)))
     .WithName("Invoices_SetPaidAmount")

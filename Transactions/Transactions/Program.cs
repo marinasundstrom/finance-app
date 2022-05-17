@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Transactions;
 using Transactions.Commands;
-using Transactions.Contracts;
+using Transactions.Models;
 using Transactions.Data;
 using Transactions.Queries;
 
@@ -45,7 +45,7 @@ builder.Services.AddMassTransit(x =>
 
     //x.AddConsumers(typeof(Program).Assembly);
 
-    x.AddRequestClient<TransactionBatch>();
+    x.AddRequestClient<Transactions.Contracts.TransactionBatch>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -90,5 +90,11 @@ app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator med
     .WithTags("Transactions")
     //.RequireAuthorization()
     .Produces(StatusCodes.Status200OK); ;
+
+app.MapPut("/transactions/{transactionId}/status", async (string transactionId, TransactionStatus status, IMediator mediator)
+    => await mediator.Send(new SetTransactionStatus(transactionId, status)))
+    .WithName("Transactions_SetTransactionStatus")
+    .WithTags("Transactions")
+    .Produces(StatusCodes.Status200OK);
 
 app.Run();

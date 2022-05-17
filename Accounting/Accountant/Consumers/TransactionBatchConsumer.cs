@@ -4,6 +4,7 @@ using Invoices.Client;
 
 using MassTransit;
 
+using Transactions.Client;
 using Transactions.Contracts;
 
 namespace Transactions.Consumers;
@@ -12,11 +13,13 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 {
     private readonly IVerificationsClient _verificationsClient;
     private readonly IInvoicesClient _invoicesClient;
+    private readonly ITransactionsClient _transactionsClient;
 
-    public TransactionBatchConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient)
+    public TransactionBatchConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient, ITransactionsClient transactionsClient)
     {
         _verificationsClient = verificationsClient;
         _invoicesClient = invoicesClient;
+        _transactionsClient = transactionsClient;
     }
 
     public async Task Consume(ConsumeContext<TransactionBatch> context)
@@ -43,7 +46,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         if (!int.TryParse(transaction.Reference, out var invoiceId))
         {
             // Mark transaction as unknown
-
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Unknown);
             return;
         }
 
@@ -52,6 +55,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         if (invoice is null)
         {
             // Mark transaction as unknown
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Unknown);
         }
         else
         {
@@ -59,9 +63,10 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
             switch (invoice.Status)
             {
-                case InvoiceStatus.Created:
-                    // Do nothing
-                    break;
+                //case InvoiceStatus.Created:
+                //    // Do nothing
+                //    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Payback);
+                //    break;
 
                 case InvoiceStatus.Sent:
                     if (receivedAmount < invoice.Total)
@@ -100,8 +105,13 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
                 case InvoiceStatus.Cancelled:
                     // Mark transaktion for re-pay
-                    break;
+                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Payback);
+
+                    // Create verification in a worker
+                    return;
             }
+
+            await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Verified);
 
             var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
             {

@@ -85,6 +85,51 @@
           }
         }
       }
+    },
+    "/transactions/{transactionId}/status": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/TransactionStatus"
+            },
+            "x-nullable": false,
+            "enum": [
+              "Unverified",
+              "Verified",
+              "Payback",
+              "Unknown"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -130,11 +175,13 @@
       "x-enumNames": [
         "Unverified",
         "Verified",
+        "Payback",
         "Unknown"
       ],
       "enum": [
         "Unverified",
         "Verified",
+        "Payback",
         "Unknown"
       ]
     },

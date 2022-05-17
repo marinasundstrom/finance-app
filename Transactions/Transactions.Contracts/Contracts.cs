@@ -8,5 +8,6 @@ public enum TransactionStatus
 {
     Unverified,
     Verified,
+    Payback,
     Unknown,
 }

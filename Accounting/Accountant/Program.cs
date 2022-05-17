@@ -4,6 +4,7 @@ using Invoices.Client;
 
 using MassTransit;
 
+using Transactions.Client;
 using Transactions.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,12 +30,17 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/api/");
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/accounting/");
 });
 
 builder.Services.AddInvoicesClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/invoices/");
+});
+
+builder.Services.AddTransactionsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/transactions/");
 });
 
 var app = builder.Build();
