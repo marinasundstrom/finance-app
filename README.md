@@ -1,8 +1,10 @@
-# Accounting app
+# Finance app
 
 Concept app for doing accounting.
 
 Built in C# with Blazor Web Assembly and ASP.NET Core.
+
+The project also contains a Transactions service and a Invoices service. "Accountant" service is checking invoices.
 
 [Video](https://youtu.be/ImbcwK30oMM)
 
