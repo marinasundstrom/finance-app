@@ -19,16 +19,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Transactions.Contracts\Transactions.Contracts.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Services\" />
-	  <None Remove="Commands\" />
-	  <None Remove="Queries\" />
-	  <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Services\" />
-	  <Folder Include="Commands\" />
-	  <Folder Include="Queries\" />
-	</ItemGroup>
 </Project>

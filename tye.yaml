@@ -7,31 +7,31 @@
 name: accounting
 services:
 - name: webapp
-  project: Client/Client.csproj
+  project: Accounting/Client/Client.csproj
   bindings:
     - protocol: https
       port: 5010
 
 - name: webapi
-  project: Server/WebApi/WebApi.csproj
+  project: Accounting/Server/WebApi/WebApi.csproj
   bindings:
     - protocol: https
       port: 5020
 
-- name: transactions
-  project: Transactions/Transactions.csproj
-  bindings:
-    - protocol: https
-      port: 5030
-
 - name: accountant
-  project: Accountant/Accountant.csproj
+  project: Accounting/Accountant/Accountant.csproj
   bindings:
     - protocol: https
       port: 5040
 
+- name: transactions
+  project: Transactions/Transactions/Transactions.csproj
+  bindings:
+    - protocol: https
+      port: 5030
+
 - name: invoices
-  project: Invoices/Invoices.csproj
+  project: Invoices/Invoices/Invoices.csproj
   bindings:
     - protocol: https
       port: 5050
