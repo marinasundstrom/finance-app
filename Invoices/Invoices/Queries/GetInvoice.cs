@@ -27,7 +27,7 @@ public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
 
             return invoice is null
                 ? null
-                : new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.Total, invoice.Vat, invoice.VatRate, invoice.Paid);
+                : new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid);
         }
     }
 }

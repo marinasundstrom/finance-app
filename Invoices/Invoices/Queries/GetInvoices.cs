@@ -24,7 +24,7 @@ public record GetInvoices() : IRequest<IEnumerable<InvoiceDto>>
         {
             var invoices = await _context.Invoices.ToArrayAsync(cancellationToken);
 
-            return invoices.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.Total, invoice.Vat, invoice.VatRate, invoice.Paid));
+            return invoices.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid));
         }
     }
 }

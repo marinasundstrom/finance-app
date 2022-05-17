@@ -207,9 +207,10 @@
         "id",
         "date",
         "status",
-        "total",
+        "subTotal",
         "vat",
-        "vatRate"
+        "vatRate",
+        "total"
       ],
       "properties": {
         "id": {
@@ -223,7 +224,7 @@
         "status": {
           "$ref": "#/definitions/InvoiceStatus"
         },
-        "total": {
+        "subTotal": {
           "type": "number",
           "format": "decimal"
         },
@@ -234,6 +235,10 @@
         "vatRate": {
           "type": "number",
           "format": "double"
+        },
+        "total": {
+          "type": "number",
+          "format": "decimal"
         },
         "paid": {
           "type": "number",
@@ -266,9 +271,10 @@
       "required": [
         "date",
         "status",
-        "total",
+        "subTotal",
         "vat",
-        "vatRate"
+        "vatRate",
+        "total"
       ],
       "properties": {
         "date": {
@@ -278,7 +284,7 @@
         "status": {
           "$ref": "#/definitions/InvoiceStatus"
         },
-        "total": {
+        "subTotal": {
           "type": "number",
           "format": "decimal"
         },
@@ -289,6 +295,10 @@
         "vatRate": {
           "type": "number",
           "format": "double"
+        },
+        "total": {
+          "type": "number",
+          "format": "decimal"
         }
       }
     },

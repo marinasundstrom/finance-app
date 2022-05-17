@@ -11,18 +11,20 @@
         <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Status</MudTh>
-        <MudTh>Total</MudTh>
+        <MudTh>SubTotal</MudTh>
         <MudTh>VAT Rate</MudTh>
         <MudTh>VAT</MudTh>
+        <MudTh>Total</MudTh>
         <MudTh>Paid</MudTh>
     </HeaderContent>
     <RowTemplate Context="invoice">
         <MudTd DataLabel="Id">@invoice.Id</MudTd>
         <MudTd DataLabel="Date">@invoice.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Status">@invoice.Status</MudTd>
-        <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
+        <MudTd DataLabel="SubTotal">@invoice.SubTotal.ToString("c")</MudTd>
         <MudTd DataLabel="VAT Rate">@invoice.VatRate.ToString("c")</MudTd>
         <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
+        <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
     </RowTemplate>
     <LoadingContent>

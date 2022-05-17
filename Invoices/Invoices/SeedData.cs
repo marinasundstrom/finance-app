@@ -22,8 +22,8 @@ public class SeedData
             {
                 context.Invoices.AddRange(new[]
                 {
-                    new Invoice(DateTime.Now, InvoiceStatus.Created, 100, 25, 0.25),
-                    new Invoice(DateTime.Now, InvoiceStatus.Created, 100, 25, 0.25)
+                    new Invoice(DateTime.Now.Subtract(TimeSpan.FromDays(-10)), InvoiceStatus.Created, 75, 25, 0.25, 100),
+                    new Invoice(DateTime.Now, InvoiceStatus.Created, 750, 250, 0.25, 1000)
                 });
 
                 await context.SaveChangesAsync();
