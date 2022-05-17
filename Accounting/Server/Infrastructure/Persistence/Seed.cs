@@ -16,7 +16,7 @@ public static class Seed
 
     public static bool SeedVerifications { get; set; } = true;
 
-    static int verificationId = 1;
+    static readonly int verificationId = 1;
 
     public static async Task SeedAsync(this IServiceProvider serviceProvider)
     {

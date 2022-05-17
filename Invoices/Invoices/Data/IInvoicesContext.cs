@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Invoices.Models;
 
-using Invoices.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Data;
 

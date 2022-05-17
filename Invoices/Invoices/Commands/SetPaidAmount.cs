@@ -29,4 +29,3 @@ public record SetPaidAmount(int InvoiceId, decimal Amount) : IRequest
         }
     }
 }
-

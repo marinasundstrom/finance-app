@@ -21,11 +21,12 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AccountingContext>(options => {
+        services.AddDbContext<AccountingContext>(options =>
+        {
             options.UseSqlServer(configuration.GetConnectionString("mssql", "Accounting"), o => o.EnableRetryOnFailure());
-            #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
-            #endif
+#endif
         });
 
         services.AddScoped<IAccountingContext>(sp => sp.GetRequiredService<AccountingContext>());

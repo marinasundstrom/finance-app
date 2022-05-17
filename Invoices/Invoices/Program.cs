@@ -1,15 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Invoices;
+using Invoices.Commands;
+using Invoices.Contracts;
+using Invoices.Data;
+using Invoices.Models;
+using Invoices.Queries;
 
 using MassTransit;
-
-using Invoices.Data;
-using Invoices;
-using Invoices.Contracts;
 using MassTransit.MessageData;
-using Invoices.Queries;
+
 using MediatR;
-using Invoices.Commands;
-using Invoices.Models;
+
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

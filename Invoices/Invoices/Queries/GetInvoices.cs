@@ -1,8 +1,10 @@
 ﻿
+using Invoices.Data;
+
 using MassTransit;
 
 using MediatR;
-using Invoices.Data;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Queries;
@@ -26,4 +28,3 @@ public record GetInvoices() : IRequest<IEnumerable<InvoiceDto>>
         }
     }
 }
-

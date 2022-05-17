@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Transactions.Models;
-
 using Microsoft.EntityFrameworkCore;
+
+using Transactions.Models;
 
 namespace Transactions.Data;
 
@@ -14,4 +14,3 @@ public class TransactionsContext : DbContext, ITransactionsContext
 
     public DbSet<Transaction> Transactions { get; set; } = null!;
 }
-

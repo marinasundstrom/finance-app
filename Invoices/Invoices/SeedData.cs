@@ -18,7 +18,7 @@ public class SeedData
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
 
-            if(!context.Invoices.Any())
+            if (!context.Invoices.Any())
             {
                 context.Invoices.AddRange(new[]
                 {

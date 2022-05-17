@@ -14,4 +14,3 @@ public class InvoicesContext : DbContext, IInvoicesContext
 
     public DbSet<Invoice> Invoices { get; set; } = null!;
 }
-

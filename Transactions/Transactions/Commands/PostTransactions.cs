@@ -25,7 +25,7 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
 
         public async Task<Unit> Handle(PostTransactions request, CancellationToken cancellationToken)
         {
-            foreach(var transaction in request.Transactions)
+            foreach (var transaction in request.Transactions)
             {
                 _context.Transactions.Add(new Models.Transaction()
                 {
@@ -46,4 +46,3 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
         }
     }
 }
-

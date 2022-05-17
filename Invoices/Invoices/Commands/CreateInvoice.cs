@@ -1,13 +1,13 @@
 ﻿using System;
 
+using Invoices.Contracts;
+using Invoices.Data;
+using Invoices.Models;
+using Invoices.Queries;
+
 using MassTransit;
 
 using MediatR;
-
-using Invoices.Contracts;
-using Invoices.Data;
-using Invoices.Queries;
-using Invoices.Models;
 
 namespace Invoices.Commands;
 

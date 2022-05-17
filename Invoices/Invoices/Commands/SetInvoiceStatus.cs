@@ -1,10 +1,13 @@
 ﻿
-using MediatR;
+using Invoices.Contracts;
 using Invoices.Data;
 using Invoices.Models;
-using Microsoft.EntityFrameworkCore;
-using Invoices.Contracts;
+
 using MassTransit;
+
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Commands;
 
@@ -29,7 +32,7 @@ public record SetInvoiceStatus(int InvoiceId, InvoiceStatus Status) : IRequest
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            if(invoice.Status == InvoiceStatus.Sent) 
+            if (invoice.Status == InvoiceStatus.Sent)
             {
                 await _publishEndpoint.Publish(new InvoicesBatch(new[]
                 {

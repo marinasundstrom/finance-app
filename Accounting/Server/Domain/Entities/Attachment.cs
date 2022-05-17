@@ -11,7 +11,7 @@ public class Attachment
 
     public AttachmentType Type { get; set; }
 
-    public Verification Verification  { get; set; } = null!;
+    public Verification Verification { get; set; } = null!;
 
     public DateTime Date { get; set; }
 

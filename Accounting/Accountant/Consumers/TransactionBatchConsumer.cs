@@ -40,7 +40,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
         // Not found set transaction status unknown
 
-        if(!int.TryParse(transaction.Reference, out var invoiceId))
+        if (!int.TryParse(transaction.Reference, out var invoiceId))
         {
             // Mark transaction as unknown
 
@@ -49,7 +49,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
         var invoice = await _invoicesClient.GetInvoiceAsync(invoiceId, cancellationToken);
 
-        if(invoice is null)
+        if (invoice is null)
         {
             // Mark transaction as unknown
         }
@@ -57,7 +57,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
         {
             var receivedAmount = transaction.Amount;
 
-            switch(invoice.Status)
+            switch (invoice.Status)
             {
                 case InvoiceStatus.Created:
                     // Do nothing

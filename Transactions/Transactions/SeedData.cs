@@ -1,7 +1,7 @@
-﻿using Transactions.Data;
-using Transactions.Models;
+﻿using Microsoft.AspNetCore.Identity;
 
-using Microsoft.AspNetCore.Identity;
+using Transactions.Data;
+using Transactions.Models;
 
 namespace Transactions;
 
@@ -17,7 +17,7 @@ public class SeedData
             //await context.Database.EnsureDeletedAsync();
             //context.Database.Migrate();
             await context.Database.EnsureCreatedAsync();
-         
+
             //await context.SaveChangesAsync();
         }
     }

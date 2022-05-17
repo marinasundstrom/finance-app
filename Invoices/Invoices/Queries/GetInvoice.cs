@@ -1,10 +1,11 @@
 ﻿using System;
 
-using MediatR;
-
 using Invoices.Contracts;
 using Invoices.Data;
 using Invoices.Queries;
+
+using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Queries;
@@ -30,4 +31,3 @@ public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
         }
     }
 }
-

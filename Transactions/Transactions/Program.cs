@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using MassTransit;
-
-using Transactions.Data;
-using Transactions;
-using Transactions.Contracts;
+﻿using MassTransit;
 using MassTransit.MessageData;
-using Transactions.Queries;
+
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using Transactions;
 using Transactions.Commands;
+using Transactions.Contracts;
+using Transactions.Data;
+using Transactions.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,6 @@ app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator med
     .WithName("Transactions_PostTransactions")
     .WithTags("Transactions")
     //.RequireAuthorization()
-    .Produces(StatusCodes.Status200OK);;
+    .Produces(StatusCodes.Status200OK); ;
 
 app.Run();

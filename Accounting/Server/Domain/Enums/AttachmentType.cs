@@ -1,6 +1,6 @@
 namespace Accounting.Domain.Enums;
 
-public enum AttachmentType 
+public enum AttachmentType
 {
     Receipt,
     Invoice
