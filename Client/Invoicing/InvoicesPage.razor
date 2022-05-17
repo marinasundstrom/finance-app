@@ -22,7 +22,7 @@
         <MudTd DataLabel="Date">@invoice.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Status">@invoice.Status</MudTd>
         <MudTd DataLabel="SubTotal">@invoice.SubTotal.ToString("c")</MudTd>
-        <MudTd DataLabel="VAT Rate">@invoice.VatRate.ToString("c")</MudTd>
+        <MudTd DataLabel="VAT Rate">@(invoice.VatRate * 100)%</MudTd>
         <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
         <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
