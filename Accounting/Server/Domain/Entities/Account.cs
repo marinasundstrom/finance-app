@@ -11,7 +11,7 @@ public class Account
 
     public AccountClass Class { get; set; }
 
-    public AccountGroup Group { get; set; }
+    public AccountGroup? Group { get; set; }
 
     public string Name { get; set; } = null!;
 
