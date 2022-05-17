@@ -1,0 +1,56 @@
+﻿@inject IInvoicesClient InvoicesClient
+
+@page "/invoices"
+
+<PageTitle>Invoices</PageTitle>
+
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoices</MudText>
+
+<MudTable ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Total</MudTh>
+        <MudTh>VAT Rate</MudTh>
+        <MudTh>VAT</MudTh>
+        <MudTh>Paid</MudTh>
+    </HeaderContent>
+    <RowTemplate Context="invoice">
+        <MudTd DataLabel="Id">@invoice.Id</MudTd>
+        <MudTd DataLabel="Date">@invoice.Date.ToString("g")</MudTd>
+        <MudTd DataLabel="Status">@invoice.Status</MudTd>
+        <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
+        <MudTd DataLabel="VAT Rate">@invoice.VatRate.ToString("c")</MudTd>
+        <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
+        <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+        bool loading = false;
+
+        private async Task<TableData<InvoiceDto>> ServerReload(TableState state)
+        {
+            loading = true;
+
+            try
+            {
+                var result = await InvoicesClient.GetInvoicesAsync();
+
+                return new TableData<InvoiceDto>() { TotalItems = result.Count(), Items = result };
+            }
+            finally
+            {
+                loading = false;
+            }
+        }
+
+    }

@@ -4,7 +4,7 @@
 # when you've given us a try, we'd love to know what you think:
 #    https://aka.ms/AA7q20u
 #
-name: accounting
+name: client
 services:
 - name: webapp
   project: Client/Client.csproj
@@ -12,7 +12,7 @@ services:
     - protocol: https
       port: 5010
 
-- name: webapi
+- name: accounting
   project: Accounting/Accounting/WebApi/WebApi.csproj
   bindings:
     - protocol: https
@@ -22,13 +22,13 @@ services:
   project: Accounting/Accountant/Accountant.csproj
   bindings:
     - protocol: https
-      port: 5040
+      port: 5030
 
 - name: transactions
   project: Transactions/Transactions/Transactions.csproj
   bindings:
     - protocol: https
-      port: 5030
+      port: 5040
 
 - name: invoices
   project: Invoices/Invoices/Invoices.csproj

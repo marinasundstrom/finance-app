@@ -78,6 +78,12 @@ await SeedData.EnsureSeedData(app);
 
 app.MapGet("/", () => "Hello World!");
 
+app.MapGet("/transactions", async (IMediator mediator) => await mediator.Send(new GetTransactons()))
+    .WithName("Transactions_GetTransactions")
+    .WithTags("Transactions")
+    //.RequireAuthorization()
+    .Produces<IEnumerable<TransactionDto>>(StatusCodes.Status200OK); ;
+
 app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator mediator)
     => await mediator.Send(new PostTransactions(transactions)))
     .WithName("Transactions_PostTransactions")

@@ -2,11 +2,17 @@
 
 using Accounting.Client;
 
+using Finance.Client;
+
+using Invoices.Client;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using MudBlazor;
 using MudBlazor.Services;
+
+using Transactions.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -31,9 +37,19 @@ CultureInfo? culture = new("sv-SE");
 CultureInfo.DefaultThreadCurrentCulture = culture;
 CultureInfo.DefaultThreadCurrentUICulture = culture;
 
+builder.Services.AddInvoicesClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}invoices/");
+});
+
+builder.Services.AddTransactionsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}transactions/");
+});
+
 builder.Services.AddAccountingClients((sp, http) =>
 {
-    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}api/");
+    http.BaseAddress = new Uri($"{builder.HostEnvironment.BaseAddress}accounting/");
 });
 
 await builder.Build().RunAsync();
