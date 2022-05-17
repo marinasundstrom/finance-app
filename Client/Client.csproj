@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Accounting.Client\Accounting.Client.csproj">
+    <ProjectReference Include="..\Accounting\Accounting.Client\Accounting.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>

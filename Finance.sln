@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Accounting\Client\Client.csproj", "{D44472AB-3565-42DD-86B1-FCDCF0D87140}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{D44472AB-3565-42DD-86B1-FCDCF0D87140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Accounting\Server\WebApi\WebApi.csproj", "{8B06D02D-D355-4583-B7E5-E96CF050CE65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "Accounting\Accounting\WebApi\WebApi.csproj", "{8B06D02D-D355-4583-B7E5-E96CF050CE65}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6E692565-5456-4181-BD6B-4188F6BF3E63}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,11 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4A1850E7-F3F7-41CC-929A-E2C2795AA29E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Accounting\Server\Application\Application.csproj", "{13C9DEB0-991B-4037-B145-CAF3550C17A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Accounting\Accounting\Application\Application.csproj", "{13C9DEB0-991B-4037-B145-CAF3550C17A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Accounting\Server\Infrastructure\Infrastructure.csproj", "{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Accounting\Accounting\Infrastructure\Infrastructure.csproj", "{BE6EDC4F-D9CF-46D0-9C6F-63CDD53E6793}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Accounting\Server\Domain\Domain.csproj", "{1C4838D4-0160-4D16-9055-4DB35F3342FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Accounting\Accounting\Domain\Domain.csproj", "{1C4838D4-0160-4D16-9055-4DB35F3342FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Contracts", "Transactions\Transactions.Contracts\Transactions.Contracts.csproj", "{992C6756-F562-48DB-9DF4-81DFB1FF5C6D}"
 EndProject
@@ -113,7 +113,6 @@ Global
 		{992C6756-F562-48DB-9DF4-81DFB1FF5C6D} = {F8B4A107-11AF-4F67-9C2C-0063CF6AFDD5}
 		{AD438943-2DE2-47C8-92E5-5A3172BCDE04} = {06218549-32FA-4CD4-8091-1AD0C5C87AC3}
 		{152DB86F-76A8-4417-B0C1-1323B99D7883} = {06218549-32FA-4CD4-8091-1AD0C5C87AC3}
-		{D44472AB-3565-42DD-86B1-FCDCF0D87140} = {06218549-32FA-4CD4-8091-1AD0C5C87AC3}
 		{4A1850E7-F3F7-41CC-929A-E2C2795AA29E} = {06218549-32FA-4CD4-8091-1AD0C5C87AC3}
 		{C1ABE473-98DE-46D9-8FAB-1F72C607A660} = {3011C5D4-2D55-48DB-9A1F-FD66E0887BDE}
 		{F39FD7AC-EBA4-40A5-B2F8-754F45BF8810} = {3011C5D4-2D55-48DB-9A1F-FD66E0887BDE}

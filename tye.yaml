@@ -7,13 +7,13 @@
 name: accounting
 services:
 - name: webapp
-  project: Accounting/Client/Client.csproj
+  project: Client/Client.csproj
   bindings:
     - protocol: https
       port: 5010
 
 - name: webapi
-  project: Accounting/Server/WebApi/WebApi.csproj
+  project: Accounting/Accounting/WebApi/WebApi.csproj
   bindings:
     - protocol: https
       port: 5020
