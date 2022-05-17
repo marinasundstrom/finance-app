@@ -30,6 +30,8 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
                 _context.Transactions.Add(new Models.Transaction()
                 {
                     Id = transaction.Id,
+                    Date = transaction.Date ?? DateTime.Now,
+                    Status = Models.TransactionStatus.Unverified,
                     From = transaction.From,
                     Reference = transaction.Reference,
                     Currency = transaction.Currency,
@@ -40,7 +42,7 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
             await _context.SaveChangesAsync(cancellationToken);
 
             await _publishEndpoint.Publish(
-                new TransactionBatch(request.Transactions.Select(t => new Contracts.Transaction(t.Id, t.From, t.Reference, t.Currency, t.Amount))));
+                new TransactionBatch(request.Transactions.Select(t => new Contracts.Transaction(t.Id, t.Date.GetValueOrDefault(), (Contracts.TransactionStatus)t.Status, t.From, t.Reference, t.Currency, t.Amount))));
 
             return Unit.Value;
         }

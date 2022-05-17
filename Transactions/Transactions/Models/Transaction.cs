@@ -5,6 +5,8 @@ public class Transaction
 {
     public string Id { get; set; } = null!;
 
+    public DateTime Date { get; set; }
+
     public TransactionStatus Status { get; set; }
 
     public string? From { get; set; }

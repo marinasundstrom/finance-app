@@ -9,6 +9,8 @@
 <MudTable ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
     <HeaderContent>
         <MudTh>Id</MudTh>
+        <MudTh>Date</MudTh>
+        <MudTh>Status</MudTh>
         <MudTh>From</MudTh>
         <MudTh>Reference</MudTh>
         <MudTh>Currency</MudTh>
@@ -16,8 +18,8 @@
     </HeaderContent>
     <RowTemplate Context="transaction">
         <MudTd DataLabel="Id">@transaction.Id</MudTd>
-        @* <MudTd DataLabel="Id">@transaction.Date</MudTd> *@
-        @* <MudTd DataLabel="Id">@transaction.Status</MudTd> *@
+        <MudTd DataLabel="Date">@transaction.Date?.ToString("g")</MudTd>
+        <MudTd DataLabel="Status">@transaction.Status</MudTd>
         <MudTd DataLabel="From">@transaction.From</MudTd>
         <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
         <MudTd DataLabel="Currency">@transaction.Currency</MudTd>

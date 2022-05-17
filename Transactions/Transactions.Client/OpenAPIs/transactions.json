@@ -5,7 +5,7 @@
     "title": "Transactions API",
     "version": "0.1"
   },
-  "host": "localhost:5030",
+  "host": "localhost:5040",
   "schemes": [
     "https"
   ],
@@ -92,6 +92,7 @@
       "type": "object",
       "required": [
         "id",
+        "status",
         "from",
         "reference",
         "currency",
@@ -100,6 +101,13 @@
       "properties": {
         "id": {
           "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/TransactionStatus"
         },
         "from": {
           "type": "string"
@@ -115,6 +123,20 @@
           "format": "decimal"
         }
       }
+    },
+    "TransactionStatus": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Unverified",
+        "Verified",
+        "Unknown"
+      ],
+      "enum": [
+        "Unverified",
+        "Verified",
+        "Unknown"
+      ]
     },
     "Unit": {
       "type": "object",
