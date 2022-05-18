@@ -27,7 +27,10 @@ public record GetTransactons() : IRequest<IEnumerable<TransactionDto>>
 
         public async Task<IEnumerable<TransactionDto>> Handle(GetTransactons request, CancellationToken cancellationToken)
         {
-            var transactions = await _context.Transactions.ToArrayAsync();
+            var transactions = await _context.Transactions
+                .OrderByDescending(x => x.Date)
+                .ToArrayAsync();
+
             return transactions.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount));
         }
     }

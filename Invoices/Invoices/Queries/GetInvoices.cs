@@ -22,7 +22,9 @@ public record GetInvoices() : IRequest<IEnumerable<InvoiceDto>>
 
         public async Task<IEnumerable<InvoiceDto>> Handle(GetInvoices request, CancellationToken cancellationToken)
         {
-            var invoices = await _context.Invoices.ToArrayAsync(cancellationToken);
+            var invoices = await _context.Invoices
+                .OrderByDescending(x => x.Date)
+                .ToArrayAsync(cancellationToken);
 
             return invoices.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid));
         }
