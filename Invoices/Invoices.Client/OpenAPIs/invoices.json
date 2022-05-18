@@ -132,7 +132,7 @@
             "x-nullable": false
           },
           {
-            "type": "string",
+            "type": "integer",
             "name": "status",
             "in": "query",
             "required": true,
@@ -141,12 +141,12 @@
             },
             "x-nullable": false,
             "enum": [
-              "Created",
-              "Sent",
-              "Paid",
-              "PartiallyPaid",
-              "Overpaid",
-              "Cancelled"
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
             ]
           }
         ],
@@ -247,7 +247,7 @@
       }
     },
     "InvoiceStatus": {
-      "type": "string",
+      "type": "integer",
       "description": "",
       "x-enumNames": [
         "Created",
@@ -258,12 +258,12 @@
         "Cancelled"
       ],
       "enum": [
-        "Created",
-        "Sent",
-        "Paid",
-        "PartiallyPaid",
-        "Overpaid",
-        "Cancelled"
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
       ]
     },
     "CreateInvoice": {

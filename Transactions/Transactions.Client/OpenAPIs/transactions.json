@@ -104,7 +104,7 @@
             "x-nullable": true
           },
           {
-            "type": "string",
+            "type": "integer",
             "name": "status",
             "in": "query",
             "required": true,
@@ -113,10 +113,10 @@
             },
             "x-nullable": false,
             "enum": [
-              "Unverified",
-              "Verified",
-              "Payback",
-              "Unknown"
+              0,
+              1,
+              2,
+              3
             ]
           }
         ],
@@ -170,7 +170,7 @@
       }
     },
     "TransactionStatus": {
-      "type": "string",
+      "type": "integer",
       "description": "",
       "x-enumNames": [
         "Unverified",
@@ -179,10 +179,10 @@
         "Unknown"
       ],
       "enum": [
-        "Unverified",
-        "Verified",
-        "Payback",
-        "Unknown"
+        0,
+        1,
+        2,
+        3
       ]
     },
     "Unit": {

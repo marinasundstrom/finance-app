@@ -67,7 +67,8 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                 //    // Do nothing
                 //    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Payback);
                 //    break;
-
+                
+                case InvoiceStatus.Created:
                 case InvoiceStatus.Sent:
                     if (receivedAmount < invoice.Total)
                     {
