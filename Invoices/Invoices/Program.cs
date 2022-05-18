@@ -4,6 +4,7 @@ using Invoices.Contracts;
 using Invoices.Data;
 using Invoices.Models;
 using Invoices.Queries;
+using Documents.Client;
 
 using MassTransit;
 using MassTransit.MessageData;
@@ -26,7 +27,7 @@ builder.Services.AddSwaggerDocument(c =>
 
 const string ConnectionStringKey = "mssql";
 
-var connectionString = Configuration.GetConnectionString(ConnectionStringKey, "Invoices");
+var connectionString = Invoices.ConfigurationExtensions.GetConnectionString(Configuration, ConnectionStringKey, "Invoices");
 
 builder.Services.AddDbContext<InvoicesContext>((sp, options) =>
 {
@@ -56,9 +57,10 @@ builder.Services.AddMassTransit(x =>
 .AddMassTransitHostedService(true)
 .AddGenericRequestClient();
 
-//builder.Services.AddScoped<IEmailService, EmailService>();
-//builder.Services.AddScoped<IRazorTemplateCompiler, RazorTemplateCompiler>();
-//builder.Services.AddScoped<IPdfGenerator, PdfGenerator>();
+builder.Services.AddDocumentsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/documents/");
+});
 
 var app = builder.Build();
 
