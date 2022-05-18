@@ -12,6 +12,8 @@ public class DocumentsContext : DbContext
     {
     }
 
+    public DbSet<Document> Documents { get; set; } = null!;
+
     public DbSet<DocumentTemplate> DocumentTemplates { get; set; } = null!;
 }
 

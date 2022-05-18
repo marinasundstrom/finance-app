@@ -12,16 +12,22 @@
   "paths": {
     "/": {
       "get": {
-        "operationId": "Get",
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetDocuments",
         "produces": [
-          "text/plain"
+          "application/json"
         ],
         "responses": {
           "200": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/DocumentDto"
+              }
             }
           }
         }
@@ -59,6 +65,62 @@
           "200": {
             "description": ""
           }
+        }
+      }
+    },
+    "/Documents/UploadDocument": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_UploadDocument",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "title",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "file",
+            "name": "file",
+            "in": "formData",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DocumentDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "url",
+        "uploaded"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "uploaded": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     }
