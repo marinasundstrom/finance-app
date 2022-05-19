@@ -36,15 +36,30 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
         "responses": {
           "200": {
             "x-nullable": false,
             "description": "",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/TransactionDto"
-              }
+              "$ref": "#/definitions/ItemsResultOfTransactionDto"
             }
           }
         }
@@ -133,6 +148,25 @@
     }
   },
   "definitions": {
+    "ItemsResultOfTransactionDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransactionDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
     "TransactionDto": {
       "type": "object",
       "required": [

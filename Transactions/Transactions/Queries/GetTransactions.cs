@@ -12,9 +12,9 @@ using Transactions.Queries;
 
 namespace Transactions.Queries;
 
-public record GetTransactons() : IRequest<IEnumerable<TransactionDto>>
+public record GetTransactons(int Page, int PageSize) : IRequest<ItemsResult<TransactionDto>>
 {
-    public class Handler : IRequestHandler<GetTransactons, IEnumerable<TransactionDto>>
+    public class Handler : IRequestHandler<GetTransactons, ItemsResult<TransactionDto>>
     {
         private readonly ITransactionsContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
@@ -25,13 +25,25 @@ public record GetTransactons() : IRequest<IEnumerable<TransactionDto>>
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<IEnumerable<TransactionDto>> Handle(GetTransactons request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<TransactionDto>> Handle(GetTransactons request, CancellationToken cancellationToken)
         {
-            var transactions = await _context.Transactions
+            var query = _context.Transactions
+                .AsSplitQuery()
+                .AsNoTracking()
                 .OrderByDescending(x => x.Date)
-                .ToArrayAsync();
+                .AsQueryable();
 
-            return transactions.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount));
+            int totalItems = await query.CountAsync(cancellationToken);
+
+            query = query
+                .Skip(request.Page * request.PageSize)
+                .Take(request.PageSize);
+
+            var items = await query.ToArrayAsync(cancellationToken);
+
+            return new ItemsResult<TransactionDto>(
+                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)), 
+                totalItems);
         }
     }
 }

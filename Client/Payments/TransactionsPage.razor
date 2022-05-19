@@ -48,9 +48,9 @@
 
         try
         {
-            var result = await TransactionsClient.GetTransactionsAsync();
+            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize);
 
-            return new TableData<TransactionDto>() { TotalItems = result.Count(), Items = result };
+            return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
         finally
         {

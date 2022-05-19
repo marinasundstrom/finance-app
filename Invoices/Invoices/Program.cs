@@ -81,11 +81,11 @@ await SeedData.EnsureSeedData(app);
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/invoices", async (IMediator mediator)
-    => await mediator.Send(new GetInvoices()))
+app.MapGet("/invoices", async (int page, int pageSize, IMediator mediator)
+    => await mediator.Send(new GetInvoices(page, pageSize)))
     .WithName("Invoices_GetInvoices")
     .WithTags("Invoices")
-    .Produces<IEnumerable<InvoiceDto>>(StatusCodes.Status200OK);
+    .Produces<ItemsResult<InvoiceDto>>(StatusCodes.Status200OK);
 
 app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
     => await mediator.Send(new GetInvoice(invoiceId)))
