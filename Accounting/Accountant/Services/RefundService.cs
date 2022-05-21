@@ -62,6 +62,18 @@ namespace Accountant.Services
 
                     await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyRepaid);
                 }
+                else if (invoice.Status == InvoiceStatus.PartiallyPaid) 
+                {
+                    _logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
+                }
+                else if (invoice.Status == InvoiceStatus.Sent)
+                {
+                    var daysSince = (DateTime.Now.Date - invoice.Date.Date).TotalDays;
+                    if(daysSince > 30) 
+                    {
+                        _logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
+                    }
+                }
             }
         }
     }
