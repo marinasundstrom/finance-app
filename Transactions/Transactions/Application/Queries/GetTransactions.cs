@@ -1,16 +1,12 @@
-﻿using System;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Contracts;
-using Transactions.Data;
-using Transactions.Queries;
+using Transactions.Domain;
 
-namespace Transactions.Queries;
+namespace Transactions.Application.Queries;
 
 public record GetTransactons(int Page, int PageSize) : IRequest<ItemsResult<TransactionDto>>
 {

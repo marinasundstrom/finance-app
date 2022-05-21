@@ -1,13 +1,10 @@
-﻿using System;
-
-using MassTransit;
+﻿using MassTransit;
 
 using MediatR;
 
-using Transactions.Data;
-using Transactions.Queries;
+using Transactions.Domain;
 
-namespace Transactions.Commands;
+namespace Transactions.Application.Commands;
 
 public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequest
 {
@@ -26,16 +23,14 @@ public record PostTransactions(IEnumerable<TransactionDto> Transactions) : IRequ
         {
             foreach (var transaction in request.Transactions)
             {
-                _context.Transactions.Add(new Models.Transaction()
-                {
-                    Id = transaction.Id,
-                    Date = transaction.Date ?? DateTime.Now,
-                    Status = Models.TransactionStatus.Unverified,
-                    From = transaction.From,
-                    Reference = transaction.Reference,
-                    Currency = transaction.Currency,
-                    Amount = transaction.Amount
-                });
+                _context.Transactions.Add(new Domain.Entities.Transaction(
+                    transaction.Id,
+                    transaction.Date ?? DateTime.Now,
+                    transaction.Status,
+                    transaction.From,
+                    transaction.Reference,
+                    transaction.Currency,
+                    transaction.Amount));
             }
 
             await _context.SaveChangesAsync(cancellationToken);

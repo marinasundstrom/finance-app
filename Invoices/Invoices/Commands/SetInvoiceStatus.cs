@@ -28,7 +28,7 @@ public record SetInvoiceStatus(int InvoiceId, InvoiceStatus Status) : IRequest
         {
             var invoice = await _context.Invoices.FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            invoice.Status = request.Status;
+            invoice.SetStatus(request.Status);
 
             await _context.SaveChangesAsync(cancellationToken);
 

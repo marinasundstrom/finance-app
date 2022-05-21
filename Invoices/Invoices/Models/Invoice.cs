@@ -17,10 +17,15 @@ public class Invoice
 
     public int Id { get; set; }
     public DateTime Date { get; set; }
-    public InvoiceStatus Status { get; set; }
+    public InvoiceStatus Status { get; private set; }
     public decimal SubTotal { get; set; }
     public decimal Vat { get; set; }
     public double VatRate { get; set; }
     public decimal Total { get; set; }
     public decimal? Paid { get; set; }
+
+    public void SetStatus(InvoiceStatus status)
+    {
+        Status = status;
+    }
 }

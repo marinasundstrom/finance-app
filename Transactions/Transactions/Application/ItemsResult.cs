@@ -1,3 +1,3 @@
-namespace Transactions.Queries;
+namespace Transactions.Application;
 
 public record ItemsResult<T>(IEnumerable<T> Items, int TotalItems);

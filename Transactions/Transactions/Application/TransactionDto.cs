@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Transactions.Domain.Enums;
 
-using Transactions.Models;
-
-namespace Transactions.Queries;
+namespace Transactions.Application;
 
 public record TransactionDto(string Id, DateTime? Date, TransactionStatus Status, string From, string Reference, string Currency, decimal Amount);

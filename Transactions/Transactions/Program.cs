@@ -1,19 +1,18 @@
 ﻿using MassTransit;
-using MassTransit.MessageData;
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
-
-using Transactions;
-using Transactions.Commands;
-using Transactions.Models;
-using Transactions.Data;
-using Transactions.Queries;
+using Transactions.Application;
+using Transactions.Application.Queries;
+using Transactions.Application.Commands;
+using Transactions.Domain.Enums;
+using Transactions.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+builder.Services.AddApplication();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -22,22 +21,6 @@ builder.Services.AddSwaggerDocument(c =>
     c.Title = "Transactions API";
     c.Version = "0.1";
 });
-
-const string ConnectionStringKey = "mssql";
-
-var connectionString = Configuration.GetConnectionString(ConnectionStringKey, "Transactions");
-
-builder.Services.AddDbContext<TransactionsContext>((sp, options) =>
-{
-    options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
-#if DEBUG
-    options.EnableSensitiveDataLogging();
-#endif
-});
-
-builder.Services.AddScoped<ITransactionsContext>(sp => sp.GetRequiredService<TransactionsContext>());
-
-builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.AddMassTransit(x =>
 {
@@ -54,10 +37,6 @@ builder.Services.AddMassTransit(x =>
 })
 .AddMassTransitHostedService(true)
 .AddGenericRequestClient();
-
-//builder.Services.AddScoped<IEmailService, EmailService>();
-//builder.Services.AddScoped<IRazorTemplateCompiler, RazorTemplateCompiler>();
-//builder.Services.AddScoped<IPdfGenerator, PdfGenerator>();
 
 var app = builder.Build();
 

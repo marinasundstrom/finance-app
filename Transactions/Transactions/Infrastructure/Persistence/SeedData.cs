@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-using Transactions.Data;
-using Transactions.Models;
-
-namespace Transactions;
+﻿namespace Transactions.Infrastructure.Persistence;
 
 public class SeedData
 {

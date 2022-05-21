@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Transactions.Models;
+using Transactions.Domain.Entities;
 
-namespace Transactions.Data;
+namespace Transactions.Domain;
 
 public interface ITransactionsContext
 {

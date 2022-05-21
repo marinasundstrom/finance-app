@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using Transactions.Domain;
+using Transactions.Domain.Entities;
 
-using Transactions.Models;
-
-namespace Transactions.Data;
+namespace Transactions.Infrastructure.Persistence;
 
 public class TransactionsContext : DbContext, ITransactionsContext
 {

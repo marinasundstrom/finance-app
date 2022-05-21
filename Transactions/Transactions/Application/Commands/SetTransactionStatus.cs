@@ -5,10 +5,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Models;
-using Transactions.Data;
+using Transactions.Domain;
+using Transactions.Domain.Enums;
 
-namespace Transactions.Commands;
+namespace Transactions.Application.Commands;
 
 public record SetTransactionStatus(string TransactionId, TransactionStatus Status) : IRequest
 {
@@ -28,7 +28,7 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
 
             var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
-            transaction.Status = request.Status;
+            transaction.SetStatus(request.Status);
 
             await _context.SaveChangesAsync(cancellationToken);
 

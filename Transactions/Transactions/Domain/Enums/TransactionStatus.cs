@@ -1,4 +1,4 @@
-﻿namespace Transactions.Models;
+﻿namespace Transactions.Domain.Enums;
 
 public enum TransactionStatus
 {
