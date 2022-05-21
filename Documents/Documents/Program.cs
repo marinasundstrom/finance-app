@@ -18,6 +18,8 @@ using Documents.Application.Queries;
 using Documents;
 using Documents.Application.Commands;
 using Documents.Infrastructure.Persistence;
+using Documents.Application.Common.Interfaces;
+using Documents.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,10 @@ var Configuration = builder.Configuration;
 builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddControllers();
 

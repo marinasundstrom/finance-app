@@ -13,6 +13,8 @@ using Invoices.Infrastructure;
 using Invoices.Infrastructure.Persistence;
 using Invoices.Application.Queries;
 using Invoices.Domain.Enums;
+using Invoices.Application.Common.Interfaces;
+using Invoices.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,10 @@ var Configuration = builder.Configuration;
 builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddEndpointsApiExplorer();
 

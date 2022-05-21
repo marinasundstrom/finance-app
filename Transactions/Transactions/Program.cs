@@ -8,6 +8,8 @@ using Transactions.Application.Commands;
 using Transactions.Domain.Enums;
 using Transactions.Infrastructure.Persistence;
 using Transactions.Infrastructure;
+using Transactions.Application.Common.Interfaces;
+using Transactions.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,10 @@ var Configuration = builder.Configuration;
 builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
