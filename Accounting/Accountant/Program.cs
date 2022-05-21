@@ -2,6 +2,7 @@
 
 using Accountant;
 using Accountant.Consumers;
+using Accountant.Services;
 
 using Accounting.Client;
 
@@ -17,6 +18,8 @@ using Transactions.Client;
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+builder.Services.AddSingleton<IRefundService, RefundService>();
 
 builder.Services.AddMassTransit(x =>
 {

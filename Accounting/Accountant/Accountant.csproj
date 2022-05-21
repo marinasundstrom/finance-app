@@ -39,5 +39,9 @@
     <None Remove="Hangfire.AspNetCore" />
     <None Remove="Hangfire.SqlServer" />
     <None Remove="Hangfire" />
+    <None Remove="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

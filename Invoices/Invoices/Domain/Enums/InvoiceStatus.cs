@@ -8,5 +8,7 @@ public enum InvoiceStatus
     Paid,
     PartiallyPaid,
     Overpaid,
+    Repaid,
+    PartiallyRepaid,
     Cancelled
 }

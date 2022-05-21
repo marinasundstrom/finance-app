@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Accountant.Services;
+
 using Hangfire;
 
 namespace Accountant;
@@ -11,8 +13,8 @@ public static class JobsExtensions
         var backgroundJobs = services.GetRequiredService<IBackgroundJobClient>();
         backgroundJobs.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
 
-        //var recurringJobs = services.GetRequiredService<IRecurringJobManager>();
-        //recurringJobs.AddOrUpdate<INotifier>("test", (notifier) => notifier.Notify(), Cron.Minutely());
+        var recurringJobs = services.GetRequiredService<IRecurringJobManager>();
+        recurringJobs.AddOrUpdate<RefundService>("refund", (refundService) => refundService.CheckForRefund(), Cron.Minutely());
 
         return services;
     }
