@@ -1,10 +1,9 @@
 ﻿using Documents.Domain.Entities;
 using Documents.Domain.Enums;
-using Documents.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents;
+namespace Documents.Infrastructure.Persistence;
 
 public class SeedData
 {

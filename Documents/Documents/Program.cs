@@ -17,6 +17,7 @@ using Documents.Infrastructure;
 using Documents.Application.Queries;
 using Documents;
 using Documents.Application.Commands;
+using Documents.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
