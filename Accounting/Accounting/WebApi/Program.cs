@@ -69,6 +69,8 @@ builder.Services.AddMassTransit(x =>
 .AddMassTransitHostedService(true)
 .AddGenericRequestClient();
 
+
+
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
 

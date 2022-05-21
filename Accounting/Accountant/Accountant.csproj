@@ -11,6 +11,9 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.1" />
 	  <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
 	  <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+	  <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
+	  <PackageReference Include="Hangfire.SqlServer" Version="1.7.28" />
+	  <PackageReference Include="Hangfire" Version="1.7.28" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,5 +36,8 @@
 
   <ItemGroup>
     <None Remove="Microsoft.Tye.Extensions.Configuration" />
+    <None Remove="Hangfire.AspNetCore" />
+    <None Remove="Hangfire.SqlServer" />
+    <None Remove="Hangfire" />
   </ItemGroup>
 </Project>

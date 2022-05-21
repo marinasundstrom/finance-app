@@ -5,7 +5,7 @@ using Invoices.Contracts;
 
 using MassTransit;
 
-namespace Transactions.Consumers;
+namespace Accountant.Consumers;
 
 public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 {
