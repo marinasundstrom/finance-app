@@ -1,7 +1,7 @@
 ﻿
 using Invoices.Contracts;
-using Invoices.Data;
-using Invoices.Models;
+using Invoices.Domain;
+using Invoices.Domain.Enums;
 
 using MassTransit;
 

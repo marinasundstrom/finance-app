@@ -1,8 +1,4 @@
-﻿using Invoices;
-using Invoices.Commands;
-using Invoices.Contracts;
-using Invoices.Data;
-using Invoices.Models;
+﻿using Invoices.Commands;
 using Invoices.Queries;
 using Documents.Client;
 
@@ -12,10 +8,19 @@ using MassTransit.MessageData;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+using Invoices.Application;
+using Invoices.Infrastructure;
+using Invoices.Infrastructure.Persistence;
+using Invoices.Application.Queries;
+using Invoices.Domain.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -24,20 +29,6 @@ builder.Services.AddSwaggerDocument(c =>
     c.Title = "Invoices API";
     c.Version = "0.1";
 });
-
-const string ConnectionStringKey = "mssql";
-
-var connectionString = Invoices.ConfigurationExtensions.GetConnectionString(Configuration, ConnectionStringKey, "Invoices");
-
-builder.Services.AddDbContext<InvoicesContext>((sp, options) =>
-{
-    options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
-#if DEBUG
-    options.EnableSensitiveDataLogging();
-#endif
-});
-
-builder.Services.AddScoped<IInvoicesContext>(sp => sp.GetRequiredService<InvoicesContext>());
 
 builder.Services.AddMediatR(typeof(Program));
 

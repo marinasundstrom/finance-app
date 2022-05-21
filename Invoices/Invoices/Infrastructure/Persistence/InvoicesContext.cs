@@ -1,10 +1,9 @@
-﻿using System;
-
-using Invoices.Models;
+﻿using Invoices.Domain;
+using Invoices.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Data;
+namespace Invoices.Infrastructure.Persistence;
 
 public class InvoicesContext : DbContext, IInvoicesContext
 {

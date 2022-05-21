@@ -1,4 +1,4 @@
-﻿using Invoices.Data;
+﻿using Invoices.Domain;
 
 using MediatR;
 

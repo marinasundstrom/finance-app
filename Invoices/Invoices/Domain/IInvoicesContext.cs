@@ -1,8 +1,8 @@
-﻿using Invoices.Models;
+﻿using Invoices.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Data;
+namespace Invoices.Domain;
 
 public interface IInvoicesContext
 {

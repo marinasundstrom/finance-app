@@ -1,9 +1,7 @@
-﻿using Invoices.Data;
-using Invoices.Models;
+﻿using Invoices.Domain.Entities;
+using Invoices.Domain.Enums;
 
-using Microsoft.AspNetCore.Identity;
-
-namespace Invoices;
+namespace Invoices.Infrastructure.Persistence;
 
 public class SeedData
 {

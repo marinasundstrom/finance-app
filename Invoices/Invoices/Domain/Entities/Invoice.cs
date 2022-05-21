@@ -1,5 +1,8 @@
 ﻿using System;
-namespace Invoices.Models;
+
+using Invoices.Domain.Enums;
+
+namespace Invoices.Domain.Entities;
 
 public class Invoice
 {

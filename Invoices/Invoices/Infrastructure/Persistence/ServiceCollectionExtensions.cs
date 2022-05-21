@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 
-using Transactions.Domain;
+using Invoices.Domain;
+using Invoices.Domain.Entities;
 
-namespace Transactions.Infrastructure.Persistence;
+namespace Invoices.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {
@@ -10,17 +11,17 @@ public static class ServiceCollectionExtensions
     {
         const string ConnectionStringKey = "mssql";
 
-        var connectionString = configuration.GetConnectionString(ConnectionStringKey, "Transactions");
+        var connectionString = Invoices.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Invoices");
 
-        services.AddDbContext<TransactionsContext>((sp, options) =>
+        services.AddDbContext<InvoicesContext>((sp, options) =>
         {
             options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
-        #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
-        #endif
+#endif
         });
 
-        services.AddScoped<ITransactionsContext>(sp => sp.GetRequiredService<TransactionsContext>());
+        services.AddScoped<IInvoicesContext>(sp => sp.GetRequiredService<InvoicesContext>());
 
         return services;
     }

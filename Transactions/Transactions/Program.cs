@@ -7,12 +7,15 @@ using Transactions.Application.Queries;
 using Transactions.Application.Commands;
 using Transactions.Domain.Enums;
 using Transactions.Infrastructure.Persistence;
+using Transactions.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
-builder.Services.AddApplication();
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 

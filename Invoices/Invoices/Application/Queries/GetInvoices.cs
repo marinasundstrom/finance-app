@@ -1,5 +1,6 @@
 ﻿
-using Invoices.Data;
+using Invoices.Application;
+using Invoices.Domain;
 
 using MassTransit;
 
