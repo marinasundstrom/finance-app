@@ -1,25 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Identity;
+using Azure.Storage.Blobs;
+
+using Documents;
+using Documents.Application;
+using Documents.Application.Commands;
+using Documents.Application.Common.Interfaces;
+using Documents.Application.Queries;
+using Documents.Application.Services;
+using Documents.Consumers;
+using Documents.Contracts;
+using Documents.Infrastructure;
+using Documents.Infrastructure.Persistence;
+using Documents.Services;
 
 using MassTransit;
-
-using Documents.Application;
-using Documents.Consumers;
-using Documents.Application.Services;
-using Documents.Contracts;
-using Microsoft.AspNetCore.Mvc;
 using MassTransit.MessageData;
+
 using MediatR;
 
-using Azure.Identity;
-using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
-using Documents.Infrastructure;
-using Documents.Application.Queries;
-using Documents;
-using Documents.Application.Commands;
-using Documents.Infrastructure.Persistence;
-using Documents.Application.Common.Interfaces;
-using Documents.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

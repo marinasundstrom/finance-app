@@ -1,15 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-
-using Accounting.Domain;
 using Accounting.Application.Common.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+using Accounting.Domain;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Accounting.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) 
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AccountingContext>(options =>
         {

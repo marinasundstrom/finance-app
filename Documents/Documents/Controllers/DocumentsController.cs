@@ -27,4 +27,3 @@ public class DocumentsController : Controller
         await _mediator.Send(new UploadDocument(title, file.OpenReadStream()));
     }
 }
-

@@ -38,7 +38,7 @@ public record GetTransactons(int Page, int PageSize) : IRequest<ItemsResult<Tran
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<TransactionDto>(
-                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)), 
+                items.Select(t => new TransactionDto(t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
                 totalItems);
         }
     }

@@ -17,4 +17,3 @@ public class DocumentsContext : DbContext, IDocumentsContext
 
     public DbSet<DocumentTemplate> DocumentTemplates { get; set; } = null!;
 }
-

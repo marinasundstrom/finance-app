@@ -38,7 +38,7 @@ public record GetInvoices(int Page, int PageSize) : IRequest<ItemsResult<Invoice
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<InvoiceDto>(
-                items.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid)), 
+                items.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid)),
                 totalItems);
         }
     }

@@ -1,9 +1,8 @@
-﻿using Transactions.Application.Common.Interfaces;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.Extensions.Logging;
 
+using Transactions.Application.Common.Interfaces;
 using Transactions.Application.Common.Models;
 using Transactions.Domain.Common;
 

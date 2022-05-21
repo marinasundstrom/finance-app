@@ -20,14 +20,14 @@ public class SeedData
 
             var documentTemplate = await context.DocumentTemplates.FirstOrDefaultAsync(dt => dt.Id == "greeting");
 
-            if(documentTemplate is null) 
+            if (documentTemplate is null)
             {
                 documentTemplate = new DocumentTemplate()
                 {
                     Id = "greeting",
                     Name = "Greeting",
                     TemplateLanguage = DocumentTemplateLanguage.Razor,
-                    Content = 
+                    Content =
 @$"
 @model dynamic
 Hello, @Model.Name!"

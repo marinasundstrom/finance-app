@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Transactions.Domain.Common;
-
 using MediatR;
+
+using Transactions.Domain.Common;
 
 namespace Transactions.Application.Common.Models;
 

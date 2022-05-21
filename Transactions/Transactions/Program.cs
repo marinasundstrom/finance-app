@@ -3,12 +3,12 @@
 using MediatR;
 
 using Transactions.Application;
-using Transactions.Application.Queries;
 using Transactions.Application.Commands;
-using Transactions.Domain.Enums;
-using Transactions.Infrastructure.Persistence;
-using Transactions.Infrastructure;
 using Transactions.Application.Common.Interfaces;
+using Transactions.Application.Queries;
+using Transactions.Domain.Enums;
+using Transactions.Infrastructure;
+using Transactions.Infrastructure.Persistence;
 using Transactions.Services;
 
 var builder = WebApplication.CreateBuilder(args);

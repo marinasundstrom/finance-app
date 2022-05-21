@@ -1,7 +1,7 @@
-﻿using MassTransit;
-
+﻿using Documents.Application.Services;
 using Documents.Contracts;
-using Documents.Application.Services;
+
+using MassTransit;
 
 namespace Documents.Consumers;
 

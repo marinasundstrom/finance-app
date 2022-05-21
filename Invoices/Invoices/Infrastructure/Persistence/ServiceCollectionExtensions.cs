@@ -1,13 +1,13 @@
-using Microsoft.EntityFrameworkCore;
-
 using Invoices.Domain;
 using Invoices.Domain.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Infrastructure.Persistence;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) 
+    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         const string ConnectionStringKey = "mssql";
 

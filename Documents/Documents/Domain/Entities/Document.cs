@@ -1,8 +1,8 @@
 namespace Documents.Domain.Entities;
 
-public class Document 
+public class Document
 {
-     public string Id { get; set; } = null!;
+    public string Id { get; set; } = null!;
 
     public string Title { get; set; } = null!;
 

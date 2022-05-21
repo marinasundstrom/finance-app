@@ -6,7 +6,7 @@ public enum AccountGroup
 {
     [Display(Name = "Rented premises")]
     RentedPremises = 50,
-    
+
     [Display(Name = "Property costs")]
     PropertyCosts = 51,
 
@@ -42,7 +42,7 @@ public enum AccountGroup
 
     [Display(Name = "Telecommunications and postal services")]
     TelecommunicationsAndPostalServices = 62,
-    
+
     [Display(Name = "Corporate insurance and other risk-related costs")]
     CorporateInsuranceAndOtherRiskRelatedCosts = 63,
 

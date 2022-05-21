@@ -2,13 +2,13 @@ using Accounting.Domain.Enums;
 
 namespace Accounting.Domain.Entities;
 
-public static class Accounts 
+public static class Accounts
 {
-    static IEnumerable<Account> accounts;
+    static IEnumerable<Account>? accounts;
 
-    public static IEnumerable<Account> GetAll() 
+    public static IEnumerable<Account> GetAll()
     {
-        return accounts ??= new [] 
+        return accounts ??= new[]
         {
             new Account
             {

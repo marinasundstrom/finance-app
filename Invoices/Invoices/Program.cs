@@ -1,6 +1,14 @@
-﻿using Invoices.Commands;
+﻿using Documents.Client;
+
+using Invoices.Application;
+using Invoices.Application.Common.Interfaces;
+using Invoices.Application.Queries;
+using Invoices.Commands;
+using Invoices.Domain.Enums;
+using Invoices.Infrastructure;
+using Invoices.Infrastructure.Persistence;
 using Invoices.Queries;
-using Documents.Client;
+using Invoices.Services;
 
 using MassTransit;
 using MassTransit.MessageData;
@@ -8,13 +16,6 @@ using MassTransit.MessageData;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
-using Invoices.Application;
-using Invoices.Infrastructure;
-using Invoices.Infrastructure.Persistence;
-using Invoices.Application.Queries;
-using Invoices.Domain.Enums;
-using Invoices.Application.Common.Interfaces;
-using Invoices.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
