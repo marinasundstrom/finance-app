@@ -1,5 +1,6 @@
-﻿using System;
-namespace Documents.Models;
+﻿using Documents.Domain.Enums;
+
+namespace Documents.Domain.Entities;
 
 public class DocumentTemplate
 {

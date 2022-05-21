@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Documents.Commands;
+using Documents.Application.Commands;
 
 using MediatR;
 

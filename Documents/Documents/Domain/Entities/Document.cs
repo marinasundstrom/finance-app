@@ -1,4 +1,4 @@
-namespace Documents.Models;
+namespace Documents.Domain.Entities;
 
 public class Document 
 {

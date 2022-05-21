@@ -1,12 +1,9 @@
-﻿using System;
-
-using Documents.Data;
-using Documents.Models;
-using Documents.Services;
+﻿using Documents.Application.Services;
+using Documents.Infrastructure.Persistence;
 
 using MediatR;
 
-namespace Documents.Commands;
+namespace Documents.Application.Commands;
 
 public record UploadDocument(string Title, Stream Stream) : IRequest<DocumentDto>
 {
@@ -23,7 +20,7 @@ public record UploadDocument(string Title, Stream Stream) : IRequest<DocumentDto
 
         public async Task<DocumentDto> Handle(UploadDocument request, CancellationToken cancellationToken)
         {
-            var document = new Documents.Models.Document() {
+            var document = new Domain.Entities.Document() {
                 Id = Guid.NewGuid().ToString(),
                 Title = request.Title,
                 Uploaded = DateTime.Now

@@ -1,9 +1,7 @@
 ﻿using System.Text;
 
 using Documents.Contracts;
-using Documents.Data;
-using Documents.Models;
-using Documents.Services;
+using Documents.Application.Services;
 
 using MassTransit;
 using MassTransit.MessageData;
@@ -11,6 +9,9 @@ using MassTransit.MessageData;
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
+using Documents.Infrastructure.Persistence;
+using Documents.Domain.Entities;
+using Documents.Domain.Enums;
 
 namespace Documents.Consumers;
 

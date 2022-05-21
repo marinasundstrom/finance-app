@@ -1,7 +1,7 @@
-﻿using Documents.Data;
-using Documents.Models;
+﻿using Documents.Domain.Entities;
+using Documents.Domain.Enums;
+using Documents.Infrastructure.Persistence;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Documents;

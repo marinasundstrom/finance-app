@@ -1,4 +1,4 @@
-﻿namespace Documents.Services;
+﻿namespace Documents.Application.Services;
 
 public interface IFileUploaderService
 {

@@ -2,26 +2,29 @@
 
 using MassTransit;
 
+using Documents.Application;
 using Documents.Consumers;
-using Documents.Services;
-using Documents.Data;
-using Documents;
+using Documents.Application.Services;
 using Documents.Contracts;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using MassTransit.MessageData;
-using System.Text;
 using MediatR;
-using Documents.Commands;
 
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Azure;
-using Documents.Queries;
+using Documents.Infrastructure;
+using Documents.Application.Queries;
+using Documents;
+using Documents.Application.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(Configuration);
 
 builder.Services.AddControllers();
 
@@ -41,18 +44,6 @@ builder.Services.AddSwaggerDocument(c =>
 var proxyBuilder = builder.Services.AddReverseProxy();
 // Initialize the reverse proxy from the "ReverseProxy" section of configuration
 proxyBuilder.LoadFromConfig(Configuration.GetSection("ReverseProxy"));
-
-const string ConnectionStringKey = "mssql";
-
-var connectionString = Configuration.GetConnectionString(ConnectionStringKey, "Documents");
-
-builder.Services.AddDbContext<DocumentsContext>((sp, options) =>
-{
-    options.UseSqlServer(connectionString, o => o.EnableRetryOnFailure());
-#if DEBUG
-    options.EnableSensitiveDataLogging();
-#endif
-});
 
 // TODO: Switch out for Azure Storage later
 IMessageDataRepository messageDataRepository = new InMemoryMessageDataRepository();

@@ -1,12 +1,13 @@
 ﻿using System;
 
-using Documents.Models;
+using Documents.Domain;
+using Documents.Domain.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Data;
+namespace Documents.Infrastructure.Persistence;
 
-public class DocumentsContext : DbContext
+public class DocumentsContext : DbContext, IDocumentsContext
 {
     public DocumentsContext(DbContextOptions options) : base(options)
     {

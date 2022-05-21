@@ -1,4 +1,4 @@
-﻿namespace Documents.Models;
+﻿namespace Documents.Domain.Enums;
 
 public enum DocumentTemplateLanguage
 {

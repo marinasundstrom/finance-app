@@ -1,6 +1,6 @@
-using Invoices.Infrastructure.Persistence;
+using Documents.Infrastructure.Persistence;
 
-namespace Invoices.Infrastructure;
+namespace Documents.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,9 +1,3 @@
-using System;
-
-using Microsoft.EntityFrameworkCore;
-
-using Transactions.Domain;
-using Transactions.Domain.Entities;
 using Transactions.Infrastructure.Persistence;
 
 namespace Transactions.Infrastructure;

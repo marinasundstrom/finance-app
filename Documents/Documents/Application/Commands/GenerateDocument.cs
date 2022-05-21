@@ -1,5 +1,4 @@
-﻿
-using Documents.Contracts;
+﻿using Documents.Contracts;
 
 using MassTransit;
 
@@ -7,7 +6,7 @@ using MediatR;
 
 using Newtonsoft.Json;
 
-namespace Documents.Commands;
+namespace Documents.Application.Commands;
 
 public record GenerateDocument(string TemplateId, string Model) : IRequest<Stream>
 {

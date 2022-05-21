@@ -1,5 +1,4 @@
-﻿
-using Documents.Data;
+﻿using Documents.Infrastructure.Persistence;
 
 using MassTransit;
 
@@ -7,7 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Documents.Queries;
+namespace Documents.Application.Queries;
 
 public record GetDocuments() : IRequest<IEnumerable<DocumentDto>>
 {
