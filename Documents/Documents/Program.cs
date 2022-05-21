@@ -5,6 +5,7 @@ using Documents;
 using Documents.Application;
 using Documents.Application.Commands;
 using Documents.Application.Common.Interfaces;
+using Documents.Application.Common.Models;
 using Documents.Application.Queries;
 using Documents.Application.Services;
 using Documents.Consumers;
@@ -121,11 +122,11 @@ app.UseRouting();
 
 app.MapReverseProxy();
 
-app.MapGet("/", async (IMediator mediator)
-    => await mediator.Send(new GetDocuments()))
+app.MapGet("/", async (int page, int pageSize, IMediator mediator)
+    => await mediator.Send(new GetDocuments(page, pageSize)))
     .WithName("Documents_GetDocuments")
     .WithTags("Documents")
-    .Produces<IEnumerable<DocumentDto>>(StatusCodes.Status200OK);
+    .Produces<ItemsResult<DocumentDto>>(StatusCodes.Status200OK);
 
 app.MapPost("/GenerateDocument", async (string templateId, [FromBody] string model, IMediator mediator) =>
 {
