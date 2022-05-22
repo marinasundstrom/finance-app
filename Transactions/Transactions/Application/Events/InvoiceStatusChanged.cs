@@ -28,7 +28,7 @@ public class TransactionStatusChangedHandler : INotificationHandler<DomainEventN
 
         if(transaction is not null) 
         {
-            await _transactionsHubClient.TransactionUpdated(new TransactionUpdatedDto(transaction.Id, transaction.Status));
+            await _transactionsHubClient.TransactionStatusUpdated(transaction.Id, transaction.Status);
         }
     }
 }

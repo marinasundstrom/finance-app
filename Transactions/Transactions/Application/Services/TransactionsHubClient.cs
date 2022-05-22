@@ -14,8 +14,8 @@ public class TransactionsHubClient : ITransactionsHubClient
         _hubContext = hubContext;
     }
 
-    public async Task TransactionUpdated(TransactionUpdatedDto dto)
+    public async Task TransactionStatusUpdated(string id, TransactionStatus status)
     {
-        await _hubContext.Clients.All.TransactionUpdated(dto);
+        await _hubContext.Clients.All.TransactionStatusUpdated(id, status);
     }
 }
