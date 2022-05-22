@@ -15,6 +15,7 @@ using MassTransit.MessageData;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -90,6 +91,12 @@ app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
     .WithName("Invoices_GetInvoice")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
+
+app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediator)
+    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId)), "application/html"))
+    .WithName("Invoices_GetInvoiceFile")
+    .WithTags("Invoices")
+    .Produces<FileResult>(StatusCodes.Status200OK);
 
 app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator)
     => await mediator.Send(command))

@@ -1,5 +1,4 @@
-﻿
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 using Accounting.Application.Common.Interfaces;
 

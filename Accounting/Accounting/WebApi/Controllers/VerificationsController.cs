@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Accounting.Application.Common.Interfaces;
+﻿using Accounting.Application.Common.Interfaces;
 using Accounting.Application.Verifications;
 using Accounting.Application.Verifications.Commands;
 using Accounting.Application.Verifications.Queries;
@@ -14,9 +8,6 @@ using Azure.Storage.Blobs;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-using static Accounting.Application.Shared;
 
 namespace Accounting.Controllers
 {

@@ -128,6 +128,36 @@
         }
       }
     },
+    "/invoices/{invoiceId}/file": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoiceFile",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
     "/invoices/{invoiceId}/status": {
       "put": {
         "tags": [

@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Accounting.Application.Accounts;
-using Accounting.Application.Common.Interfaces;
-using Accounting.Application.Entries;
+﻿using Accounting.Application.Entries;
 using Accounting.Application.Entries.Queries;
-using Accounting.Application.Verifications;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Accounting.Controllers
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Accounting.Application.Common.Interfaces;
+﻿using Accounting.Application.Common.Interfaces;
 
 using Azure.Storage.Blobs;
 

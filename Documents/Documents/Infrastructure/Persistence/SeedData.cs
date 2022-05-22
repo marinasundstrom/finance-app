@@ -57,6 +57,28 @@ Hello, @Model.Name!"
 
                 context.DocumentTemplates.Add(documentTemplate);
 
+                documentTemplate = new DocumentTemplate()
+                {
+                    Id = "invoice",
+                    Name = "Invoice",
+                    TemplateLanguage = DocumentTemplateLanguage.Razor,
+                    Content =
+@$"
+@model dynamic
+
+<style>
+    body {{
+        font-family: 'Helvetica', 'Arial', sans-serif;
+    }}
+</style>
+
+<h1>Faktura @Model.Id</h1>
+
+<p>Test</p>"
+                };
+
+                context.DocumentTemplates.Add(documentTemplate);
+
                 await context.SaveChangesAsync();
             }
         }

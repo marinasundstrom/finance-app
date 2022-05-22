@@ -1,6 +1,4 @@
-﻿using System;
-
-using Accounting.Client;
+﻿using Accounting.Client;
 
 using Invoices.Client;
 

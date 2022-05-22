@@ -20,11 +20,7 @@ public record UploadDocument(string Title, Stream Stream) : IRequest<DocumentDto
 
         public async Task<DocumentDto> Handle(UploadDocument request, CancellationToken cancellationToken)
         {
-            var document = new Domain.Entities.Document()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Title = request.Title,
-            };
+            var document = new Domain.Entities.Document(request.Title);
 
             _context.Documents.Add(document);
 

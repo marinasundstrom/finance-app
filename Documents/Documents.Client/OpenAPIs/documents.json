@@ -48,41 +48,6 @@
         }
       }
     },
-    "/GenerateDocument": {
-      "post": {
-        "tags": [
-          "Documents"
-        ],
-        "operationId": "Documents_GenerateDocument",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "name": "templateId",
-            "in": "query",
-            "required": true,
-            "x-nullable": true
-          },
-          {
-            "name": "String",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "type": "string"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/Documents/UploadDocument": {
       "post": {
         "tags": [
@@ -109,6 +74,45 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/Documents/GenerateDocument": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GenerateDocument",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "templateId",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "name": "model",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": true,
+            "description": "",
+            "schema": {
+              "type": "file"
+            }
           }
         }
       }
@@ -140,7 +144,7 @@
         "id",
         "title",
         "url",
-        "uploaded"
+        "created"
       ],
       "properties": {
         "id": {
@@ -152,7 +156,7 @@
         "url": {
           "type": "string"
         },
-        "uploaded": {
+        "created": {
           "type": "string",
           "format": "date-time"
         }

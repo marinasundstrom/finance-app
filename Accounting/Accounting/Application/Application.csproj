@@ -18,11 +18,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Microsoft.EntityFrameworkCore.Relational" />
-    <None Remove="EventHandlers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventHandlers\" />
-  </ItemGroup>
 </Project>

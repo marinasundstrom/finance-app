@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Accounting.Application.Accounts;
+﻿using Accounting.Application.Accounts;
 using Accounting.Application.Accounts.Queries;
-using Accounting.Application.Common.Interfaces;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-using static Accounting.Application.Accounts.Mappings;
 
 namespace Accounting.Controllers
 {

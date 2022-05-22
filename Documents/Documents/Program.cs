@@ -128,6 +128,7 @@ app.MapGet("/", async (int page, int pageSize, IMediator mediator)
     .WithTags("Documents")
     .Produces<ItemsResult<DocumentDto>>(StatusCodes.Status200OK);
 
+/*
 app.MapPost("/GenerateDocument", async (string templateId, [FromBody] string model, IMediator mediator) =>
 {
     DocumentFormat documentFormat = DocumentFormat.Html;
@@ -139,6 +140,7 @@ app.MapPost("/GenerateDocument", async (string templateId, [FromBody] string mod
 .WithTags("Documents")
 //.RequireAuthorization()
 .Produces(StatusCodes.Status200OK);
+*/
 
 /*
 app.MapPost("/UploadDocument", async ([FromBody] UploadDocument model, IMediator mediator) =>

@@ -9,6 +9,8 @@ using Accounting.Services;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 
+using Documents.Client;
+
 using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
@@ -69,7 +71,10 @@ builder.Services.AddMassTransit(x =>
 .AddMassTransitHostedService(true)
 .AddGenericRequestClient();
 
-
+builder.Services.AddDocumentsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{configuration.GetServiceUri("nginx")}/documents/");
+});
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("sv-SE");
 CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;

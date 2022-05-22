@@ -1,5 +1,4 @@
-﻿
-namespace Accountant.Services
+﻿namespace Accountant.Services
 {
     public interface IRefundService
     {
