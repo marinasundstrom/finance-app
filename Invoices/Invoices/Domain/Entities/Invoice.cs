@@ -6,7 +6,7 @@ using Invoices.Domain.Events;
 
 namespace Invoices.Domain.Entities;
 
-public class Invoice : IHasDomainEvent
+public class Invoice : IHasDomainEvents
 {
     private Invoice() { }
 

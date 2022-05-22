@@ -24,7 +24,6 @@ public record UploadDocument(string Title, Stream Stream) : IRequest<DocumentDto
             {
                 Id = Guid.NewGuid().ToString(),
                 Title = request.Title,
-                Uploaded = DateTime.Now
             };
 
             _context.Documents.Add(document);
@@ -35,7 +34,7 @@ public record UploadDocument(string Title, Stream Stream) : IRequest<DocumentDto
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new DocumentDto(document.Id, document.Title, document.BlobId, document.Uploaded);
+            return new DocumentDto(document.Id, document.Title, document.BlobId, document.Created);
         }
     }
 }

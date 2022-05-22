@@ -116,7 +116,7 @@ else
     app.UseHsts();
 }
 
-await SeedData.EnsureSeedData(app);
+//await SeedData.EnsureSeedData(app);
 
 app.UseRouting();
 

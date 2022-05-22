@@ -29,7 +29,7 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var query = _context.Documents
                 .AsSplitQuery()
                 .AsNoTracking()
-                .OrderByDescending(x => x.Uploaded)
+                .OrderByDescending(x => x.Created)
                 .AsQueryable();
 
             int totalItems = await query.CountAsync(cancellationToken);
@@ -41,7 +41,7 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<DocumentDto>(
-                items.Select(document => new DocumentDto(document.Id, document.Title, GetUrl(document.BlobId), document.Uploaded)),
+                items.Select(document => new DocumentDto(document.Id, document.Title, GetUrl(document.BlobId), document.Created)),
                 totalItems);
         }
 

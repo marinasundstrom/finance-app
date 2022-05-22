@@ -4,7 +4,7 @@ using Transactions.Domain.Events;
 
 namespace Transactions.Domain.Entities;
 
-public class Transaction : IHasDomainEvent
+public class Transaction : IHasDomainEvents
 {
     private Transaction()
     {

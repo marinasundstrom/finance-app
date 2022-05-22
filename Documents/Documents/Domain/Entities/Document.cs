@@ -1,6 +1,8 @@
+using Documents.Domain.Common;
+
 namespace Documents.Domain.Entities;
 
-public class Document
+public class Document : AuditableEntity, IHasDomainEvents
 {
     public string Id { get; set; } = null!;
 
@@ -8,5 +10,5 @@ public class Document
 
     public string BlobId { get; set; } = null!;
 
-    public DateTime Uploaded { get; set; }
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 }

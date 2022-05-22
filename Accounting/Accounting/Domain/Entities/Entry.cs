@@ -7,7 +7,7 @@ using Accounting.Domain.Common;
 
 namespace Accounting.Domain.Entities;
 
-public class Entry : IHasDomainEvent
+public class Entry : IHasDomainEvents
 {
     [Key]
     public int Id { get; set; }
