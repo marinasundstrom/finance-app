@@ -26,7 +26,7 @@ public record CreateInvoice(DateTime Date, InvoiceStatus Status, decimal SubTota
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid);
+            return invoice.ToDto();
         }
     }
 }

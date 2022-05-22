@@ -33,7 +33,9 @@ public class InvoicesContext : DbContext, IInvoicesContext
 
     public DbSet<Invoice> Invoices { get; set; } = null!;
 
-       public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public DbSet<InvoiceItem> InvoiceItems { get; set; }  = null!;
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {

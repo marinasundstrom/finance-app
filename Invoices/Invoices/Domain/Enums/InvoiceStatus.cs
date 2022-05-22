@@ -3,7 +3,7 @@
 //[Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
 public enum InvoiceStatus
 {
-    Created,
+    Draft,
     Sent,
     Paid,
     PartiallyPaid,

@@ -26,19 +26,20 @@ public record GetInvoices(int Page, int PageSize) : IRequest<ItemsResult<Invoice
             var query = _context.Invoices
                 .AsSplitQuery()
                 .AsNoTracking()
-                .OrderByDescending(x => x.Date)
+                .OrderByDescending(x => x.Id)
                 .AsQueryable();
 
             int totalItems = await query.CountAsync(cancellationToken);
 
-            query = query
+            query = query         
+                .Include(i => i.Items)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);
 
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<InvoiceDto>(
-                items.Select(invoice => new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid)),
+                items.Select(invoice => invoice.ToDto()),
                 totalItems);
         }
     }

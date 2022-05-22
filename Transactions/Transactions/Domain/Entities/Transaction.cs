@@ -47,8 +47,10 @@ public class Transaction : IHasDomainEvents
 
     public void SetStatus(TransactionStatus status)
     {
-        Status = status;
-
-        DomainEvents.Add(new TransactionStatusChanged(Id, status));
+        if(Status != status) 
+        {
+            Status = status;
+            DomainEvents.Add(new TransactionStatusChanged(Id, status));
+        }
     }
 }

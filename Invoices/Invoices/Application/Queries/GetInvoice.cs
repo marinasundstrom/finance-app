@@ -20,11 +20,13 @@ public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
 
         public async Task<InvoiceDto?> Handle(GetInvoice request, CancellationToken cancellationToken)
         {
-            var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
+            var invoice = await _context.Invoices
+                .Include(i => i.Items)
+                .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             return invoice is null
                 ? null
-                : new InvoiceDto(invoice.Id, invoice.Date, invoice.Status, invoice.SubTotal, invoice.Vat, invoice.VatRate, invoice.Total, invoice.Paid);
+                : invoice.ToDto();
         }
     }
 }

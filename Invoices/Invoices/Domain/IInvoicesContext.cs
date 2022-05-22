@@ -6,7 +6,9 @@ namespace Invoices.Domain;
 
 public interface IInvoicesContext
 {
-    DbSet<Invoice> Invoices { get; set; }
+    DbSet<Invoice> Invoices { get; }
+
+    DbSet<InvoiceItem> InvoiceItems { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

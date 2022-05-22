@@ -273,9 +273,9 @@
         "id",
         "date",
         "status",
+        "items",
         "subTotal",
         "vat",
-        "vatRate",
         "total"
       ],
       "properties": {
@@ -289,6 +289,12 @@
         },
         "status": {
           "$ref": "#/definitions/InvoiceStatus"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InvoiceItemDto"
+          }
         },
         "subTotal": {
           "type": "number",
@@ -316,7 +322,7 @@
       "type": "integer",
       "description": "",
       "x-enumNames": [
-        "Created",
+        "Draft",
         "Sent",
         "Paid",
         "PartiallyPaid",
@@ -335,6 +341,42 @@
         6,
         7
       ]
+    },
+    "InvoiceItemDto": {
+      "type": "object",
+      "required": [
+        "id",
+        "description",
+        "unitPrice",
+        "vatRate",
+        "quantity",
+        "lineTotal"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "description": {
+          "type": "string"
+        },
+        "unitPrice": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "vatRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "quantity": {
+          "type": "number",
+          "format": "double"
+        },
+        "lineTotal": {
+          "type": "number",
+          "format": "decimal"
+        }
+      }
     },
     "CreateInvoice": {
       "type": "object",

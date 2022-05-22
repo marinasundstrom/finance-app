@@ -8,9 +8,11 @@ namespace Invoices.Domain.Entities;
 
 public class Invoice : IHasDomainEvents
 {
+    List<InvoiceItem> _items = new List<InvoiceItem>();
+
     private Invoice() { }
 
-    public Invoice(DateTime date, InvoiceStatus status, decimal subTotal, decimal vat, double vatRate, decimal total)
+    public Invoice(DateTime date, InvoiceStatus status, decimal subTotal, decimal vat, double? vatRate, decimal total)
     {
         if(total != subTotal + vat) 
         {
@@ -32,14 +34,36 @@ public class Invoice : IHasDomainEvents
     public InvoiceStatus Status { get; private set; }
     public decimal SubTotal { get; set; }
     public decimal Vat { get; set; }
-    public double VatRate { get; set; }
+    public double? VatRate { get; set; }
     public decimal Total { get; set; }
     public decimal? Paid { get; set; }
 
+    public IReadOnlyList<InvoiceItem> Items => _items;
+
+    public InvoiceItem AddItem(string description, decimal unitPrice, double vatRate, double quantity) 
+    {
+        var invoiceItem = new InvoiceItem(description, unitPrice, vatRate, quantity);
+        _items.Add(invoiceItem);
+
+        UpdateTotals();
+
+        return invoiceItem;
+    }
+
+    internal void UpdateTotals()
+    {
+        Vat = Items.Sum(i => i.Vat());
+        SubTotal = Items.Sum(i => i.SubTotal());
+        Total = Items.Sum(i => i.LineTotal);
+    }
+
     public void SetStatus(InvoiceStatus status)
     {
-        Status = status;
-        DomainEvents.Add(new InvoiceStatusChanged(Id, Status));
+        if(Status != status) 
+        {
+            Status = status;
+            DomainEvents.Add(new InvoiceStatusChanged(Id, Status));
+        }
     }
  
     /*
