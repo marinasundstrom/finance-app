@@ -3,20 +3,17 @@
 using Invoices.Application;
 using Invoices.Application.Common.Interfaces;
 using Invoices.Application.Queries;
-using Invoices.Commands;
+using Invoices.Application.Commands;
 using Invoices.Domain.Enums;
 using Invoices.Infrastructure;
-using Invoices.Infrastructure.Persistence;
 using Invoices.Queries;
 using Invoices.Services;
 
 using MassTransit;
-using MassTransit.MessageData;
 
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,7 +90,7 @@ app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
 app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediator)
-    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId)), "application/html"))
+    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId)), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);

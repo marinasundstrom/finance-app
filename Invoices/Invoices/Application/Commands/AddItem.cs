@@ -7,7 +7,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Commands;
+namespace Invoices.Application.Commands;
 
 public record AddItem(int InvoiceId, string Description, decimal UnitPrice, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
 {

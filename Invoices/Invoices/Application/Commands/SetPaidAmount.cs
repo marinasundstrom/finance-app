@@ -4,7 +4,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Commands;
+namespace Invoices.Application.Commands;
 
 public record SetPaidAmount(int InvoiceId, decimal Amount) : IRequest
 {

@@ -5,7 +5,7 @@ using Invoices.Domain.Enums;
 
 using MediatR;
 
-namespace Invoices.Commands;
+namespace Invoices.Application.Commands;
 
 public record CreateInvoice(DateTime Date, InvoiceStatus Status, decimal SubTotal, decimal Vat, double VatRate, decimal Total) : IRequest<InvoiceDto>
 {

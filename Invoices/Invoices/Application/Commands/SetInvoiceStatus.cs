@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Commands;
+namespace Invoices.Application.Commands;
 
 public record SetInvoiceStatus(int InvoiceId, InvoiceStatus Status) : IRequest
 {

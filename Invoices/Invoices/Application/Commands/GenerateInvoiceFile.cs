@@ -1,5 +1,6 @@
 using Documents.Client;
 
+using Invoices.Application;
 using Invoices.Domain;
 
 using MediatR;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
-namespace Invoices.Commands;
+namespace Invoices.Application.Commands;
 
 public record GenerateInvoiceFile(int InvoiceId) : IRequest<Stream>
 {
@@ -29,8 +30,13 @@ public record GenerateInvoiceFile(int InvoiceId) : IRequest<Stream>
                 .Include(i => i.Items)
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
+            if(invoice is null) 
+            {
+                throw new Exception();
+            }
+
             var model = JsonConvert.SerializeObject(
-                    JsonConvert.SerializeObject(invoice).ToString());
+                    JsonConvert.SerializeObject(invoice.ToDto()).ToString());
 
             Console.WriteLine(model);
 

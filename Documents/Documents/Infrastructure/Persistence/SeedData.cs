@@ -72,9 +72,35 @@ Hello, @Model.Name!"
     }}
 </style>
 
-<h1>Faktura @Model.Id</h1>
+<h1>Invoice @Model.Id</h1>
 
-<p>Test</p>"
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>VAT Rate (%)</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var item in Model.Items) 
+    {{
+        <tr>
+            <td>@item.Description</td>
+            <td>@item.UnitPrice.ToString(""c"")</td>
+            <td>@item.Quantity</td>
+            <td>@(item.VatRate * 100)</td>
+            <td>@item.LineTotal.ToString(""c"")</td>
+        </tr>
+    }}
+    </tbody>
+</table>
+
+<p>Sub Total: @Model.SubTotal.ToString(""c"")</p>
+<p>VAT: @Model.Vat.ToString(""c"")</p>
+<p>Total: @Model.Total.ToString(""c"")</p>"
                 };
 
                 context.DocumentTemplates.Add(documentTemplate);
