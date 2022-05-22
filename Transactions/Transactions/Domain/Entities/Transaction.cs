@@ -13,7 +13,7 @@ public class Transaction : IHasDomainEvent
 
     public Transaction(string? id, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
     {
-        if(amount == 0) 
+        if(amount <= 0) 
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }

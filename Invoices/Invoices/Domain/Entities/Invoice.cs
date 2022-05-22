@@ -12,7 +12,7 @@ public class Invoice : IHasDomainEvent
 
     public Invoice(DateTime date, InvoiceStatus status, decimal subTotal, decimal vat, double vatRate, decimal total)
     {
-        if(total == subTotal + vat) 
+        if(total != subTotal + vat) 
         {
             throw new Exception("Total is not equal to Sub Total + VAT.");
         }
