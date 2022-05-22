@@ -46,16 +46,16 @@
     [Parameter] public InvoiceStatus Status { get; set; }
 
     [Required]
-    [Parameter] public decimal SubTotal { get; set; }
+    [Parameter] public decimal SubTotal { get; set; } = 80m;
 
     [Required]
-    [Parameter] public decimal Vat { get; set; }
+    [Parameter] public decimal Vat { get; set; } = 20m;
 
     [Required]
-    [Parameter] public double VatRate { get; set; }
+    [Parameter] public double VatRate { get; set; } = 0.25;
 
     [Required]
-    [Parameter] public decimal Total { get; set; }
+    [Parameter] public decimal Total { get; set; } = 100;
 
     async Task Submit()
     {
