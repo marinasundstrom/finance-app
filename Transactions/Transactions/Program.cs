@@ -6,7 +6,9 @@ using Transactions.Application;
 using Transactions.Application.Commands;
 using Transactions.Application.Common.Interfaces;
 using Transactions.Application.Queries;
+using Transactions.Application.Services;
 using Transactions.Domain.Enums;
+using Transactions.Hubs;
 using Transactions.Infrastructure;
 using Transactions.Infrastructure.Persistence;
 using Transactions.Services;
@@ -18,6 +20,10 @@ var Configuration = builder.Configuration;
 builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
+
+builder.Services.AddScoped<ITransactionsHubClient, TransactionsHubClient>();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -84,5 +90,7 @@ app.MapPut("/transactions/{transactionId}/status", async (string transactionId, 
     .WithName("Transactions_SetTransactionStatus")
     .WithTags("Transactions")
     .Produces(StatusCodes.Status200OK);
+
+app.MapHub<TransactionsHub>("/hubs/transactions");
 
 app.Run();

@@ -25,7 +25,7 @@
             <MudTr>
 
                 <td colspan="4">
-                    <MudTable  Elevation="0" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
+                    <MudTable T="AccountDto" Elevation="0" Items="context.Accounts" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(context.Accounts is null)" LoadingProgressColor="Color.Info" OnRowClick="(TableRowClickEventArgs<AccountDto> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
                         <HeaderContent>
                             <MudTh></MudTh>
                             <MudTh colspan="2">Account</MudTh>
