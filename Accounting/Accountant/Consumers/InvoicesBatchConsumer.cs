@@ -35,6 +35,11 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
 
         var invoice = await _invoicesClient.GetInvoiceAsync(i.Id, cancellationToken);
 
+        if(invoice.Status != InvoiceStatus.Sent) 
+        {
+            return;
+        }
+
         await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
             Description = $"Skickade ut faktura #{i.Id}",
