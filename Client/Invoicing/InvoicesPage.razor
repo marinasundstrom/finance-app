@@ -20,6 +20,7 @@
         <MudTh>VAT</MudTh>
         <MudTh>Total</MudTh>
         <MudTh>Paid</MudTh>
+        <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate Context="invoice">
         <MudTd DataLabel="Id">@invoice.Id</MudTd>
@@ -30,6 +31,9 @@
         <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
         <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{invoice.Id}/file")" />
+        </MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>
