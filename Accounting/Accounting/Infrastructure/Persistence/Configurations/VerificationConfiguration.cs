@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Accounting.Infrastructure.Persistence.Configurations;
 
-public class Entryfiguration : IEntityTypeConfiguration<Entry>
+public class VerificationConfiguration : IEntityTypeConfiguration<Verification>
 {
-    public void Configure(EntityTypeBuilder<Entry> builder)
+    public void Configure(EntityTypeBuilder<Verification> builder)
     {
-        builder.ToTable("Entries");
-
-        builder.Ignore(e => e.DomainEvents);
+        builder.ToTable("Verifications");
     }
 }

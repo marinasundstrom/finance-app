@@ -17,13 +17,11 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
     {
         private readonly ITransactionsContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly ITransactionsHubClient _transactionsHubClient;
-
-        public Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint, ITransactionsHubClient transactionsHubClient)
+        
+        public Handler(ITransactionsContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _publishEndpoint = publishEndpoint;
-            _transactionsHubClient = transactionsHubClient;
         }
 
         public async Task<Unit> Handle(SetTransactionStatus request, CancellationToken cancellationToken)
@@ -34,8 +32,6 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
             transaction.SetStatus(request.Status);
 
             await _context.SaveChangesAsync(cancellationToken);
-
-            await _transactionsHubClient.TransactionUpdated(new TransactionUpdatedDto(request.TransactionId, request.Status));
 
             return Unit.Value;
         }

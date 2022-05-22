@@ -1,8 +1,10 @@
-﻿using Transactions.Domain.Enums;
+﻿using Transactions.Domain.Common;
+using Transactions.Domain.Enums;
+using Transactions.Domain.Events;
 
 namespace Transactions.Domain.Entities;
 
-public class Transaction
+public class Transaction : IHasDomainEvent
 {
     private Transaction()
     {
@@ -11,6 +13,11 @@ public class Transaction
 
     public Transaction(string? id, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
     {
+        if(amount == 0) 
+        {
+            throw new ArgumentException("Amount must be greater than 0.");
+        }
+
         Id = id ?? Guid.NewGuid().ToUrlFriendlyString();
         Date = date;
         Status = status;
@@ -18,6 +25,8 @@ public class Transaction
         Reference = reference;
         Currency = currency;
         Amount = amount;
+
+        DomainEvents.Add(new TransactionRegistered(Id));
     }
 
     public string Id { get; set; } = null!;
@@ -34,8 +43,12 @@ public class Transaction
 
     public decimal Amount { get; set; }
 
+    public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+
     public void SetStatus(TransactionStatus status)
     {
         Status = status;
+
+        DomainEvents.Add(new TransactionStatusChanged(Id, status));
     }
 }
