@@ -29,12 +29,15 @@ namespace Accountant.Services
                 {
                     _logger.LogDebug($"Handling overpaid invoice {invoice.Id}");
 
+                    // TODO: Fix calculations with regards to VAT
+
                     var amountToRefund = invoice.Paid - invoice.Total;
-                    var vat = amountToRefund / (1m + (25m / 100m));
+                    var subTotal = amountToRefund / (1m + (25m / 100m));
+                    var vat = amountToRefund - subTotal;
 
                     var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
                     {
-                        Description = $"Betalade tillbaka för #{invoice.Id}",
+                        Description = $"Betalade tillbaka för överbetalad faktura #{invoice.Id}",
                         Entries = new[]
                         {
                             new CreateEntry
@@ -62,14 +65,22 @@ namespace Accountant.Services
                 }
                 else if (invoice.Status == InvoiceStatus.PartiallyPaid) 
                 {
+                    // TODO: Move to its own scheduled task
+
                     _logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
+
+                    // Send email
                 }
                 else if (invoice.Status == InvoiceStatus.Sent)
                 {
+                    // TODO: Move to its own scheduled task
+
                     var daysSince = (DateTime.Now.Date - invoice.Date.Date).TotalDays;
                     if(daysSince > 30) 
                     {
                         _logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
+
+                        // Send email
                     }
                 }
             }
