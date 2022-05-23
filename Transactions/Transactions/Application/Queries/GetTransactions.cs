@@ -5,10 +5,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using Transactions.Domain;
+using Transactions.Domain.Enums;
 
 namespace Transactions.Application.Queries;
 
-public record GetTransactons(int Page, int PageSize) : IRequest<ItemsResult<TransactionDto>>
+public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
 {
     public class Handler : IRequestHandler<GetTransactons, ItemsResult<TransactionDto>>
     {
@@ -28,6 +29,12 @@ public record GetTransactons(int Page, int PageSize) : IRequest<ItemsResult<Tran
                 .AsNoTracking()
                 .OrderByDescending(x => x.Date)
                 .AsQueryable();
+
+            if (request.Status?.Any() ?? false)
+            {
+                var statuses = request.Status.Select(x => (int)x);
+                query = query.Where(i => statuses.Any(s => s == (int)i.Status));
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
 

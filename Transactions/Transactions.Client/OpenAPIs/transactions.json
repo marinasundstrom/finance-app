@@ -28,42 +28,6 @@
       }
     },
     "/transactions": {
-      "get": {
-        "tags": [
-          "Transactions"
-        ],
-        "operationId": "Transactions_GetTransactions",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfTransactionDto"
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "Transactions"
@@ -218,27 +182,60 @@
           }
         }
       }
+    },
+    "/Transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_GetTransactions",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/TransactionStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfTransactionDto"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
-    "ItemsResultOfTransactionDto": {
+    "Unit": {
       "type": "object",
-      "required": [
-        "items",
-        "totalItems"
-      ],
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/TransactionDto"
-          }
-        },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
+      "description": "Represents a void type, since Void is not a valid return type in C#."
     },
     "TransactionDto": {
       "type": "object",
@@ -292,9 +289,24 @@
         "Unknown"
       ]
     },
-    "Unit": {
+    "ItemsResultOfTransactionDto": {
       "type": "object",
-      "description": "Represents a void type, since Void is not a valid return type in C#."
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransactionDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     }
   }
 }

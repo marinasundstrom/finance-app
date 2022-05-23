@@ -25,6 +25,15 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
 
+builder.Services.AddControllers();
+
+// Set the JSON serializer options
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    // options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddScoped<ITransactionsHubClient, TransactionsHubClient>();
 
 builder.Services.AddSignalR();
@@ -83,11 +92,13 @@ else
 
 app.MapGet("/", () => "Hello World!");
 
+/*
 app.MapGet("/transactions", async (int page, int pageSize, IMediator mediator) => await mediator.Send(new GetTransactons(page, pageSize)))
     .WithName("Transactions_GetTransactions")
     .WithTags("Transactions")
     //.RequireAuthorization()
-    .Produces<ItemsResult<TransactionDto>>(StatusCodes.Status200OK); ;
+    .Produces<ItemsResult<TransactionDto>>(StatusCodes.Status200OK);
+*/
 
 app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator mediator)
     => await mediator.Send(new PostTransactions(transactions)))
@@ -115,5 +126,7 @@ app.MapPut("/transactions/{transactionId}/invoiceId", async (string transactionI
     .Produces(StatusCodes.Status200OK);
 
 app.MapHub<TransactionsHub>("/hubs/transactions");
+
+app.MapControllers();
 
 app.Run();

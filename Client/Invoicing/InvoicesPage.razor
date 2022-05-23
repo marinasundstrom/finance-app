@@ -10,8 +10,18 @@
 
 <MudButton Variant="Variant.Filled" Link="/invoices/new" Class="mb-2">New invoice</MudButton>
 
-<MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info"
-    OnRowClick="async (e) => await GoTo(e.Item)">
+<MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<InvoiceStatus>())
+            {
+                <MudSelectItem T="InvoiceStatus?" Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
@@ -46,6 +56,8 @@
 {
     MudTable<InvoiceDto> table;
     bool loading = false;
+    InvoiceStatus? Status;
+    HashSet<InvoiceStatus?> selectedStatuses = new HashSet<InvoiceStatus?>();
 
     private async Task<TableData<InvoiceDto>> ServerReload(TableState state)
     {
@@ -53,7 +65,7 @@
 
         try
         {
-            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, null);
+            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (InvoiceStatus)s!));
 
             return new TableData<InvoiceDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -77,5 +89,13 @@
     public async Task GoTo(InvoiceDto invoice)
     {
         NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
+    }
+
+    private async Task OnSelectedValuesChanged(HashSet<InvoiceStatus?> selectedValues) 
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+
+        StateHasChanged();
     }
 }

@@ -19,4 +19,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Transactions.Contracts\Transactions.Contracts.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Controllers\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Controllers\" />
+	</ItemGroup>
 </Project>

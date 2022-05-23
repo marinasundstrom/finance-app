@@ -16,6 +16,16 @@
 
 <MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
+     <ToolBarContent>
+        <MudSpacer />
+        <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+            @foreach (var status in Enum.GetValues<TransactionStatus>())
+            {
+                <MudSelectItem T="TransactionStatus?" Value="@status">@Enum.GetName(typeof(TransactionStatus), status)</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+    
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
@@ -47,6 +57,8 @@
     MudTable<TransactionDto> table = null!;
     bool loading = false;
     HubConnection hubConnection = null!;
+    TransactionStatus? Status;
+    HashSet<TransactionStatus?> selectedStatuses = new HashSet<TransactionStatus?>();
 
     private async Task<TableData<TransactionDto>> ServerReload(TableState state)
     {
@@ -54,7 +66,7 @@
 
         try
         {
-            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize);
+            var result = await TransactionsClient.GetTransactionsAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
 
             return new TableData<TransactionDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -159,5 +171,13 @@
     public async ValueTask DisposeAsync()
     {
         await hubConnection.DisposeAsync();
+    }
+
+    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues) 
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+
+        StateHasChanged();
     }
 }

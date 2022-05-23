@@ -9,7 +9,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Invoices.Queries;
+namespace Invoices.Application.Queries;
 
 public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceStatus[]? Status = null) : IRequest<ItemsResult<InvoiceDto>>
 {

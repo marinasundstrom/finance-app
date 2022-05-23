@@ -6,7 +6,6 @@ using Invoices.Application.Queries;
 using Invoices.Application.Commands;
 using Invoices.Domain.Enums;
 using Invoices.Infrastructure;
-using Invoices.Queries;
 using Invoices.Services;
 
 using MassTransit;

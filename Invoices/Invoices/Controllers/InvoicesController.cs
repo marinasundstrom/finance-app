@@ -1,6 +1,6 @@
 using Invoices.Application;
 using Invoices.Domain.Enums;
-using Invoices.Queries;
+using Invoices.Application.Queries;
 
 using MediatR;
 
