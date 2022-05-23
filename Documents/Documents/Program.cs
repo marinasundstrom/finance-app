@@ -132,7 +132,7 @@ app.UseRouting();
 
 app.MapReverseProxy();
 
-app.MapGet("/", async (int page, int pageSize, IMediator mediator, CancellationToken cancellationToken)
+app.MapGet("/Documents", async (int page, int pageSize, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new GetDocuments(page, pageSize), cancellationToken))
     .WithName("Documents_GetDocuments")
     .WithTags("Documents")

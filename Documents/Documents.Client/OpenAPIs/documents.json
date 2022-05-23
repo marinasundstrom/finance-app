@@ -1,5 +1,5 @@
 ﻿{
-  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))",
+  "x-generator": "NSwag v13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v12.0.0.0))",
   "swagger": "2.0",
   "info": {
     "title": "Documents API",
@@ -10,7 +10,7 @@
     "https"
   ],
   "paths": {
-    "/": {
+    "/Documents": {
       "get": {
         "tags": [
           "Documents"
@@ -85,7 +85,6 @@
         ],
         "operationId": "Documents_GenerateDocument",
         "consumes": [
-          "application/json-patch+json",
           "application/json",
           "text/json",
           "application/*+json"

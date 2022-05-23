@@ -27,7 +27,7 @@
         }
       }
     },
-    "/invoices/{invoiceId}": {
+    "/Invoices/{invoiceId}": {
       "get": {
         "tags": [
           "Invoices"
@@ -57,7 +57,7 @@
         }
       }
     },
-    "/invoices/{invoiceId}/file": {
+    "/Invoices/{invoiceId}/Dile": {
       "get": {
         "tags": [
           "Invoices"
@@ -87,7 +87,7 @@
         }
       }
     },
-    "/invoices/{invoiceId}/items": {
+    "/Invoices/{invoiceId}/Items": {
       "post": {
         "tags": [
           "Invoices"
@@ -169,7 +169,7 @@
         }
       }
     },
-    "/invoices": {
+    "/Invoices": {
       "post": {
         "tags": [
           "Invoices"
@@ -202,9 +202,55 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoices",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/InvoiceStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfInvoiceDto"
+            }
+          }
+        }
       }
     },
-    "/invoices/{invoiceId}/status": {
+    "/Invoices/{invoiceId}/Status": {
       "put": {
         "tags": [
           "Invoices"
@@ -254,7 +300,7 @@
         }
       }
     },
-    "/invoices/{invoiceId}/paid": {
+    "/Invoices/{invoiceId}/Paid": {
       "put": {
         "tags": [
           "Invoices"
@@ -287,54 +333,6 @@
             "description": "",
             "schema": {
               "$ref": "#/definitions/Unit"
-            }
-          }
-        }
-      }
-    },
-    "/Invoices": {
-      "get": {
-        "tags": [
-          "Invoices"
-        ],
-        "operationId": "Invoices_GetInvoices",
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "array",
-            "name": "status",
-            "in": "query",
-            "collectionFormat": "multi",
-            "x-nullable": true,
-            "items": {
-              "$ref": "#/definitions/InvoiceStatus"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfInvoiceDto"
             }
           }
         }
