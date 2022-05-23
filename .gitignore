@@ -407,3 +407,5 @@ ASALocalRun/
 *.db
 .data
 .tye
+
+certs/
