@@ -8,41 +8,42 @@ namespace Invoices.Domain.Entities;
 
 public class Invoice : IHasDomainEvents
 {
-    List<InvoiceItem> _items = new List<InvoiceItem>();
+    readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
     private Invoice() { }
 
-    public Invoice(DateTime date, InvoiceStatus status, decimal subTotal, decimal vat, double? vatRate, decimal total)
+    public Invoice(DateTime? date, InvoiceStatus status = InvoiceStatus.Draft, string? note = null)
     {
-        if(total != subTotal + vat) 
-        {
-            throw new Exception("Total is not equal to Sub Total + VAT.");
-        }
-
-        Date = date;
+        Date = date ?? DateTime.Now;
         Status = status;
-        SubTotal = subTotal;
-        Vat = vat;
-        VatRate = vatRate;
-        Total = total;
+        Note = note;
 
         DomainEvents.Add(new InvoiceCreated(Id));
     }
 
     public int Id { get; set; }
+
     public DateTime Date { get; set; }
+
     public InvoiceStatus Status { get; private set; }
+
+    public DateTime? DueDate { get; set; }
+
     public decimal SubTotal { get; set; }
+
     public decimal Vat { get; set; }
-    public double? VatRate { get; set; }
+
     public decimal Total { get; set; }
+
     public decimal? Paid { get; set; }
+
+    public string? Note { get; set; }
 
     public IReadOnlyList<InvoiceItem> Items => _items;
 
-    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, double vatRate, double quantity) 
+    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity) 
     {
-        var invoiceItem = new InvoiceItem(productType, description, unitPrice, vatRate, quantity);
+        var invoiceItem = new InvoiceItem(productType, description, unitPrice, unit, vatRate, quantity);
         _items.Add(invoiceItem);
 
         UpdateTotals();

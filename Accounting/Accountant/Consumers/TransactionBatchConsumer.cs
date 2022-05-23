@@ -110,6 +110,8 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                     return;
             }
 
+            await _transactionsClient.SetTransactionInvoiceIdAsync(transaction.Id, invoiceId);
+
             await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Verified);
 
             var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification

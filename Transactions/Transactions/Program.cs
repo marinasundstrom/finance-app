@@ -108,6 +108,12 @@ app.MapPut("/transactions/{transactionId}/reference", async (string transactionI
     .WithTags("Transactions")
     .Produces(StatusCodes.Status200OK);
 
+app.MapPut("/transactions/{transactionId}/invoiceId", async (string transactionId, int invoiceId, IMediator mediator)
+    => await mediator.Send(new SetTransactionInvoiceId(transactionId, invoiceId)))
+    .WithName("Transactions_SetTransactionInvoiceId")
+    .WithTags("Transactions")
+    .Produces(StatusCodes.Status200OK);
+
 app.MapHub<TransactionsHub>("/hubs/transactions");
 
 app.Run();

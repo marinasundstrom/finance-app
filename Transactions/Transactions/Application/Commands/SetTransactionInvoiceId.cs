@@ -3,13 +3,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using Transactions.Domain;
-using Transactions.Domain.Enums;
 
 namespace Transactions.Application.Commands;
 
-public record SetTransactionStatus(string TransactionId, TransactionStatus Status) : IRequest
+public record SetTransactionInvoiceId(string TransactionId, int InvoiceId) : IRequest
 {
-    public class Handler : IRequestHandler<SetTransactionStatus>
+    public class Handler : IRequestHandler<SetTransactionInvoiceId>
     {
         private readonly ITransactionsContext _context;
         
@@ -18,11 +17,11 @@ public record SetTransactionStatus(string TransactionId, TransactionStatus Statu
             _context = context;
         }
 
-        public async Task<Unit> Handle(SetTransactionStatus request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetTransactionInvoiceId request, CancellationToken cancellationToken)
         {
             var transaction = await _context.Transactions.FirstAsync(x => x.Id == request.TransactionId, cancellationToken);
 
-            transaction.SetStatus(request.Status);
+            transaction.SetInvoiceId(request.InvoiceId);
 
             await _context.SaveChangesAsync(cancellationToken);
 

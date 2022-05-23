@@ -1,0 +1,256 @@
+@page "/invoices/new"
+@page "/invoices/{Id:int}"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+@inject IInvoicesClient InvoicesClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+@if (Id is not null)
+{
+    <PageTitle>Invoice #@Id</PageTitle>
+
+    <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
+
+    <EditForm Model="@this" OnValidSubmit="Submit">
+        <DataAnnotationsValidator />
+
+        <MudGrid Class="mb-4">
+            <MudItem xs="12" sm="12" md="6">
+                @if(Status >= InvoiceStatus.Sent) 
+                {
+                    <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
+                }
+                else 
+                {
+                    <MudDatePicker Label="Date" @bind-Date="Date" For="() => Date"></MudDatePicker>
+                }
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6">
+                @if(Status >= InvoiceStatus.Sent) 
+                {
+                    <MudField Label="Time">@Time?.ToString(@"hh\:mm")</MudField>
+                }
+                else 
+                {
+                    <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
+                }
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6">
+                <div class="d-flex">
+                    <MudField Label="Status">@Status</MudField>
+                    <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end" OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6">
+                @if(Status >= InvoiceStatus.Sent) 
+                {
+                    <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
+                }
+                else 
+                {
+                    <MudDatePicker Label="Due Date" @bind-Date="DueDate" For="() => DueDate"></MudDatePicker>
+                }
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudTextField Label="Note" @bind-Time="Note" For="() => Note"></MudTextField>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+
+    <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">New item</MudButton>
+
+    <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>Description</MudTh>
+            <MudTh>Product Type</MudTh>
+            <MudTh>Unit Price</MudTh>
+            <MudTh>Unit</MudTh>
+            <MudTh>VAT Rate</MudTh>
+            <MudTh>VAT</MudTh>
+            <MudTh>Total</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="invoiceItem">
+            <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
+            <MudTd DataLabel="Product Type">@invoiceItem.ProductType</MudTd>
+            <MudTd DataLabel="Unit Price">@invoiceItem.UnitPrice</MudTd>
+            <MudTd DataLabel="Unit">@invoiceItem.Unit</MudTd>
+            <MudTd DataLabel="VAT Rate">@(invoiceItem.VatRate * 100)%</MudTd>
+            <MudTd DataLabel="VAT">@* *@</MudTd>
+            <MudTd DataLabel="Line Total">@invoiceItem.LineTotal.ToString("c")</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Filled.Remove" />
+            </MudTd>
+        </RowTemplate>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+
+    <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>
+
+    <MudField Label="VAT">@Vat.ToString("c")</MudField>
+
+    <MudField Label="Total">@Total.ToString("c")</MudField>
+}
+
+@code
+{
+    MudTable<InvoiceItemViewModel> table;
+    bool loading = false;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Required]
+    public DateTime? Date { get; set; }
+
+    [Required]
+    public TimeSpan? Time { get; set; }
+
+    [Required]
+    public InvoiceStatus Status { get; set; }
+
+    public string? Note { get; set; }
+
+    public DateTime? DueDate { get; set; }
+
+    public List<InvoiceItemViewModel> Items { get; set; } = new List<InvoiceItemViewModel>();
+
+    public decimal SubTotal => Items.Sum(i => i.SubTotal);
+
+    public decimal Vat => Items.Sum(i => i.Vat);
+
+    public decimal Total => Items.Sum(i => i.LineTotal);
+
+    protected override async Task OnInitializedAsync()
+    {
+        InvoiceDto invoice;
+
+        if (Id is not null)
+        {
+            invoice = await InvoicesClient.GetInvoiceAsync(Id.GetValueOrDefault());
+
+            foreach (var item in invoice.Items)
+            {
+                Items.Add(new InvoiceItemViewModel
+                {
+                    ProductType = item.ProductType,
+                    Description = item.Description,
+                    UnitPrice = item.UnitPrice,
+                    Unit = item.Unit,
+                    Quantity = item.Quantity,
+                    VatRate = item.VatRate,
+                    // LineTotal = item.LineTotal
+                });
+            }
+        }
+        else
+        {
+            invoice = await InvoicesClient.CreateInvoiceAsync(
+            new CreateInvoice()
+            {
+                Status = InvoiceStatus.Draft
+            }
+            );
+
+            Snackbar.Add("Created invoice draft", Severity.Info);
+        }
+
+        Id = invoice.Id;
+        Status = invoice.Status;
+        Date = invoice.Date.Date;
+        Time = invoice.Date.TimeOfDay;
+    }
+
+    private async Task Submit()
+    {
+        await Task.CompletedTask;
+    }
+
+    private async Task AddItem()
+    {
+        var model = new InvoiceItemViewModel();
+
+        var dialogParameters = new DialogParameters();
+        dialogParameters.Add(nameof(InvoiceItemDialog.Id), Id);
+        dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);
+
+        var dialogRef = DialogService.Show<InvoiceItemDialog>("Item", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled)
+            return;
+
+        var vm = (InvoiceItemViewModel)result.Data;
+
+        var invoice = await InvoicesClient.AddItemAsync(
+            Id.GetValueOrDefault(),
+            vm.ProductType,
+            vm.Description,
+            vm.UnitPrice,
+            vm.Unit,
+            vm.VatRate,
+            vm.Quantity
+        );
+
+        Items.Add(vm);
+    }
+
+    public async Task UpdateInvoiceStatus()
+    {
+        int invoiceId = Id.GetValueOrDefault();
+
+        var dialogParameters = new DialogParameters();
+        dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
+        dialogParameters.Add(nameof(SetStatusDialog.Status), Status);
+
+        var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        Status = (InvoiceStatus)result.Data;
+
+        await table.ReloadServerData();
+    }
+
+    public class InvoiceItemViewModel
+    {
+        [Required]
+        public string Description { get; set; } = null!;
+
+        public ProductType ProductType { get; set; }
+
+        [Required]
+        public decimal UnitPrice { get; set; }
+
+        [Required]
+        public string Unit { get; set; } = null!;
+
+        [Required]
+        [Range(0.0001, double.MaxValue)]
+        public double Quantity { get; set; } = 1;
+
+        public double VatRate { get; set; } = 0.25;
+
+        [Required]
+        public decimal SubTotal => LineTotal.SubTotal(VatRate);
+
+        [Required]
+        public decimal Vat => LineTotal.Vat(VatRate);
+
+        public decimal LineTotal => UnitPrice * (decimal)Quantity;
+    }
+}

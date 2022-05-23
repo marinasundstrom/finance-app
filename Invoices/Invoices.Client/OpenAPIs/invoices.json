@@ -135,6 +135,13 @@
             "x-nullable": false
           },
           {
+            "type": "string",
+            "name": "unit",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          },
+          {
             "type": "number",
             "name": "vatRate",
             "in": "query",
@@ -372,10 +379,6 @@
           "type": "number",
           "format": "decimal"
         },
-        "vatRate": {
-          "type": "number",
-          "format": "double"
-        },
         "total": {
           "type": "number",
           "format": "decimal"
@@ -417,6 +420,7 @@
         "productType",
         "description",
         "unitPrice",
+        "unit",
         "vatRate",
         "quantity",
         "lineTotal"
@@ -435,6 +439,9 @@
         "unitPrice": {
           "type": "number",
           "format": "decimal"
+        },
+        "unit": {
+          "type": "string"
         },
         "vatRate": {
           "type": "number",
@@ -464,14 +471,6 @@
     },
     "CreateInvoice": {
       "type": "object",
-      "required": [
-        "date",
-        "status",
-        "subTotal",
-        "vat",
-        "vatRate",
-        "total"
-      ],
       "properties": {
         "date": {
           "type": "string",
@@ -480,21 +479,8 @@
         "status": {
           "$ref": "#/definitions/InvoiceStatus"
         },
-        "subTotal": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "vat": {
-          "type": "number",
-          "format": "decimal"
-        },
-        "vatRate": {
-          "type": "number",
-          "format": "double"
-        },
-        "total": {
-          "type": "number",
-          "format": "decimal"
+        "note": {
+          "type": "string"
         }
       }
     },

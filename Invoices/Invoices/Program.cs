@@ -108,8 +108,8 @@ app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediato
     .Produces<FileResult>(StatusCodes.Status200OK);
 
 app.MapPost("/invoices/{invoiceId}/items", async (int invoiceId, 
-    ProductType productType, string description, decimal unitPrice, double vatRate, double quantity, IMediator mediator)
-    => await mediator.Send(new AddItem(invoiceId, productType, description, unitPrice, vatRate, quantity)))
+    ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity, IMediator mediator)
+    => await mediator.Send(new AddItem(invoiceId, productType, description, unitPrice, unit, vatRate, quantity)))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);

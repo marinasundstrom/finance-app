@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Application.Commands;
 
-public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
+public record AddItem(int InvoiceId, ProductType ProductType, string Description, decimal UnitPrice, string Unit, double VatRate, double Quantity) : IRequest<InvoiceItemDto>
 {
     public class Handler : IRequestHandler<AddItem, InvoiceItemDto>
     {
@@ -36,7 +36,7 @@ public record AddItem(int InvoiceId, ProductType ProductType, string Description
                 throw new Exception();
             }
 
-            var item = invoice.AddItem(request.ProductType, request.Description, request.UnitPrice, request.VatRate, request.Quantity);
+            var item = invoice.AddItem(request.ProductType, request.Description, request.UnitPrice, request.Unit, request.VatRate, request.Quantity);
 
             await _context.SaveChangesAsync(cancellationToken);
 

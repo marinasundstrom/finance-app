@@ -1,5 +1,6 @@
 ﻿@inject IInvoicesClient InvoicesClient
 @inject IDialogService DialogService
+@inject NavigationManager NavigationManager
 
 @page "/invoices"
 
@@ -7,16 +8,15 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoices</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="NewInvoice" Class="mb-2">New invoice</MudButton>
+<MudButton Variant="Variant.Filled" Link="/invoices/new" Class="mb-2">New invoice</MudButton>
 
 <MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info"
-    OnRowClick="async (e) => await UpdateInvoiceStatus(e.Item)">
+    OnRowClick="async (e) => await GoTo(e.Item)">
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Status</MudTh>
         <MudTh>SubTotal</MudTh>
-        <MudTh>VAT Rate</MudTh>
         <MudTh>VAT</MudTh>
         <MudTh>Total</MudTh>
         <MudTh>Paid</MudTh>
@@ -27,7 +27,6 @@
         <MudTd DataLabel="Date">@invoice.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Status">@invoice.Status</MudTd>
         <MudTd DataLabel="Sub Total">@invoice.SubTotal.ToString("c")</MudTd>
-        <MudTd DataLabel="VAT Rate">@(invoice.VatRate * 100)%</MudTd>
         <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
         <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
@@ -75,17 +74,8 @@
         await table.ReloadServerData();
     }
 
-    public async Task UpdateInvoiceStatus(InvoiceDto invoice)
+    public async Task GoTo(InvoiceDto invoice)
     {
-        var dialogParameters = new DialogParameters();
-        dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoice.Id);
-
-        var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
-
-        var result = await dialogRef.Result;
-
-        if (result.Cancelled) return;
-
-        await table.ReloadServerData();
+        NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
     }
 }

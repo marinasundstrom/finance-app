@@ -8,7 +8,7 @@
         <DialogContent>
 
             <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
-                @foreach(var status in Enum.GetValues<InvoiceStatus>())
+                @foreach(var status in Enum.GetValues<InvoiceStatus>().Skip(1))
                 {
                     <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
                 }
@@ -36,7 +36,7 @@
     {
         await InvoicesClient.SetInvoiceStatusAsync(InvoiceId, Status);
 
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog.Close(DialogResult.Ok(Status));
     }
 
     void Cancel() => MudDialog.Cancel();

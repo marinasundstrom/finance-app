@@ -181,6 +181,43 @@
           }
         }
       }
+    },
+    "/transactions/{transactionId}/invoiceId": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionInvoiceId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

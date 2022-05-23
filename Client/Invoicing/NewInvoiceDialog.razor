@@ -8,6 +8,7 @@
         <DialogContent>
             <MudDatePicker Label="Date" @bind-Date="Date" For="() => Date"></MudDatePicker>
 
+            @*
             <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
 
             <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
@@ -25,6 +26,8 @@
             <MudNumericField Label="VAT Rate" @bind-Value="VatRate" For="() => VatRate"></MudNumericField>
 
             <MudNumericField Label="Total" @bind-Value="Total" For="() => Total"></MudNumericField>
+
+            *@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel" Variant="Variant.Text">Cancel</MudButton>
@@ -42,32 +45,12 @@
     [Required]
     [Parameter] public TimeSpan? Time { get; set; } = DateTime.Now.TimeOfDay;
 
-    [Required]
-    [Parameter] public InvoiceStatus Status { get; set; }
-
-    [Required]
-    [Parameter] public decimal SubTotal { get; set; } = 80m;
-
-    [Required]
-    [Parameter] public decimal Vat { get; set; } = 20m;
-
-    [Required]
-    [Parameter] public double VatRate { get; set; } = 0.25;
-
-    [Required]
-    [Parameter] public decimal Total { get; set; } = 100;
-
     async Task Submit()
     {
         await InvoicesClient.CreateInvoiceAsync(
             new CreateInvoice ()
             {
-                Date = Date.GetValueOrDefault(),
-                Status = Status,
-                SubTotal = SubTotal,
-                Vat = Vat,
-                VatRate = VatRate / 100,
-                Total = Total
+                Date = Date.GetValueOrDefault()
             });
 
         MudDialog.Close(DialogResult.Ok(true));
