@@ -94,39 +94,42 @@ app.MapGet("/invoices", async (int page, int pageSize, [FromQuery] InvoiceStatus
     .Produces<ItemsResult<InvoiceDto>>(StatusCodes.Status200OK);
 */
 
-app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
-    => await mediator.Send(new GetInvoice(invoiceId)))
+app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetInvoice(invoiceId), cancellationToken))
     .WithName("Invoices_GetInvoice")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediator)
-    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId)), "application/html", $"{invoiceId}.html"))
+app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);
 
 app.MapPost("/invoices/{invoiceId}/items", async (int invoiceId, 
-    ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity, IMediator mediator)
-    => await mediator.Send(new AddItem(invoiceId, productType, description, unitPrice, unit, vatRate, quantity)))
+    ProductType productType, string description, decimal unitPrice, string unit, double vatRate, double quantity, 
+    IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new AddItem(invoiceId, productType, description, unitPrice, unit, vatRate, quantity), cancellationToken))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
-app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator)
-    => await mediator.Send(command))
+app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(command, cancellationToken))
     .WithName("Invoices_CreateInvoice")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapPut("/invoices/{invoiceId}/status", async (int invoiceId, InvoiceStatus status, IMediator mediator)
-    => await mediator.Send(new SetInvoiceStatus(invoiceId, status)))
+app.MapPut("/invoices/{invoiceId}/status", async (int invoiceId, InvoiceStatus status, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetInvoiceStatus(invoiceId, status), cancellationToken))
     .WithName("Invoices_SetInvoiceStatus")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/invoices/{invoiceId}/paid", async (int invoiceId, decimal amount, IMediator mediator)
-    => await mediator.Send(new SetPaidAmount(invoiceId, amount)))
+app.MapPut("/invoices/{invoiceId}/paid", async (int invoiceId, decimal amount, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);

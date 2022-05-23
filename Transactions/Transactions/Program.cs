@@ -100,27 +100,27 @@ app.MapGet("/transactions", async (int page, int pageSize, IMediator mediator) =
     .Produces<ItemsResult<TransactionDto>>(StatusCodes.Status200OK);
 */
 
-app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator mediator)
-    => await mediator.Send(new PostTransactions(transactions)))
+app.MapPost("/transactions", async (TransactionDto[] transactions, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new PostTransactions(transactions), cancellationToken))
     .WithName("Transactions_PostTransactions")
     .WithTags("Transactions")
     //.RequireAuthorization()
     .Produces(StatusCodes.Status200OK); ;
 
-app.MapPut("/transactions/{transactionId}/status", async (string transactionId, TransactionStatus status, IMediator mediator)
-    => await mediator.Send(new SetTransactionStatus(transactionId, status)))
+app.MapPut("/transactions/{transactionId}/status", async (string transactionId, TransactionStatus status, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetTransactionStatus(transactionId, status), cancellationToken))
     .WithName("Transactions_SetTransactionStatus")
     .WithTags("Transactions")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/transactions/{transactionId}/reference", async (string transactionId, string reference, IMediator mediator)
-    => await mediator.Send(new UpdateTransactionReference(transactionId, reference)))
+app.MapPut("/transactions/{transactionId}/reference", async (string transactionId, string reference, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new UpdateTransactionReference(transactionId, reference), cancellationToken))
     .WithName("Transactions_SetTransactionReference")
     .WithTags("Transactions")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/transactions/{transactionId}/invoiceId", async (string transactionId, int invoiceId, IMediator mediator)
-    => await mediator.Send(new SetTransactionInvoiceId(transactionId, invoiceId)))
+app.MapPut("/transactions/{transactionId}/invoiceId", async (string transactionId, int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetTransactionInvoiceId(transactionId, invoiceId), cancellationToken))
     .WithName("Transactions_SetTransactionInvoiceId")
     .WithTags("Transactions")
     .Produces(StatusCodes.Status200OK);

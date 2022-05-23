@@ -132,8 +132,8 @@ app.UseRouting();
 
 app.MapReverseProxy();
 
-app.MapGet("/", async (int page, int pageSize, IMediator mediator)
-    => await mediator.Send(new GetDocuments(page, pageSize)))
+app.MapGet("/", async (int page, int pageSize, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetDocuments(page, pageSize), cancellationToken))
     .WithName("Documents_GetDocuments")
     .WithTags("Documents")
     .Produces<ItemsResult<DocumentDto>>(StatusCodes.Status200OK);
