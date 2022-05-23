@@ -145,6 +145,42 @@
           }
         }
       }
+    },
+    "/transactions/{transactionId}/reference": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "operationId": "Transactions_SetTransactionReference",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

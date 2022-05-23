@@ -63,10 +63,9 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
 
             switch (invoice.Status)
             {
-                //case InvoiceStatus.Draft:
-                //    // Do nothing
-                //    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Client.TransactionStatus.Payback);
-                //    break;
+                case InvoiceStatus.Draft:
+                    await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Unknown);
+                    return;
 
                 case InvoiceStatus.Sent:
                     if (receivedAmount < invoice.Total)
@@ -96,7 +95,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                     {
                         await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Paid, cancellationToken);
                     }
-                    else if (paidAmount > invoice.Total)
+                    else if (paidAmount > invoice.Total) 
                     {
                         await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Overpaid, cancellationToken);
                     }

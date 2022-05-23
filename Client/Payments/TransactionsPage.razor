@@ -14,8 +14,8 @@
 
 <MudButton Variant="Variant.Filled" OnClick="NewTransaction" Class="mb-2">New transaction</MudButton>
 
-<MudTable @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
-    Loading="@loading" LoadingProgressColor="Color.Info">
+<MudTable T="TransactionDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await UpdateTransactionReference(e.Item)" >
     <HeaderContent>
         <MudTh>Id</MudTh>
         <MudTh>Date</MudTh>
@@ -67,6 +67,21 @@
     public async Task NewTransaction()
     {
         var dialogRef = DialogService.Show<NewTransactionDialog>("New transaction");
+
+        var result = await dialogRef.Result;
+
+        if (result.Cancelled) return;
+
+        await table.ReloadServerData();
+    }
+
+    public async Task UpdateTransactionReference(TransactionDto transaction)
+    {
+        DialogParameters dialogParameters = new ();
+        dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.TransactionId), transaction.Id);
+        dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.Reference), transaction.Reference);
+
+        var dialogRef = DialogService.Show<UpdateTransactionReferenceDialog>("Update reference", dialogParameters);
 
         var result = await dialogRef.Result;
 

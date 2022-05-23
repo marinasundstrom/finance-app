@@ -35,6 +35,15 @@ public class Transaction : IHasDomainEvents
 
     public TransactionStatus Status { get; private set; } = TransactionStatus.Unverified;
 
+    public void UpdateReference(string reference)
+    {
+        if(Reference != reference) 
+        {
+            Reference = reference;
+            DomainEvents.Add(new TransactionReferenceUpdated(Id, reference));
+        }
+    }
+
     public string? From { get; set; }
 
     public string? Reference { get; set; }
