@@ -9,7 +9,7 @@ using Transactions.Domain.Enums;
 
 namespace Transactions.Application.Queries;
 
-public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status = null) : IRequest<ItemsResult<TransactionDto>>
+public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<TransactionDto>>
 {
     public class Handler : IRequestHandler<GetTransactons, ItemsResult<TransactionDto>>
     {
@@ -33,7 +33,7 @@ public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status
             {
                 throw new Exception("Page Size must not be greater than 100.");
             }
-            
+
             var query = _context.Transactions
                 .AsSplitQuery()
                 .AsNoTracking()
@@ -45,6 +45,13 @@ public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status
                 var statuses = request.Status.Select(x => (int)x);
                 query = query.Where(i => statuses.Any(s => s == (int)i.Status));
             }
+
+            if(request.InvoiceId is not null) 
+            {
+                int invoiceId = request.InvoiceId.GetValueOrDefault();
+                query = query.Where(i => i.InvoiceId == invoiceId);
+            }
+
 
             int totalItems = await query.CountAsync(cancellationToken);
 

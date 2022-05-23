@@ -218,6 +218,13 @@
             "items": {
               "$ref": "#/definitions/TransactionStatus"
             }
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
           }
         ],
         "responses": {
