@@ -19,6 +19,16 @@ public record GetVerificationsQuery(int Page = 0, int PageSize = 10) : IRequest<
 
         public async Task<VerificationsResult> Handle(GetVerificationsQuery request, CancellationToken cancellationToken)
         {
+            if(request.PageSize < 0) 
+            {
+                throw new Exception("Page Size cannot be negative.");
+            }
+
+            if(request.PageSize > 100) 
+            {
+                throw new Exception("Page Size must not be greater than 100.");
+            }
+            
             var query = context.Verifications
                 .Include(x => x.Entries)
                 .Include(x => x.Attachments)

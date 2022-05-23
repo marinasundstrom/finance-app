@@ -26,6 +26,16 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
 
         public async Task<ItemsResult<DocumentDto>> Handle(GetDocuments request, CancellationToken cancellationToken)
         {
+            if(request.PageSize < 0) 
+            {
+                throw new Exception("Page Size cannot be negative.");
+            }
+
+            if(request.PageSize > 100) 
+            {
+                throw new Exception("Page Size must not be greater than 100.");
+            }
+            
             var query = _context.Documents
                 .AsSplitQuery()
                 .AsNoTracking()

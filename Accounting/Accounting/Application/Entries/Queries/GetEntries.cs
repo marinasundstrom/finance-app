@@ -19,6 +19,16 @@ public record GetEntriesQuery(int? AccountNo = null, int? VerificationId = null,
 
         public async Task<EntriesResult> Handle(GetEntriesQuery request, CancellationToken cancellationToken)
         {
+            if(request.PageSize < 0) 
+            {
+                throw new Exception("Page Size cannot be negative.");
+            }
+
+            if(request.PageSize > 100) 
+            {
+                throw new Exception("Page Size must not be greater than 100.");
+            }
+            
             var query = context.Entries
                    .Include(e => e.Verification)
                    .Include(e => e.Account)
