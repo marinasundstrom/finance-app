@@ -1,6 +1,7 @@
 ﻿
 using Invoices.Application;
 using Invoices.Domain;
+using Invoices.Domain.Enums;
 
 using MassTransit;
 
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Queries;
 
-public record GetInvoices(int Page, int PageSize) : IRequest<ItemsResult<InvoiceDto>>
+public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceStatus[]? Status = null) : IRequest<ItemsResult<InvoiceDto>>
 {
     public class Handler : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
@@ -28,6 +29,12 @@ public record GetInvoices(int Page, int PageSize) : IRequest<ItemsResult<Invoice
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
+
+            if(request.Status?.Any() ?? false) 
+            {
+                var statuses = request.Status.Select(x => (int)x);
+                query = query.Where(i => statuses.Any(s => s == (int)i.Status));
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
 

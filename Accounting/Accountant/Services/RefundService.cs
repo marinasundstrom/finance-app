@@ -21,7 +21,7 @@ namespace Accountant.Services
         {
             _logger.LogInformation("Querying for invoices");
 
-            var results = await _invoicesClient.GetInvoicesAsync(0, 100);
+            var results = await _invoicesClient.GetInvoicesAsync(0, 100, new [] { InvoiceStatus.Overpaid });
 
             foreach(var invoice in results.Items)
             {
@@ -62,26 +62,6 @@ namespace Accountant.Services
                     });
 
                     await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyRepaid);
-                }
-                else if (invoice.Status == InvoiceStatus.PartiallyPaid) 
-                {
-                    // TODO: Move to its own scheduled task
-
-                    _logger.LogDebug($"Notify customer about partially paid invoice {invoice.Id}");
-
-                    // Send email
-                }
-                else if (invoice.Status == InvoiceStatus.Sent)
-                {
-                    // TODO: Move to its own scheduled task
-
-                    var daysSince = (DateTime.Now.Date - invoice.Date.Date).TotalDays;
-                    if(daysSince > 30) 
-                    {
-                        _logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
-
-                        // Send email
-                    }
                 }
             }
         }

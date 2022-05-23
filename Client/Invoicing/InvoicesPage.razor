@@ -54,7 +54,7 @@
 
         try
         {
-            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize);
+            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, null);
 
             return new TableData<InvoiceDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }

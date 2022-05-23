@@ -24,6 +24,8 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(Configuration);
 
+builder.Services.AddControllers();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -76,11 +78,13 @@ else
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/invoices", async (int page, int pageSize, IMediator mediator)
-    => await mediator.Send(new GetInvoices(page, pageSize)))
+/*
+app.MapGet("/invoices", async (int page, int pageSize, [FromQuery] InvoiceStatus[]? status, IMediator mediator)
+    => await mediator.Send(new GetInvoices(page, pageSize, status)))
     .WithName("Invoices_GetInvoices")
     .WithTags("Invoices")
     .Produces<ItemsResult<InvoiceDto>>(StatusCodes.Status200OK);
+*/
 
 app.MapGet("/invoices/{invoiceId}", async (int invoiceId, IMediator mediator)
     => await mediator.Send(new GetInvoice(invoiceId)))
@@ -118,5 +122,7 @@ app.MapPut("/invoices/{invoiceId}/paid", async (int invoiceId, decimal amount, I
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
+
+app.MapControllers();
 
 app.Run();

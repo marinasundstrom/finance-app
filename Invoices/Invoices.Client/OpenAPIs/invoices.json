@@ -27,77 +27,6 @@
         }
       }
     },
-    "/invoices": {
-      "get": {
-        "tags": [
-          "Invoices"
-        ],
-        "operationId": "Invoices_GetInvoices",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "name": "page",
-            "in": "query",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          },
-          {
-            "type": "integer",
-            "name": "pageSize",
-            "in": "query",
-            "required": true,
-            "format": "int32",
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/ItemsResultOfInvoiceDto"
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Invoices"
-        ],
-        "operationId": "Invoices_CreateInvoice",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "CreateInvoice",
-            "in": "body",
-            "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/CreateInvoice"
-            },
-            "x-nullable": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "x-nullable": false,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/InvoiceDto"
-            }
-          }
-        }
-      }
-    },
     "/invoices/{invoiceId}": {
       "get": {
         "tags": [
@@ -233,6 +162,41 @@
         }
       }
     },
+    "/invoices": {
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_CreateInvoice",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateInvoice",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateInvoice"
+            },
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceDto"
+            }
+          }
+        }
+      }
+    },
     "/invoices/{invoiceId}/status": {
       "put": {
         "tags": [
@@ -320,28 +284,57 @@
           }
         }
       }
+    },
+    "/Invoices": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_GetInvoices",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "array",
+            "name": "status",
+            "in": "query",
+            "collectionFormat": "multi",
+            "x-nullable": true,
+            "items": {
+              "$ref": "#/definitions/InvoiceStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ItemsResultOfInvoiceDto"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
-    "ItemsResultOfInvoiceDto": {
-      "type": "object",
-      "required": [
-        "items",
-        "totalItems"
-      ],
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/InvoiceDto"
-          }
-        },
-        "totalItems": {
-          "type": "integer",
-          "format": "int32"
-        }
-      }
-    },
     "InvoiceDto": {
       "type": "object",
       "required": [
@@ -508,6 +501,25 @@
     "Unit": {
       "type": "object",
       "description": "Represents a void type, since Void is not a valid return type in C#."
+    },
+    "ItemsResultOfInvoiceDto": {
+      "type": "object",
+      "required": [
+        "items",
+        "totalItems"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InvoiceDto"
+          }
+        },
+        "totalItems": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     }
   }
 }

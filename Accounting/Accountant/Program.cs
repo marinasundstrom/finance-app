@@ -20,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
 
 builder.Services.AddSingleton<IRefundService, RefundService>();
+builder.Services.AddSingleton<IReminderService, ReminderService>();
 
 builder.Services.AddMassTransit(x =>
 {
