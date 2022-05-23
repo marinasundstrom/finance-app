@@ -14,7 +14,9 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Invoices.Infrastructure.Persistence;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,13 @@ builder.Services
     .AddInfrastructure(Configuration);
 
 builder.Services.AddControllers();
+
+// Set the JSON serializer options
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    // options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddHttpContextAccessor();
 

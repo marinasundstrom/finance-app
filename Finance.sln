@@ -53,6 +53,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documents.Contracts", "Docu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Documents.Client", "Documents\Documents.Client\Documents.Client.csproj", "{7CED9DE0-D5F3-4125-BE0F-ED4AE2D3F0BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EmailService", "EmailService", "{D3A42B26-2259-43A8-9A4F-6EC6946881E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "EmailService\EmailService\EmailService.csproj", "{F33F9F29-2F51-4B91-99A1-3550667EC0CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService.Contracts", "EmailService\EmailService.Contracts\EmailService.Contracts.csproj", "{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +129,14 @@ Global
 		{7CED9DE0-D5F3-4125-BE0F-ED4AE2D3F0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CED9DE0-D5F3-4125-BE0F-ED4AE2D3F0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CED9DE0-D5F3-4125-BE0F-ED4AE2D3F0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F33F9F29-2F51-4B91-99A1-3550667EC0CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F33F9F29-2F51-4B91-99A1-3550667EC0CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F33F9F29-2F51-4B91-99A1-3550667EC0CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F33F9F29-2F51-4B91-99A1-3550667EC0CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,5 +161,7 @@ Global
 		{5BA08D9F-B41F-4825-94F6-B691A5EAC5D5} = {2CFF45EF-2CE0-46B2-A15F-877E1F12E359}
 		{B450D52E-F29F-40FF-B99D-AF3D94D3FADF} = {2CFF45EF-2CE0-46B2-A15F-877E1F12E359}
 		{7CED9DE0-D5F3-4125-BE0F-ED4AE2D3F0BF} = {2CFF45EF-2CE0-46B2-A15F-877E1F12E359}
+		{F33F9F29-2F51-4B91-99A1-3550667EC0CD} = {D3A42B26-2259-43A8-9A4F-6EC6946881E7}
+		{4D9B8E3F-A9D7-4556-94B5-5DC6B9309FA9} = {D3A42B26-2259-43A8-9A4F-6EC6946881E7}
 	EndGlobalSection
 EndGlobal

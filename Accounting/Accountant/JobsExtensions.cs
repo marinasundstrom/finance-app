@@ -15,7 +15,7 @@ public static class JobsExtensions
 
         var recurringJobs = services.GetRequiredService<IRecurringJobManager>();
         recurringJobs.AddOrUpdate<RefundService>("refund", (refundService) => refundService.CheckForRefund(), Cron.Minutely());
-        recurringJobs.AddOrUpdate<IReminderService>("remind", (reminderService) => reminderService.IssueReminders(), Cron.Minutely());
+        recurringJobs.AddOrUpdate<IReminderService>("remind", (reminderService) => reminderService.IssueReminders(), Cron.MinuteInterval(10));
 
         return services;
     }

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Documents.Application.Commands;
 
-public record GenerateDocument(string TemplateId, string Model) : IRequest<Stream>
+public record GenerateDocument(string TemplateId, DocumentFormat DocumentFormat, string Model) : IRequest<Stream>
 {
     public class Handler : IRequestHandler<GenerateDocument, Stream>
     {
@@ -22,7 +22,7 @@ public record GenerateDocument(string TemplateId, string Model) : IRequest<Strea
         public async Task<Stream> Handle(GenerateDocument request, CancellationToken cancellationToken)
         {
             var result = await _requestClient.GetResponse<DocumentResponse>(
-                new CreateDocumentFromTemplate(request.TemplateId, DocumentFormat.Html, JsonConvert.SerializeObject(request.Model)));
+                new CreateDocumentFromTemplate(request.TemplateId, request.DocumentFormat, JsonConvert.SerializeObject(request.Model)));
             var message = result.Message;
             return new MemoryStream(await message.Document.Value);
         }

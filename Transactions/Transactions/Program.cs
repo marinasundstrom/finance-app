@@ -1,6 +1,10 @@
-﻿using MassTransit;
+﻿using System.Text.Json.Serialization;
+
+using MassTransit;
 
 using MediatR;
+
+using Microsoft.AspNetCore.Http.Json;
 
 using Transactions.Application;
 using Transactions.Application.Commands;
@@ -28,6 +32,13 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+// Set the JSON serializer options
+builder.Services.Configure<JsonOptions>(options =>
+{
+    // options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddEndpointsApiExplorer();
 

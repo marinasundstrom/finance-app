@@ -42,6 +42,12 @@ services:
     - protocol: https
       port: 5070
 
+- name: email
+  project: EmailService/EmailService/EmailService.csproj
+  bindings:
+    - protocol: https
+      port: 5080
+
 - name: mssql
   image: mcr.microsoft.com/azure-sql-edge:latest
   env:

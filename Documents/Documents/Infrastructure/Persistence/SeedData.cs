@@ -105,6 +105,55 @@ Hello, @Model.Name!"
 
                 context.DocumentTemplates.Add(documentTemplate);
 
+                documentTemplate = new DocumentTemplate()
+                {
+                    Id = "reminder",
+                    Name = "Reminder",
+                    TemplateLanguage = DocumentTemplateLanguage.Razor,
+                    Content =
+@$"
+@model dynamic
+
+<style>
+    body {{
+        font-family: 'Helvetica', 'Arial', sans-serif;
+    }}
+</style>
+
+<p>Hi, @Model.Name!</p>
+
+<p>You have not yet paid the invoice.</p>
+
+<p>Amount to pay: @Model.AmountToPay.ToString(""c"")</p>"
+                };
+
+                context.DocumentTemplates.Add(documentTemplate);
+
+                                documentTemplate = new DocumentTemplate()
+                {
+                    Id = "reminder2",
+                    Name = "Reminder 2",
+                    TemplateLanguage = DocumentTemplateLanguage.Razor,
+                    Content =
+@$"
+@model dynamic
+
+<style>
+    body {{
+        font-family: 'Helvetica', 'Arial', sans-serif;
+    }}
+</style>
+
+<p>Hi, @Model.Name!</p>
+
+<p>You have outstanding payments.</p>
+
+<p>Amount to pay: @Model.RemainingAmount.ToString(""c"")</p>"
+                };
+
+                context.DocumentTemplates.Add(documentTemplate);
+
+
                 await context.SaveChangesAsync();
             }
         }

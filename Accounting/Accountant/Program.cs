@@ -6,6 +6,8 @@ using Accountant.Services;
 
 using Accounting.Client;
 
+using Documents.Client;
+
 using Hangfire;
 using Hangfire.SqlServer;
 
@@ -21,6 +23,7 @@ var Configuration = builder.Configuration;
 
 builder.Services.AddSingleton<IRefundService, RefundService>();
 builder.Services.AddSingleton<IReminderService, ReminderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -52,6 +55,11 @@ builder.Services.AddInvoicesClients((sp, http) =>
 builder.Services.AddTransactionsClients((sp, http) =>
 {
     http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/transactions/");
+});
+
+builder.Services.AddDocumentsClients((sp, http) =>
+{
+    http.BaseAddress = new Uri($"{Configuration.GetServiceUri("nginx")}/documents/");
 });
 
 // Add Hangfire services.

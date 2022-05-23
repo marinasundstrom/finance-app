@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using Accounting.Application;
 using Accounting.Application.Common.Interfaces;
@@ -13,6 +15,7 @@ using Documents.Client;
 
 using MassTransit;
 
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
@@ -32,6 +35,14 @@ builder.Services.AddScoped<IBlobService, BlobService>();
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+// Set the JSON serializer options
+builder.Services.Configure<JsonOptions>(options =>
+{
+    // options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerDocument(c =>

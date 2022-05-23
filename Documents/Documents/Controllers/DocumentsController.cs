@@ -29,11 +29,11 @@ public class DocumentsController : Controller
     }
 
     [HttpPost("GenerateDocument")]
-    public async Task<IActionResult> GenerateDocument(string templateId, [FromBody] string model)
+    public async Task<IActionResult> GenerateDocument(string templateId, DocumentFormat documentFormat, [FromBody] string model)
     {
-        DocumentFormat documentFormat = DocumentFormat.Html;
+        //DocumentFormat documentFormat = DocumentFormat.Html;
 
-        var stream = await _mediator.Send(new GenerateDocument(templateId, model));
+        var stream = await _mediator.Send(new GenerateDocument(templateId, documentFormat, model));
         return File(stream, documentFormat == DocumentFormat.Html ? "application/html" : "application/pdf");
     }
 }

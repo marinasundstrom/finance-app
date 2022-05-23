@@ -1,4 +1,6 @@
-﻿using Azure.Identity;
+﻿using System.Text.Json.Serialization;
+
+using Azure.Identity;
 using Azure.Storage.Blobs;
 
 using Documents;
@@ -20,6 +22,7 @@ using MassTransit.MessageData;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
@@ -36,6 +39,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddControllers();
+
+// Set the JSON serializer options
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    // options.SerializerOptions.WriteIndented = true;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddMediatR(typeof(Program));
 

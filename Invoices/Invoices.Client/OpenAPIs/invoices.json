@@ -106,7 +106,7 @@
             "x-nullable": false
           },
           {
-            "type": "integer",
+            "type": "string",
             "name": "productType",
             "in": "query",
             "required": true,
@@ -115,8 +115,8 @@
             },
             "x-nullable": false,
             "enum": [
-              1,
-              2
+              "Good",
+              "Service"
             ]
           },
           {
@@ -216,7 +216,7 @@
             "x-nullable": false
           },
           {
-            "type": "integer",
+            "type": "string",
             "name": "status",
             "in": "query",
             "required": true,
@@ -225,14 +225,14 @@
             },
             "x-nullable": false,
             "enum": [
-              0,
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7
+              "Draft",
+              "Sent",
+              "Paid",
+              "PartiallyPaid",
+              "Overpaid",
+              "Repaid",
+              "PartiallyRepaid",
+              "Cancelled"
             ]
           }
         ],
@@ -387,7 +387,7 @@
       }
     },
     "InvoiceStatus": {
-      "type": "integer",
+      "type": "string",
       "description": "",
       "x-enumNames": [
         "Draft",
@@ -400,14 +400,14 @@
         "Cancelled"
       ],
       "enum": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
+        "Draft",
+        "Sent",
+        "Paid",
+        "PartiallyPaid",
+        "Overpaid",
+        "Repaid",
+        "PartiallyRepaid",
+        "Cancelled"
       ]
     },
     "InvoiceItemDto": {
@@ -451,15 +451,15 @@
       }
     },
     "ProductType": {
-      "type": "integer",
+      "type": "string",
       "description": "",
       "x-enumNames": [
         "Good",
         "Service"
       ],
       "enum": [
-        1,
-        2
+        "Good",
+        "Service"
       ]
     },
     "CreateInvoice": {

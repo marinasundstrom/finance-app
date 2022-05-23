@@ -40,7 +40,7 @@ public record GenerateInvoiceFile(int InvoiceId) : IRequest<Stream>
 
             Console.WriteLine(model);
 
-            var response = await _documentsClient.GenerateDocumentAsync("invoice", model);
+            var response = await _documentsClient.GenerateDocumentAsync("invoice", DocumentFormat.Html, model);
             return response.Stream;
         }
     }

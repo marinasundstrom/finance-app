@@ -271,6 +271,7 @@
         ],
         "operationId": "Verifications_CreateVerification",
         "consumes": [
+          "application/json-patch+json",
           "application/json",
           "text/json",
           "application/*+json"
