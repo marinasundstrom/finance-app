@@ -158,6 +158,81 @@
         }
       }
     },
+    "/invoices/{invoiceId}/items": {
+      "post": {
+        "tags": [
+          "Invoices"
+        ],
+        "operationId": "Invoices_AddItem",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "integer",
+            "name": "productType",
+            "in": "query",
+            "required": true,
+            "x-schema": {
+              "$ref": "#/definitions/ProductType"
+            },
+            "x-nullable": false,
+            "enum": [
+              1,
+              2
+            ]
+          },
+          {
+            "type": "string",
+            "name": "description",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "number",
+            "name": "unitPrice",
+            "in": "query",
+            "required": true,
+            "format": "decimal",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "vatRate",
+            "in": "query",
+            "required": true,
+            "format": "double",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "quantity",
+            "in": "query",
+            "required": true,
+            "format": "double",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InvoiceItemDto"
+            }
+          }
+        }
+      }
+    },
     "/invoices/{invoiceId}/status": {
       "put": {
         "tags": [
@@ -346,6 +421,7 @@
       "type": "object",
       "required": [
         "id",
+        "productType",
         "description",
         "unitPrice",
         "vatRate",
@@ -356,6 +432,9 @@
         "id": {
           "type": "integer",
           "format": "int32"
+        },
+        "productType": {
+          "$ref": "#/definitions/ProductType"
         },
         "description": {
           "type": "string"
@@ -377,6 +456,18 @@
           "format": "decimal"
         }
       }
+    },
+    "ProductType": {
+      "type": "integer",
+      "description": "",
+      "x-enumNames": [
+        "Good",
+        "Service"
+      ],
+      "enum": [
+        1,
+        2
+      ]
     },
     "CreateInvoice": {
       "type": "object",

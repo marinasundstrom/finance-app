@@ -11,6 +11,6 @@ public static class Mappings
 
     public static InvoiceItemDto ToDto(this InvoiceItem item) 
     {
-        return new InvoiceItemDto(item.Id, item.Description, item.UnitPrice, item.VatRate, item.Quantity, item.LineTotal);
+        return new InvoiceItemDto(item.Id, item.ProductType, item.Description, item.UnitPrice, item.VatRate, item.Quantity, item.LineTotal);
     }
 }

@@ -40,9 +40,9 @@ public class Invoice : IHasDomainEvents
 
     public IReadOnlyList<InvoiceItem> Items => _items;
 
-    public InvoiceItem AddItem(string description, decimal unitPrice, double vatRate, double quantity) 
+    public InvoiceItem AddItem(ProductType productType, string description, decimal unitPrice, double vatRate, double quantity) 
     {
-        var invoiceItem = new InvoiceItem(description, unitPrice, vatRate, quantity);
+        var invoiceItem = new InvoiceItem(productType, description, unitPrice, vatRate, quantity);
         _items.Add(invoiceItem);
 
         UpdateTotals();

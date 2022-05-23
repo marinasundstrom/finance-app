@@ -14,6 +14,7 @@ using MassTransit;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using Invoices.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +35,6 @@ builder.Services.AddSwaggerDocument(c =>
     c.Title = "Invoices API";
     c.Version = "0.1";
 });
-
-builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.AddMassTransit(x =>
 {
@@ -94,6 +93,13 @@ app.MapGet("/invoices/{invoiceId}/file", async (int invoiceId, IMediator mediato
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
     .Produces<FileResult>(StatusCodes.Status200OK);
+
+app.MapPost("/invoices/{invoiceId}/items", async (int invoiceId, 
+    ProductType productType, string description, decimal unitPrice, double vatRate, double quantity, IMediator mediator)
+    => await mediator.Send(new AddItem(invoiceId, productType, description, unitPrice, vatRate, quantity)))
+    .WithName("Invoices_AddItem")
+    .WithTags("Invoices")
+    .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
 
 app.MapPost("/invoices", async (CreateInvoice command, IMediator mediator)
     => await mediator.Send(command))

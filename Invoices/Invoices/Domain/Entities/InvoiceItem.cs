@@ -1,9 +1,12 @@
+using Invoices.Domain.Enums;
+
 namespace Invoices.Domain.Entities;
 
 public class InvoiceItem 
 {
-    public InvoiceItem(string description, decimal unitPrice, double vatRate, double quantity)
+    public InvoiceItem(ProductType productType, string description, decimal unitPrice, double vatRate, double quantity)
     {
+        ProductType = productType;
         Description = description;
         UpdateUnitPrice(unitPrice, vatRate);
         UpdateQuantity(quantity);
@@ -13,6 +16,7 @@ public class InvoiceItem
     public Invoice Invoice { get; set; } = null!;
     public int InvoiceId { get; private set; }
     public string? ProductId { get; private set; }
+    public ProductType ProductType  { get; private set; }
     public string Description { get; private set; } = null!;
 
     public void UpdateDescription(string description) 

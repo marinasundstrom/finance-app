@@ -40,30 +40,105 @@ public class InvoicesBatchConsumer : IConsumer<InvoicesBatch>
             return;
         }
 
+        var itemsGroupedByTypeAndVatRate = invoice.Items.GroupBy(item => new { item.ProductType, item.VatRate });
+
+        List<CreateEntry> entries = new ();
+
+        foreach(var group in itemsGroupedByTypeAndVatRate) 
+        {
+            var productType = group.Key.ProductType;
+            var vatRate = group.Key.VatRate;
+
+            var vat = group.Sum(i => i.LineTotal).Vat(vatRate);
+            var subTotal = group.Sum(i => i.LineTotal).SubTotal(vatRate);
+
+            entries.Add(new CreateEntry
+            {
+                AccountNo = 1510,
+                Description = string.Empty,
+                Debit = invoice.Total
+            });
+
+            if(productType == ProductType.Good) 
+            {
+                if(vatRate == 0.25) 
+                {
+                    entries.AddRange(new [] {
+                        new CreateEntry
+                        {
+                            AccountNo = 2610,
+                            Description = string.Empty,
+                            Credit = vat
+                        },
+                        new CreateEntry
+                        {
+                            AccountNo = 3001,
+                            Description = string.Empty,
+                            Credit = subTotal
+                        }
+                    });
+                }
+                else if(vatRate == 0.12) 
+                {
+                    entries.AddRange(new [] {
+                        new CreateEntry
+                        {
+                            AccountNo = 2610,
+                            Description = string.Empty,
+                            Credit = vat
+                        },
+                        new CreateEntry
+                        {
+                            AccountNo = 3002,
+                            Description = string.Empty,
+                            Credit = subTotal
+                        }
+                    });
+                }
+                else if(vatRate == 0.06) 
+                {
+                    entries.AddRange(new [] {
+                        new CreateEntry
+                        {
+                            AccountNo = 2610,
+                            Description = string.Empty,
+                            Credit = vat
+                        },
+                        new CreateEntry
+                        {
+                            AccountNo = 3003,
+                            Description = string.Empty,
+                            Credit = subTotal
+                        }
+                    });
+                }
+            }
+            else if(productType == ProductType.Service) 
+            {
+                if(vatRate == 0.25) 
+                {
+                    entries.AddRange(new [] {
+                        new CreateEntry
+                        {
+                            AccountNo = 2610,
+                            Description = string.Empty,
+                            Credit = vat
+                        },
+                        new CreateEntry
+                        {
+                            AccountNo = 3041,
+                            Description = string.Empty,
+                            Credit = subTotal
+                        }
+                    });
+                }
+            }
+        }
+
         await _verificationsClient.CreateVerificationAsync(new CreateVerification
         {
             Description = $"Skickade ut faktura #{i.Id}",
-            Entries = new[]
-            {
-                new CreateEntry
-                {
-                    AccountNo = 1510,
-                    Description = string.Empty,
-                    Debit = invoice.Total
-                },
-                new CreateEntry
-                {
-                    AccountNo = 2610,
-                    Description = string.Empty,
-                    Credit = invoice.Vat
-                },
-                new CreateEntry
-                {
-                    AccountNo = 3001,
-                    Description = string.Empty,
-                    Credit = invoice.Total - invoice.Vat
-                }
-            }
+            Entries = entries
         }, cancellationToken);
     }
 }
