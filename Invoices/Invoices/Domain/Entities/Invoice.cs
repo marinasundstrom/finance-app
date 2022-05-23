@@ -29,6 +29,8 @@ public class Invoice : IHasDomainEvents
 
     public DateTime? DueDate { get; set; }
 
+    public string? Reference { get; set; }
+
     public decimal SubTotal { get; set; }
 
     public decimal Vat { get; set; }

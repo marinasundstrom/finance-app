@@ -26,15 +26,16 @@
         </MudSelect>
     </ToolBarContent>
     
-    <HeaderContent>
-        <MudTh>Id</MudTh>
-        <MudTh>Date</MudTh>
-        <MudTh>Status</MudTh>
-        <MudTh>From</MudTh>
-        <MudTh>Reference</MudTh>
-        <MudTh>Currency</MudTh>
-        <MudTh>Amount</MudTh>
-    </HeaderContent>
+     <HeaderContent>
+         <MudTh>Id</MudTh>
+         <MudTh>Date</MudTh>
+         <MudTh>Status</MudTh>
+         <MudTh>From</MudTh>
+         <MudTh>Reference</MudTh>
+         <MudTh>Currency</MudTh>
+         <MudTh>Amount</MudTh>
+         <MudTh>Invoice Id</MudTh>
+     </HeaderContent>
     <RowTemplate Context="transaction">
         <MudTd DataLabel="Id">@transaction.Id</MudTd>
         <MudTd DataLabel="Date">@transaction.Date?.ToString("g")</MudTd>
@@ -43,6 +44,7 @@
         <MudTd DataLabel="Reference">@transaction.Reference</MudTd>
         <MudTd DataLabel="Currency">@transaction.Currency</MudTd>
         <MudTd DataLabel="Amount">@transaction.Amount.ToString("c")</MudTd>
+        <MudTd DataLabel="Invoice Id"><MudLink Href="@($"/invoices/{transaction.InvoiceId}")">@transaction.InvoiceId</MudLink></MudTd>
     </RowTemplate>
     <LoadingContent>
         <MudText>Loading...</MudText>

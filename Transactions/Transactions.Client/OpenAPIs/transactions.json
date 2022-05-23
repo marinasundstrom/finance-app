@@ -252,7 +252,8 @@
         "from",
         "reference",
         "currency",
-        "amount"
+        "amount",
+        "invoiceId"
       ],
       "properties": {
         "id": {
@@ -277,6 +278,10 @@
         "amount": {
           "type": "number",
           "format": "decimal"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },

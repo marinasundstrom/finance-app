@@ -365,6 +365,13 @@
         "status": {
           "$ref": "#/definitions/InvoiceStatus"
         },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reference": {
+          "type": "string"
+        },
         "items": {
           "type": "array",
           "items": {
