@@ -1,73 +1,100 @@
 @page "/invoices/new"
 @page "/invoices/{Id:int}"
 @using System.ComponentModel.DataAnnotations
+@using Accounting.Client.Invoicing
 @inject NavigationManager NavigationManager
 @inject IInvoicesClient InvoicesClient
 @inject ITransactionsClient TransactionsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-@if (Id is not null)
+@if (invoice is not null)
 {
     <PageTitle>Invoice #@Id</PageTitle>
 
     <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@Id</MudText>
 
-    <EditForm Model="@this" OnValidSubmit="Submit">
-        <DataAnnotationsValidator />
+    <div class="mb-4">
+        <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{Id}/file")">Download document</MudButton>
+    </div>
 
-        <MudGrid Class="mb-4">
-            <MudItem xs="12" sm="12" md="6">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
-                }
-                else
-                {
-                    <MudDatePicker Label="Date" @bind-Date="Date" For="() => Date"></MudDatePicker>
-                }
-            </MudItem>
+    <MudGrid Class="mb-4">
+        <MudItem xs="12" sm="12" md="6" lg="3">
+            @if (Status >= InvoiceStatus.Sent)
+            {
+                <MudField Label="Date">@Date?.ToString("yyyy-MM-dd")</MudField>
+            }
+            else
+            {
+                <MudDatePicker Label="Date" Date="Date" DateChanged="OnDateChanged" For="() => Date"></MudDatePicker>
+            }
+        </MudItem>
 
-            <MudItem xs="12" sm="12" md="6">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Time">@Time?.ToString(@"hh\:mm")</MudField>
-                }
-                else
-                {
-                    <MudTimePicker Label="Time" @bind-Time="Time" For="() => Time"></MudTimePicker>
-                }
-            </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="3">
+            <div class="d-flex">
+                <MudField Label="Status">@Status</MudField>
+                <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
+                OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
+            </div>
+        </MudItem>
 
-            <MudItem xs="12" sm="12" md="6">
-                <div class="d-flex">
-                    <MudField Label="Status">@Status</MudField>
-                    <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
-                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
-                </div>
-            </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="3">
+            @if (Status >= InvoiceStatus.Sent)
+            {
+                <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
+            }
+            else
+            {
+                <MudDatePicker Label="Due Date" Date="@DueDate" DateChanged="OnDueDateChanged" For="() => DueDate">
+                </MudDatePicker>
+            }
+        </MudItem>
 
-            <MudItem xs="12" sm="12" md="6">
-                @if (Status >= InvoiceStatus.Sent)
-                {
-                    <MudField Label="Due Date">@DueDate?.ToString("yyyy-MM-dd")</MudField>
-                }
-                else
-                {
-                    <MudDatePicker Label="Due Date" @bind-Date="DueDate" For="() => DueDate"></MudDatePicker>
-                }
-            </MudItem>
+        <MudItem xs="12" sm="12" md="12">
+            @if (Status >= InvoiceStatus.Sent)
+            {
+                <MudField Label="Reference">@Reference</MudField>
+            }
+            else
+            {
+                <MudTextField Label="Reference" Text="@Reference" TextChanged="OnReferenceChanged" For="() => Reference"></MudTextField>
+            }
+        </MudItem>
 
-            <MudItem xs="12" sm="12" md="12">
-                <MudTextField Label="Note" @bind-Time="Note" For="() => Note"></MudTextField>
-            </MudItem>
-        </MudGrid>
-    </EditForm>
+        <MudItem xs="12" sm="12" md="12">
+            @if (Status >= InvoiceStatus.Sent)
+            {
+                <MudField Label="Note">@Note</MudField>
+            }
+            else
+            {
+                <MudTextField Label="Note" Text="@Note" TextChanged="OnNoteChanged" For="() => Note"></MudTextField>
+            }      
+        </MudItem>
 
-    <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">New item</MudButton>
+        <MudItem xs="12" sm="12" md="12" lg="3">
+           <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>  
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="12" lg="3">
+           <MudField Label="VAT">@Vat.ToString("c")</MudField>
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="12" lg="3">
+          <MudField Label="Total">@Total.ToString("c")</MudField>
+        </MudItem>
+
+    </MudGrid>
+
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Items</MudText>
+
+    @if (Status == InvoiceStatus.Draft)
+    {
+        <MudButton Variant="Variant.Filled" OnClick="AddItem" Class="mb-2">Add item</MudButton>
+    }
 
     <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Items" Hover="true" Elevation="0"
-    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+        Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Description</MudTh>
             <MudTh>Product Type</MudTh>
@@ -76,7 +103,10 @@
             <MudTh>VAT Rate</MudTh>
             <MudTh>VAT</MudTh>
             <MudTh>Total</MudTh>
-            <MudTh></MudTh>
+            @if (Status == InvoiceStatus.Draft)
+            {
+                <MudTh></MudTh>
+            }
         </HeaderContent>
         <RowTemplate Context="invoiceItem">
             <MudTd DataLabel="Description">@invoiceItem.Description</MudTd>
@@ -86,28 +116,22 @@
             <MudTd DataLabel="VAT Rate">@(invoiceItem.VatRate * 100)%</MudTd>
             <MudTd DataLabel="VAT">@* *@</MudTd>
             <MudTd DataLabel="Line Total">@invoiceItem.LineTotal.ToString("c")</MudTd>
-            <MudTd>
-                <MudIconButton Icon="@Icons.Filled.Remove" />
-            </MudTd>
+            @if (Status == InvoiceStatus.Draft)
+            {
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Filled.Delete" />
+                </MudTd>
+            }       
         </RowTemplate>
         <LoadingContent>
             <MudText>Loading...</MudText>
         </LoadingContent>
-        <PagerContent>
-            <MudTablePager />
-        </PagerContent>
     </MudTable>
-
-    <MudField Label="Sub Total">@SubTotal.ToString("c")</MudField>
-
-    <MudField Label="VAT">@Vat.ToString("c")</MudField>
-
-    <MudField Label="Total">@Total.ToString("c")</MudField>
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-8 mb-4">Transactions</MudText>
 
     <MudTable T="TransactionDto" @ref="table2" ServerData="ServerReload" Hover="true" Elevation="0"
-    Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+        Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <ToolBarContent>
             <MudSpacer />
             <MudSelect T="TransactionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status2"
@@ -149,6 +173,7 @@
 
 @code
 {
+    InvoiceDto? invoice;
     MudTable<InvoiceItemViewModel> table;
     MudTable<TransactionDto> table2;
     bool loading = false;
@@ -168,6 +193,8 @@
     [Required]
     public InvoiceStatus Status { get; set; }
 
+    public string? Reference { get; set; }
+
     public string? Note { get; set; }
 
     public DateTime? DueDate { get; set; }
@@ -182,11 +209,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        InvoiceDto invoice;
-
         if (Id is not null)
         {
             invoice = await InvoicesClient.GetInvoiceAsync(Id.GetValueOrDefault());
+
+            Set(invoice);
 
             foreach (var item in invoice.Items)
             {
@@ -205,19 +232,26 @@
         else
         {
             invoice = await InvoicesClient.CreateInvoiceAsync(
-            new CreateInvoice()
-            {
-                Status = InvoiceStatus.Draft
-            }
+                new CreateInvoice()
+                {
+                    Status = InvoiceStatus.Draft
+                }
             );
+
+            Set(invoice);
 
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
+    }
 
+    private void Set(InvoiceDto invoice) 
+    {
         Id = invoice.Id;
         Status = invoice.Status;
         Date = invoice.Date.GetValueOrDefault().Date.Date;
-        Time = invoice.Date.GetValueOrDefault().Date.TimeOfDay;
+        DueDate = invoice.DueDate.GetValueOrDefault().Date.Date;
+        Reference = invoice.Reference;
+        Note = invoice.Note;
     }
 
     private async Task Submit()
@@ -274,7 +308,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues) 
+    private async Task OnSelectedValuesChanged(HashSet<TransactionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table2.ReloadServerData();
@@ -299,31 +333,61 @@
         }
     }
 
-    public class InvoiceItemViewModel
+    public async Task OnDateChanged(DateTime? date)
     {
-        [Required]
-        public string Description { get; set; } = null!;
+        try
+        {
+            if (date != Date)
+            {
+                date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-        public ProductType ProductType { get; set; }
+                await InvoicesClient.SetDateAsync(Id.GetValueOrDefault(),
+                date.GetValueOrDefault().ToUniversalTime());
 
-        [Required]
-        public decimal UnitPrice { get; set; }
+                Date = date;
+            }
+        }
+        catch (Exception)
+        {
+            Date = date;
+        }
+    }
 
-        [Required]
-        public string Unit { get; set; } = null!;
+    public async Task OnDueDateChanged(DateTime? date)
+    {
+        try
+        {
+            if (date != DueDate)
+            {
+                date = TimeZoneInfo.ConvertTimeToUtc(date.GetValueOrDefault(), TimeZoneInfo.Local);
 
-        [Required]
-        [Range(0.0001, double.MaxValue)]
-        public double Quantity { get; set; } = 1;
+                await InvoicesClient.SetDueDateAsync(Id.GetValueOrDefault(),
+                date.GetValueOrDefault().ToUniversalTime());
 
-        public double VatRate { get; set; } = 0.25;
+                DueDate = date;
+            }
+        }
+        catch (Exception)
+        {
 
-        [Required]
-        public decimal SubTotal => LineTotal.SubTotal(VatRate);
+        }
+    }
 
-        [Required]
-        public decimal Vat => LineTotal.Vat(VatRate);
+    public async Task OnReferenceChanged(string? reference)
+    {
+        if (reference != Reference)
+        {
+            await InvoicesClient.SetReferenceAsync(Id.GetValueOrDefault(), reference);
+            Reference = reference;
+        }
+    }
 
-        public decimal LineTotal => UnitPrice * (decimal)Quantity;
+    public async Task OnNoteChanged(string? note)
+    {
+        if (note != Note)
+        {
+            await InvoicesClient.SetNoteAsync(Id.GetValueOrDefault(), note);
+            Note = note;
+        }
     }
 }

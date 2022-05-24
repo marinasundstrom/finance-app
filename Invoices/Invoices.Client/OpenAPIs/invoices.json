@@ -247,6 +247,12 @@
             "items": {
               "$ref": "#/definitions/InvoiceStatus"
             }
+          },
+          {
+            "type": "string",
+            "name": "reference",
+            "in": "query",
+            "x-nullable": true
           }
         ],
         "responses": {
@@ -510,7 +516,7 @@
         "tags": [
           "Invoices"
         ],
-        "operationId": "Invoices_SetNoye",
+        "operationId": "Invoices_SetNote",
         "produces": [
           "application/json"
         ],

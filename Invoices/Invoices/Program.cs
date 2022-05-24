@@ -163,7 +163,7 @@ IMediator mediator, CancellationToken cancellationToken)
 app.MapPut("/Invoices/{invoiceId}/Note", async (int invoiceId, string? note, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetNote(invoiceId, note), cancellationToken))
-    .WithName("Invoices_SetNoye")
+    .WithName("Invoices_SetNote")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 

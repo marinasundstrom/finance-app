@@ -19,9 +19,9 @@ public class InvoicesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<InvoiceDto>>> GetInvoicesAsync(int page, int pageSize, [FromQuery] InvoiceType[]? type, [FromQuery] InvoiceStatus[]? status, CancellationToken cancellationToken = default) 
+    public async Task<ActionResult<ItemsResult<InvoiceDto>>> GetInvoicesAsync(int page, int pageSize, [FromQuery] InvoiceType[]? type, [FromQuery] InvoiceStatus[]? status, [FromQuery] string? reference, CancellationToken cancellationToken = default) 
     {
-        var result = await _mediator.Send(new GetInvoices(page, pageSize, type, status), cancellationToken);
+        var result = await _mediator.Send(new GetInvoices(page, pageSize, type, status, reference), cancellationToken);
         return Ok(result);
     }
 }

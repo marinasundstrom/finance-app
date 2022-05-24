@@ -74,6 +74,8 @@ Hello, @Model.Name!"
 
 <h1>Invoice @Model.Id</h1>
 
+<p>@Model.Status</p>
+
 <table>
     <thead>
         <tr>

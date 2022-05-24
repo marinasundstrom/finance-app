@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Invoices.Application.Queries;
 
-public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null) : IRequest<ItemsResult<InvoiceDto>>
+public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, InvoiceStatus[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
 {
     public class Handler : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
@@ -39,6 +39,11 @@ public record GetInvoices(int Page = 1, int PageSize = 10, InvoiceType[]? Types 
                 .AsNoTracking()
                 .OrderByDescending(x => x.Id)
                 .AsQueryable();
+
+            if(request.Reference is not null) 
+            {
+                query = query.Where(i => i.Reference!.ToLower().Contains(request.Reference.ToLower()));
+            }
 
             if(request.Types?.Any() ?? false) 
             {

@@ -32,7 +32,7 @@ namespace Accountant.Services
         {
             _logger.LogInformation("Querying for invoices");
 
-            var results = await _invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent });
+            var results = await _invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent }, null);
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -58,14 +58,9 @@ namespace Accountant.Services
 
                         await emailService.SendEmail("test1@foo.com", "You have partially paid", text);
                     }
-                    else if (invoice.Status == InvoiceStatus.Sent)
-                    {
-                        int expirationDays = 30;
-
-                        var daysSince = (DateTime.Now.Date - invoice.Date.GetValueOrDefault().Date).TotalDays;
-                        bool hasExpired = daysSince > expirationDays;
-                        
-                        if (hasExpired)
+                    else if (invoice.Status == InvoiceStatus.Sent || invoice.Status == InvoiceStatus.Reminder)
+                    {   
+                        if (DateTime.Now > invoice.DueDate)
                         {
                             _logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
 
@@ -78,6 +73,8 @@ namespace Accountant.Services
                                 }));
 
                             string templateId = "reminder";
+
+                            await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.Reminder);
 
                             string text = await GenerateDocument(model, templateId);
 

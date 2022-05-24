@@ -68,6 +68,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                     return;
 
                 case InvoiceStatus.Sent:
+                case InvoiceStatus.Reminder:
                     if (receivedAmount < invoice.Total)
                     {
                         await _invoicesClient.SetInvoiceStatusAsync(invoice.Id, InvoiceStatus.PartiallyPaid, cancellationToken);

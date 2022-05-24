@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
+@using Accounting.Client.Invoicing
 @inject IInvoicesClient InvoicesClient
 
 <EditForm Model="@Model" OnValidSubmit="Submit">
@@ -68,7 +69,7 @@
     [Parameter] public int Id { get; set; }
 
     [Required]
-    [Parameter] public InvoicePage.InvoiceItemViewModel Model { get; set; } = null!;
+    [Parameter] public InvoiceItemViewModel Model { get; set; } = null!;
 
     async Task Submit()
     {
