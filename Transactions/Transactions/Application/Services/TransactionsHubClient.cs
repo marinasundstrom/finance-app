@@ -18,4 +18,9 @@ public class TransactionsHubClient : ITransactionsHubClient
     {
         await _hubContext.Clients.All.TransactionStatusUpdated(id, status);
     }
+
+    public async Task TransactionInvoiceIdUpdated(string id, int? invoiceId)
+    {
+        await _hubContext.Clients.All.TransactionInvoiceIdUpdated(id, invoiceId);
+    }
 }

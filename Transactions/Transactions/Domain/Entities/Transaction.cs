@@ -52,7 +52,7 @@ public class Transaction : IHasDomainEvents
 
     public decimal Amount { get; set; }
 
-    public int InvoiceId { get; private set; }
+    public int? InvoiceId { get; private set; }
 
     public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
 
@@ -67,6 +67,10 @@ public class Transaction : IHasDomainEvents
 
     public void SetInvoiceId(int invoiceId)
     {
-        InvoiceId = invoiceId;
+        if(InvoiceId != invoiceId) 
+        {
+            InvoiceId = invoiceId;
+            DomainEvents.Add(new TransactionInvoiceIdUpdated(Id, invoiceId));
+        }
     }
 }

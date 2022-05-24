@@ -114,6 +114,7 @@
             .Build();
 
             hubConnection.On<string, TransactionStatus>("TransactionStatusUpdated", TransactionStatusUpdated);
+            hubConnection.On<string, int?>("TransactionInvoiceIdUpdated", TransactionInvoiceIdUpdated);
 
             hubConnection.Closed += (error) =>
             {
@@ -150,10 +151,7 @@
 
     Task TransactionStatusUpdated(string id, TransactionStatus status)
     {
-        var result = (TableData<TransactionDto>?)table?.GetType()?
-            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic | 
-                         System.Reflection.BindingFlags.Instance)?
-            .GetValue(table);
+        var result = GetTableData();
 
         if(result is not null)
         {
@@ -162,6 +160,25 @@
             if(transaction is not null) 
             {
                 transaction.Status = status;
+                
+                StateHasChanged();
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    Task TransactionInvoiceIdUpdated(string id, int? invoiceId)
+    {
+        var result = GetTableData();
+
+        if(result is not null)
+        {
+            var transaction = result.Items.FirstOrDefault(t => t.Id == id);
+
+            if(transaction is not null) 
+            {
+                transaction.InvoiceId = invoiceId;
                 
                 StateHasChanged();
             }
@@ -181,5 +198,13 @@
         await table.ReloadServerData();
 
         StateHasChanged();
+    }
+
+    private TableData<TransactionDto>? GetTableData() 
+    {
+        return (TableData<TransactionDto>?)table?.GetType()?
+            .GetField("_server_data", System.Reflection.BindingFlags.NonPublic | 
+                         System.Reflection.BindingFlags.Instance)?
+            .GetValue(table);
     }
 }

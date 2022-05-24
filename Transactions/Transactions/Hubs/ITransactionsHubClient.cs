@@ -4,5 +4,7 @@ namespace Transactions.Hubs;
 
 public interface ITransactionsHubClient
 {
-    Task TransactionStatusUpdated(string Id, TransactionStatus Status);
+    Task TransactionStatusUpdated(string id, TransactionStatus Status);
+
+    Task TransactionInvoiceIdUpdated(string id, int? invoiceId);
 }
