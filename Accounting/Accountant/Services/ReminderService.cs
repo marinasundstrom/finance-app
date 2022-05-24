@@ -32,7 +32,7 @@ namespace Accountant.Services
         {
             _logger.LogInformation("Querying for invoices");
 
-            var results = await _invoicesClient.GetInvoicesAsync(0, 100, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent });
+            var results = await _invoicesClient.GetInvoicesAsync(0, 100, null, new[] { InvoiceStatus.PartiallyPaid, InvoiceStatus.Sent });
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -62,7 +62,7 @@ namespace Accountant.Services
                     {
                         int expirationDays = 30;
 
-                        var daysSince = (DateTime.Now.Date - invoice.Date.Date).TotalDays;
+                        var daysSince = (DateTime.Now.Date - invoice.Date.GetValueOrDefault().Date).TotalDays;
                         bool hasExpired = daysSince > expirationDays;
                         
                         if (hasExpired)

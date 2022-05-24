@@ -10,5 +10,6 @@ public enum InvoiceStatus
     Overpaid,
     Repaid,
     PartiallyRepaid,
+    Reminder,
     Void
 }

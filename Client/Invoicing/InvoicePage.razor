@@ -216,8 +216,8 @@
 
         Id = invoice.Id;
         Status = invoice.Status;
-        Date = invoice.Date.Date;
-        Time = invoice.Date.TimeOfDay;
+        Date = invoice.Date.GetValueOrDefault().Date.Date;
+        Time = invoice.Date.GetValueOrDefault().Date.TimeOfDay;
     }
 
     private async Task Submit()

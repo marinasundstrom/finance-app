@@ -13,6 +13,12 @@
 <MudTable T="InvoiceDto" @ref="table" ServerData="ServerReload" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
+        <MudSelect T="InvoiceType?" Label="Type" MultiSelection="true" @bind-Value="Type" SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+            @foreach (var type in Enum.GetValues<InvoiceType>())
+            {
+                <MudSelectItem T="InvoiceType?" Value="@type">@Enum.GetName(typeof(InvoiceType), type)</MudSelectItem>
+            }
+        </MudSelect>
         <MudSpacer />
         <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
             @foreach (var status in Enum.GetValues<InvoiceStatus>())
@@ -24,6 +30,7 @@
     
     <HeaderContent>
         <MudTh>Id</MudTh>
+        <MudTh>Type</MudTh>
         <MudTh>Date</MudTh>
         <MudTh>Status</MudTh>
         <MudTh>Sub Total</MudTh>
@@ -34,14 +41,15 @@
     </HeaderContent>
     <RowTemplate Context="invoice">
         <MudTd DataLabel="Id">@invoice.Id</MudTd>
-        <MudTd DataLabel="Date">@invoice.Date.ToString("g")</MudTd>
+        <MudTd DataLabel="Type">@invoice.Type</MudTd>
+        <MudTd DataLabel="Date">@invoice.Date.GetValueOrDefault().ToString("g")</MudTd>
         <MudTd DataLabel="Status">@invoice.Status</MudTd>
         <MudTd DataLabel="Sub Total">@invoice.SubTotal.ToString("c")</MudTd>
         <MudTd DataLabel="VAT">@invoice.Vat.ToString("c")</MudTd>
         <MudTd DataLabel="Total">@invoice.Total.ToString("c")</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.ToString("c")</MudTd>
         <MudTd>
-            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{invoice.Id}/file")" />
+            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/invoices/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
         </MudTd>
     </RowTemplate>
     <LoadingContent>
@@ -56,6 +64,8 @@
 {
     MudTable<InvoiceDto> table;
     bool loading = false;
+    InvoiceType? Type;
+    HashSet<InvoiceType?> selectedTypes = new HashSet<InvoiceType?>();
     InvoiceStatus? Status;
     HashSet<InvoiceStatus?> selectedStatuses = new HashSet<InvoiceStatus?>();
 
@@ -65,7 +75,7 @@
 
         try
         {
-            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedStatuses.Select(s => (InvoiceStatus)s!));
+            var result = await InvoicesClient.GetInvoicesAsync(state.Page, state.PageSize, selectedTypes.Select(s => (InvoiceType)s!), selectedStatuses.Select(s => (InvoiceStatus)s!));
 
             return new TableData<InvoiceDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -91,11 +101,15 @@
         NavigationManager.NavigateTo($"/invoices/{invoice.Id}");
     }
 
+    private async Task OnSelectedTypesChanged(HashSet<InvoiceType?> selectedTypes) 
+    {
+        this.selectedTypes = selectedTypes;
+        await table.ReloadServerData();
+    }
+
     private async Task OnSelectedValuesChanged(HashSet<InvoiceStatus?> selectedValues) 
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();
-
-        StateHasChanged();
     }
 }

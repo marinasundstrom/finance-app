@@ -21,7 +21,7 @@ namespace Accountant.Services
         {
             _logger.LogInformation("Querying for invoices");
 
-            var results = await _invoicesClient.GetInvoicesAsync(0, 100, new [] { InvoiceStatus.Overpaid });
+            var results = await _invoicesClient.GetInvoicesAsync(0, 100, null, new [] { InvoiceStatus.Overpaid });
 
             foreach(var invoice in results.Items)
             {

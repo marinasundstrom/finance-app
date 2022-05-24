@@ -180,6 +180,6 @@ app.MapPost("/UploadDocument", async ([FromBody] UploadDocument model, IMediator
 
 app.MapControllers();
 
-await SeedData.EnsureSeedData(app);
+//await SeedData.EnsureSeedData(app);
 
 app.Run();

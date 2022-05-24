@@ -125,15 +125,50 @@ IMediator mediator, CancellationToken cancellationToken)
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
-app.MapPut("/Invoices/{invoiceId}/Paid", async (int invoiceId, decimal amount, 
+app.MapPut("/Invoices/{invoiceId}/PaidAmount", async (int invoiceId, decimal amount, 
 IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new SetPaidAmount(invoiceId, amount), cancellationToken))
     .WithName("Invoices_SetPaidAmount")
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
+app.MapPut("/Invoices/{invoiceId}/Date", async (int invoiceId, DateTime date, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetDate(invoiceId, date), cancellationToken))
+    .WithName("Invoices_SetDate")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Invoices/{invoiceId}/Type", async (int invoiceId, InvoiceType type, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetType(invoiceId, type), cancellationToken))
+    .WithName("Invoices_SetType")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Invoices/{invoiceId}/DueDate", async (int invoiceId, DateTime dueDate, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetDueDate(invoiceId, dueDate), cancellationToken))
+    .WithName("Invoices_SetDueDate")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Invoices/{invoiceId}/Reference", async (int invoiceId, string? reference, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetReference(invoiceId, reference), cancellationToken))
+    .WithName("Invoices_SetReference")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
+app.MapPut("/Invoices/{invoiceId}/Note", async (int invoiceId, string? note, 
+IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new SetNote(invoiceId, note), cancellationToken))
+    .WithName("Invoices_SetNoye")
+    .WithTags("Invoices")
+    .Produces(StatusCodes.Status200OK);
+
 app.MapControllers();
 
-await SeedData.EnsureSeedData(app);
+//await SeedData.EnsureSeedData(app);
 
 app.Run();
