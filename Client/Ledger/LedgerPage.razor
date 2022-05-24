@@ -15,6 +15,14 @@
             <MudText Typo="@Typo.subtitle1">@verification.Date.Date.ToShortDateString()</MudText>
             <MudText Typo="@Typo.body1">@verification.Description</MudText>
 
+            @if(verification.InvoiceId is not null) 
+            {
+                <div class="mt-4">
+                    <MudText Typo="@Typo.subtitle2">Invoice</MudText>
+                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{verification.InvoiceId}")" Class="mt-4">@verification.InvoiceId</MudLink>
+                </div>
+            }
+
             <div class="mt-4">
                 @if(verification.Attachments.Any()) 
                 {
@@ -115,6 +123,7 @@
             else
             {
                 title = $"Ledger";
+                verification = null;
             }
 
             StateHasChanged();

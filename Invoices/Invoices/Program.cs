@@ -134,6 +134,6 @@ IMediator mediator, CancellationToken cancellationToken)
 
 app.MapControllers();
 
-//await SeedData.EnsureSeedData(app);
+await SeedData.EnsureSeedData(app);
 
 app.Run();
