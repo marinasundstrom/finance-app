@@ -51,7 +51,7 @@ public record GetDocuments(int Page, int PageSize) : IRequest<ItemsResult<Docume
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<DocumentDto>(
-                items.Select(document => new DocumentDto(document.Id, document.Title, GetUrl(document.BlobId), document.Created)),
+                items.Select(document => document.ToDto(GetUrl(document.BlobId))),
                 totalItems);
         }
 

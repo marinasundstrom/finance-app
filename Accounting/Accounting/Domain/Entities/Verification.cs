@@ -11,6 +11,10 @@ public class Verification
 
     public string Description { get; set; } = null!;
 
+    public int? InvoiceId { get; set; }
+
+    public int? ReceiptId { get; set; }
+
     public List<Entry> Entries { get; set; } = new List<Entry>();
 
     public List<Attachment> Attachments { get; set; } = new List<Attachment>();

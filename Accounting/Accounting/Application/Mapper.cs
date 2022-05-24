@@ -40,6 +40,7 @@ public static class Mappings
             Description = v.Description,
             Debit = v.Entries.Sum(e => e.Debit.GetValueOrDefault()),
             Credit = v.Entries.Sum(e => e.Credit.GetValueOrDefault()),
+            InvoiceId = v.InvoiceId,
             Attachments = v.Attachments.Select(e => e.ToDto())
         };
     }
@@ -49,6 +50,10 @@ public static class Mappings
         return new AttachmentDto
         {
             Id = a.Id,
+            Name = a.Name,
+            ContentType = a.ContentType,
+            Description = a.Description,
+            InvoiceId = a.InvoiceId,
             Url = GetAttachmentUrl(a.Id)!
         };
     }

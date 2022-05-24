@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +112,10 @@ builder.Services.AddAzureClients(builder =>
     builder.UseCredential(new DefaultAzureCredential());
 });
 
+CultureInfo? culture = new("sv-SE");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -126,8 +131,6 @@ else
     app.UseHsts();
 }
 
-//await SeedData.EnsureSeedData(app);
-
 app.UseRouting();
 
 app.MapReverseProxy();
@@ -137,6 +140,18 @@ app.MapGet("/Documents", async (int page, int pageSize, IMediator mediator, Canc
     .WithName("Documents_GetDocuments")
     .WithTags("Documents")
     .Produces<ItemsResult<DocumentDto>>(StatusCodes.Status200OK);
+
+app.MapGet("/Documents/{id}", async (string id, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new GetDocument(id), cancellationToken))
+    .WithName("Documents_GetDocument")
+    .WithTags("Documents")
+    .Produces<DocumentDto>(StatusCodes.Status200OK);
+
+app.MapPost("/Documents/{id}/Rename", async (string id, string newName, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(new RenameDocument(id, newName), cancellationToken))
+    .WithName("Documents_RenameDocument")
+    .WithTags("Documents")
+    .Produces(StatusCodes.Status200OK);
 
 /*
 app.MapPost("/GenerateDocument", async (string templateId, [FromBody] string model, IMediator mediator) =>
@@ -164,5 +179,7 @@ app.MapPost("/UploadDocument", async ([FromBody] UploadDocument model, IMediator
 */
 
 app.MapControllers();
+
+//await SeedData.EnsureSeedData(app);
 
 app.Run();

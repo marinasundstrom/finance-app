@@ -88,8 +88,6 @@ else
     app.UseHsts();
 }
 
-//await SeedData.EnsureSeedData(app);
-
 app.MapGet("/", () => "Hello World!");
 
 /*
@@ -128,5 +126,7 @@ app.MapPut("/transactions/{transactionId}/invoiceId", async (string transactionI
 app.MapHub<TransactionsHub>("/hubs/transactions");
 
 app.MapControllers();
+
+//await SeedData.EnsureSeedData(app);
 
 app.Run();

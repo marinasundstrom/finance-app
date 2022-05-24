@@ -12,12 +12,19 @@
 {
     <MudCard Class="mb-4">
         <MudCardContent>
-            <MudText Typo="@Typo.body1">@verification.Date.Date.ToShortDateString()</MudText>
+            <MudText Typo="@Typo.subtitle1">@verification.Date.Date.ToShortDateString()</MudText>
             <MudText Typo="@Typo.body1">@verification.Description</MudText>
-            @foreach (var attachment in verification.Attachments)
-            {
-                <MudLink Typo="@Typo.body1" Href="@attachment.Url">Attachment</MudLink>
-            }
+
+            <div class="mt-4">
+                @if(verification.Attachments.Any()) 
+                {
+                    <MudText Typo="@Typo.subtitle2">Attachment</MudText>
+                    @foreach (var attachment in verification.Attachments)
+                    {
+                        <MudLink Typo="@Typo.body1" Href="@attachment.Url">@attachment.Name</MudLink>
+                    }
+                }
+            </div>
         </MudCardContent>
     </MudCard>
 }

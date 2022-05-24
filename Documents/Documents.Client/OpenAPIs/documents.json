@@ -48,6 +48,71 @@
         }
       }
     },
+    "/Documents/{id}": {
+      "get": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_GetDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DocumentDto"
+            }
+          }
+        }
+      }
+    },
+    "/Documents/{id}/Rename": {
+      "post": {
+        "tags": [
+          "Documents"
+        ],
+        "operationId": "Documents_RenameDocument",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "newName",
+            "in": "query",
+            "required": true,
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
     "/Documents/UploadDocument": {
       "post": {
         "tags": [
@@ -57,13 +122,12 @@
         "consumes": [
           "multipart/form-data"
         ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
-          {
-            "type": "string",
-            "name": "title",
-            "in": "query",
-            "x-nullable": true
-          },
           {
             "type": "file",
             "name": "file",
@@ -73,7 +137,11 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/DocumentDto"
+            }
           }
         }
       }
@@ -156,6 +224,8 @@
       "required": [
         "id",
         "title",
+        "extension",
+        "contentType",
         "url",
         "created"
       ],
@@ -166,14 +236,28 @@
         "title": {
           "type": "string"
         },
+        "extension": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
         "url": {
           "type": "string"
         },
         "created": {
           "type": "string",
           "format": "date-time"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
         }
       }
+    },
+    "Unit": {
+      "type": "object",
+      "description": "Represents a void type, since Void is not a valid return type in C#."
     },
     "DocumentFormat": {
       "type": "string",

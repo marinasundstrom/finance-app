@@ -57,7 +57,7 @@
         }
       }
     },
-    "/Invoices/{invoiceId}/Dile": {
+    "/Invoices/{invoiceId}/File": {
       "get": {
         "tags": [
           "Invoices"

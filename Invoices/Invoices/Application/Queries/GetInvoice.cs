@@ -22,6 +22,8 @@ public record GetInvoice(int InvoiceId) : IRequest<InvoiceDto?>
         {
             var invoice = await _context.Invoices
                 .Include(i => i.Items)
+                .AsSplitQuery()
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
             return invoice is null

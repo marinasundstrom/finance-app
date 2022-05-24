@@ -43,15 +43,15 @@ namespace Accounting.Controllers
         [HttpPost]
         public async Task<int> CreateVerification([FromBody] CreateVerification dto, CancellationToken cancellationToken)
         {
-            return await mediator.Send(new CreateVerificationCommand(dto.Description, dto.Entries), cancellationToken);
+            return await mediator.Send(new CreateVerificationCommand(dto.Description, dto.InvoiceId, dto.Entries), cancellationToken);
         }
 
         [HttpPost("/{verificationId}/Attachment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string?>> AddFileAttachmentToVerification(int verificationId, IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult<string?>> AddFileAttachmentToVerification(int verificationId, string? description, int? invoiceId, IFormFile file, CancellationToken cancellationToken)
         {
-            return await mediator.Send(new AddFileAttachmentToVerificationCommand(verificationId, file.FileName, file.OpenReadStream()), cancellationToken);
+            return await mediator.Send(new AddFileAttachmentToVerificationCommand(verificationId, file.FileName, file.ContentType, description, invoiceId, file.OpenReadStream()), cancellationToken);
         }
     }
 }

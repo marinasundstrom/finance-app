@@ -9,7 +9,7 @@ using static Accounting.Application.Shared;
 
 namespace Accounting.Application.Verifications.Commands;
 
-public record AddFileAttachmentToVerificationCommand(int VerificationId, string Name, Stream Stream) : IRequest<string>
+public record AddFileAttachmentToVerificationCommand(int VerificationId, string Name, string ContentType, string? Description, int? invoiceId, Stream Stream) : IRequest<string>
 {
     public class AddFileAttachmentToVerificationCommandHandler : IRequestHandler<AddFileAttachmentToVerificationCommand, string>
     {
@@ -40,6 +40,10 @@ public record AddFileAttachmentToVerificationCommand(int VerificationId, string 
             var attachment = new Attachment();
 
             attachment.Id = blobName;
+            attachment.Name = request.Name;
+            attachment.ContentType = request.ContentType;
+            attachment.Description = request.Description;
+            attachment.InvoiceId = request.invoiceId;
 
             verification.Attachments.Add(attachment);
 

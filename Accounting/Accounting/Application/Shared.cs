@@ -7,6 +7,6 @@ public static class Shared
     {
         if (attachment is null) return null;
 
-        return $"http://127.0.0.1:10000/devstoreaccount1/attachments/{attachment}";
+        return $"https://localhost:8080/content/attachments/{attachment}";
     }
 }

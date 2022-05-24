@@ -225,7 +225,7 @@
 
             foreach (var file in files)
             {
-                await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter(file.OpenReadStream(10
+                await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, string.Empty, null, new FileParameter(file.OpenReadStream(10
                 * 10000), file.Name));
             }
 

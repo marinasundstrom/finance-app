@@ -117,6 +117,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
             var verificationId = await _verificationsClient.CreateVerificationAsync(new CreateVerification
             {
                 Description = $"Betalade faktura #{invoice.Id}",
+                InvoiceId = invoice.Id,
                 Entries = new[]
                 {
                     new CreateEntry

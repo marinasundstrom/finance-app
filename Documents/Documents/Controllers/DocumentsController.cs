@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Documents.Application;
 using Documents.Application.Commands;
 using Documents.Contracts;
 
@@ -23,9 +24,9 @@ public class DocumentsController : Controller
     }
 
     [HttpPost("UploadDocument")]
-    public async Task UploadDocument(string title, IFormFile file, CancellationToken cancellationToken = default)
+    public async Task<DocumentDto> UploadDocument(IFormFile file, CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(new UploadDocument(title, file.OpenReadStream()), cancellationToken);
+        return await _mediator.Send(new UploadDocument(file.FileName, file.ContentType, file.OpenReadStream()), cancellationToken);
     }
 
     [HttpPost("GenerateDocument")]

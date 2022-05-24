@@ -82,8 +82,6 @@ else
     app.UseHsts();
 }
 
-//await SeedData.EnsureSeedData(app);
-
 app.MapGet("/", () => "Hello World!");
 
 /*
@@ -100,7 +98,7 @@ app.MapGet("/Invoices/{invoiceId}", async (int invoiceId, IMediator mediator, Ca
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 
-app.MapGet("/Invoices/{invoiceId}/Dile", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
+app.MapGet("/Invoices/{invoiceId}/File", async (int invoiceId, IMediator mediator, CancellationToken cancellationToken)
     => Results.File(await mediator.Send(new GenerateInvoiceFile(invoiceId), cancellationToken), "application/html", $"{invoiceId}.html"))
     .WithName("Invoices_GetInvoiceFile")
     .WithTags("Invoices")
@@ -135,5 +133,7 @@ IMediator mediator, CancellationToken cancellationToken)
     .Produces(StatusCodes.Status200OK);
 
 app.MapControllers();
+
+//await SeedData.EnsureSeedData(app);
 
 app.Run();

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Accounting.Application.Verifications.Commands;
 
-public record CreateVerificationCommand(string Description, List<CreateEntry> Entries) : IRequest<int>
+public record CreateVerificationCommand(string Description, int? InvoiceId, List<CreateEntry> Entries) : IRequest<int>
 {
     public class CreateVerificationCommandHandler : IRequestHandler<CreateVerificationCommand, int>
     {
@@ -26,7 +26,8 @@ public record CreateVerificationCommand(string Description, List<CreateEntry> En
             var verification = new Domain.Entities.Verification
             {
                 Description = request.Description,
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                InvoiceId = request.InvoiceId,
             };
 
             foreach (var entryDto in request.Entries)

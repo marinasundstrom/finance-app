@@ -271,7 +271,6 @@
         ],
         "operationId": "Verifications_CreateVerification",
         "consumes": [
-          "application/json-patch+json",
           "application/json",
           "text/json",
           "application/*+json"
@@ -346,6 +345,19 @@
             "required": true,
             "format": "int32",
             "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "description",
+            "in": "query",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "invoiceId",
+            "in": "query",
+            "format": "int32",
+            "x-nullable": true
           },
           {
             "type": "file",
@@ -630,6 +642,10 @@
           "type": "number",
           "format": "decimal"
         },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
+        },
         "attachments": {
           "type": "array",
           "items": {
@@ -642,11 +658,26 @@
       "type": "object",
       "required": [
         "id",
+        "name",
+        "contentType",
         "url"
       ],
       "properties": {
         "id": {
           "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
         },
         "url": {
           "type": "string"
@@ -662,6 +693,10 @@
       "properties": {
         "description": {
           "type": "string"
+        },
+        "invoiceId": {
+          "type": "integer",
+          "format": "int32"
         },
         "entries": {
           "type": "array",

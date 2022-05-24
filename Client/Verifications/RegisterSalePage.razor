@@ -253,7 +253,7 @@
 
         if(file is not null) 
         {
-            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter(file.OpenReadStream(10 * 10000), file.Name));
+            await VerificationsClient.AddFileAttachmentToVerificationAsync(verificationId, string.Empty, null, new FileParameter(file.OpenReadStream(10 * 10000), file.Name));
         }
 
         NavigationManager.NavigateTo("/verifications");
