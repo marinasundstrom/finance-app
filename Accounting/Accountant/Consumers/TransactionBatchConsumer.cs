@@ -102,7 +102,7 @@ public class TransactionBatchConsumer : IConsumer<TransactionBatch>
                     await _invoicesClient.SetPaidAmountAsync(invoice.Id, paidAmount);
                     break;
 
-                case InvoiceStatus.Cancelled:
+                case InvoiceStatus.Void:
                     // Mark transaktion for re-pay
                     await _transactionsClient.SetTransactionStatusAsync(transaction.Id, Transactions.Client.TransactionStatus.Payback);
 

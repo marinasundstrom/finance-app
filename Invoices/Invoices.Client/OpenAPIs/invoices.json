@@ -285,7 +285,7 @@
               "Overpaid",
               "Repaid",
               "PartiallyRepaid",
-              "Cancelled"
+              "Void"
             ]
           }
         ],
@@ -405,7 +405,7 @@
         "Overpaid",
         "Repaid",
         "PartiallyRepaid",
-        "Cancelled"
+        "Void"
       ],
       "enum": [
         "Draft",
@@ -415,7 +415,7 @@
         "Overpaid",
         "Repaid",
         "PartiallyRepaid",
-        "Cancelled"
+        "Void"
       ]
     },
     "InvoiceItemDto": {
