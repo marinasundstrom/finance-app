@@ -8,11 +8,10 @@
         <DialogContent>
 
             <MudSelect Label="Status" @bind-Value="Status" For="() => Status">
-                @foreach(var status in Enum.GetValues<InvoiceStatus>().Skip(1))
+                @foreach(var status in statuses)
                 {
                     <MudSelectItem Value="@status">@Enum.GetName(typeof(InvoiceStatus), status)</MudSelectItem>
-                }
-                
+                }    
             </MudSelect>
             
         </DialogContent>
@@ -31,6 +30,20 @@
 
     [Required]
     [Parameter] public InvoiceStatus Status { get; set; }
+
+    InvoiceStatus currentStatus;
+    IEnumerable<InvoiceStatus> statuses = Array.Empty<InvoiceStatus>();
+
+    protected override void OnInitialized() 
+    {
+        statuses = Enum.GetValues<InvoiceStatus>().Skip(1);
+        currentStatus = Status;
+
+        if(currentStatus >= InvoiceStatus.Sent) 
+        {
+            statuses = statuses.Skip(1);
+        }
+    }
 
     async Task Submit()
     {
