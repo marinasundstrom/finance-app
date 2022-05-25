@@ -6,7 +6,7 @@ Built in C# with Blazor Web Assembly and ASP.NET Core.
 
 The project also contains a Transactions service and a Invoices service. "Accountant" service is checking invoices.
 
-[Video](https://youtu.be/3t5gucn7Fck)
+[Video](https://youtu.be/uIm0IapdqzQ)
 
 ## Goal
 
