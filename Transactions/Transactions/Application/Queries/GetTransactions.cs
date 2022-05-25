@@ -9,9 +9,9 @@ using Transactions.Domain.Enums;
 
 namespace Transactions.Application.Queries;
 
-public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<TransactionDto>>
+public record GetPayments(int Page, int PageSize, TransactionStatus[]? Status = null, int? InvoiceId = null) : IRequest<ItemsResult<TransactionDto>>
 {
-    public class Handler : IRequestHandler<GetTransactons, ItemsResult<TransactionDto>>
+    public class Handler : IRequestHandler<GetPayments, ItemsResult<TransactionDto>>
     {
         private readonly ITransactionsContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
@@ -22,7 +22,7 @@ public record GetTransactons(int Page, int PageSize, TransactionStatus[]? Status
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<ItemsResult<TransactionDto>> Handle(GetTransactons request, CancellationToken cancellationToken)
+        public async Task<ItemsResult<TransactionDto>> Handle(GetPayments request, CancellationToken cancellationToken)
         {
             if(request.PageSize < 0) 
             {

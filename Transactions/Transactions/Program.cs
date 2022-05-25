@@ -91,7 +91,7 @@ else
 app.MapGet("/", () => "Hello World!");
 
 /*
-app.MapGet("/transactions", async (int page, int pageSize, IMediator mediator) => await mediator.Send(new GetTransactons(page, pageSize)))
+app.MapGet("/transactions", async (int page, int pageSize, IMediator mediator) => await mediator.Send(new GetPayments(page, pageSize)))
     .WithName("Transactions_GetTransactions")
     .WithTags("Transactions")
     //.RequireAuthorization()
