@@ -88,7 +88,7 @@ services:
   image: nginx
   bindings:
     - protocol: https
-      port: 8080
+      port: 80
   volumes:
     - source: nginx.conf
       target: /etc/nginx/templates/default.conf.template
